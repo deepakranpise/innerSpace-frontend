@@ -1,4 +1,4 @@
-// ** MUI Imports
+
 import Grid from '@mui/material/Grid'
 import Link from '@mui/material/Link'
 import Card from '@mui/material/Card'
@@ -6,17 +6,10 @@ import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 
 // ** Demo Components Imports
-import TableBasic from 'src/views/tables/TableBasic'
-import TableDense from 'src/views/tables/TableDense'
-import TableSpanning from 'src/views/tables/TableSpanning'
-import TableCustomized from 'src/views/tables/TableCustomized'
-import TableCollapsible from 'src/views/tables/TableCollapsible'
-import TableStickyHeader from 'src/views/tables/TableStickyHeader'
 import { useEffect } from 'react'
 import axios from 'axios'
 import { useState } from 'react'
 import { Alert, Button, Snackbar } from '@mui/material'
-
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
@@ -26,21 +19,17 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import { MdModeEditOutline } from 'react-icons/md'
-
-
-import AddOrEditPurchase from 'src/views/AddorEditPurchase'
+import AddOrEditSizes from 'src/views/AddOrEditSizes'
 import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
 
-const Purchase = () => {
 
-  const [data, setData] = useState([]);
+const Sizes = () => {
 
-  //1 for puchase 0 for sell
-  const [type, setType] = useState(1);
+  const [SizesData, setSizesData] = useState([]);
 
   const [toaster, setToaster] = useState(false);
-  const [addPurchase, setAddPurchase] = useState(null);
+  const [editSizes, setEditSizes] = useState(null);
 
 
   const [open, setOpen] = useState(false);
@@ -51,7 +40,7 @@ const Purchase = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setAddPurchase(null)
+    setEditSizes(null)
   };
 
   const handleOpenToaster = () => {
@@ -62,91 +51,70 @@ const Purchase = () => {
     setToaster(false);
   }
 
-  const fetch = () => {
-    try {
-      axiosInstance.get("transaction/get")
-        .then(res => {
-          console.log(res.data.data)
-          setData(res.data.data);
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    } catch (rrr) {
-      console.log(err)
-    }
-  }
 
   useEffect(() => {
     fetch();
   }, [])
 
+  const fetch = () => {
+    try {
+      axiosInstance.get("size/get")
+        .then(res => {
+          setSizesData(res.data.data);
+          console.log(res.data.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <Grid container spacing={6}>
       <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="success" sx={{ width: '100%' }}>
-          Purchase added successfully
+          Stock added successfully
         </Alert>
       </Snackbar>
       <Grid item xs={12}>
-        <Button variant="outlined" onClick={() => setType(!type)}>
-          See {type ? "Sell" : "Purchase"} Data
-        </Button>
+
         <Card>
           <CardHeader title='Sticky Header' titleTypographyProps={{ variant: 'h6' }} />
           <Button variant="outlined" onClick={handleClickOpen}>
-            Add {type ? "Purchase" : "Sell"}
+            Add Sizes
           </Button>
-          {/* <TableStickyHeader setEditStock={setEditStock}  editStock={editStock} data={data} /> */}
-
           <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table stickyHeader aria-label='sticky table'>
                 <TableHead>
                   <TableRow>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
-                      Invoice No
+                      Category
                     </TableCell>
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
-                      Party
-                    </TableCell>
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
-                      Date
-                    </TableCell>
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
-                      Products
-                    </TableCell>
-
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
-                      Action
-                    </TableCell>
+                    {/* <TableCell align="left" sx={{ minWidth: 100 }}>
+                      Category
+                    </TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {/* {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
               return ( */}
 
-                  {data.filter(d => (d.type === (type ? 'purchase' : 'sell'))).map(d => (
+                  {SizesData.map(d => (
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
-                      <TableCell key={data.id} align="left">
-                        {d.id}
-                      </TableCell>
-                      <TableCell key={data.id} align="left">
-                        {d.clientName}
-                      </TableCell>
-                      <TableCell key={data.id} align="left">
-                        {d.invoiceDate}
-                      </TableCell>
-                      <TableCell key={data.id} align="left">
-                        {d.products.map(p => (
-                          p.name + "-" + p.size
-                        ))}
+                      <TableCell key={d.id} align="left">
+                        {d.categoryId[0].name} :
                       </TableCell>
 
-                      <TableCell key={data.id} align="left">
-                        <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => setAddPurchase(d)} />
-
-                      </TableCell>
+                      {d.size.map(s => (
+                        <TableCell key={d.id} align="left">
+                          <div>  {s} </div>
+                        </TableCell>
+                      )
+                      )}
                     </TableRow>
                   ))}
 
@@ -155,14 +123,25 @@ const Purchase = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+
+            {/* <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component='div'
+        count={data.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      /> */}
           </Paper>
         </Card>
       </Grid>
 
-      <AddOrEditPurchase open={open} type={type} handleClickOpen={handleClickOpen} setEditPurchase={setAddPurchase} editPurchase={addPurchase} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
+      <AddOrEditSizes open={open} handleClickOpen={handleClickOpen} setEditSizes={setEditSizes} editSizes={editSizes} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
 
-    </Grid>
+    </Grid >
   )
+
 }
 
-export default withAuth(Purchase)
+export default withAuth(Sizes);

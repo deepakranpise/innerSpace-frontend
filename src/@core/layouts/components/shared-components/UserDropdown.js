@@ -64,6 +64,11 @@ const UserDropdown = () => {
     }
   }
 
+  const handleLogout = () => {
+    localStorage.clear();
+    router.push('/login')
+  }
+
   return (
     <Fragment>
       <Badge
@@ -144,7 +149,7 @@ const UserDropdown = () => {
           </Box>
         </MenuItem>
         <Divider />
-        <MenuItem sx={{ py: 2 }} onClick={() => handleDropdownClose('/pages/login')}>
+        <MenuItem sx={{ py: 2 }} onClick={handleLogout}>
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>

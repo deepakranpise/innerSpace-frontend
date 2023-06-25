@@ -22,31 +22,21 @@ import axiosInstance from 'src/hoc/axios';
 
 
 
-const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditMaster, editMaster }) => {
+const AddOrEditCategoryCategory = ({ open, setOpen, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditCategory, editCategory }) => {
 
   const [name, setName] = useState("");
-  const [code, setCode] = useState("");
-  const [category, setCategory] = useState("648e1709d1da73680b68f45d");
-  const [subCategory, setSubCategory] = useState("648e18f20f0c7fc6c1f7616b");
-
-  const categories = ['instant', 'odd']
-
 
   React.useEffect(() => {
-    console.log("editMaster ", editMaster)
+    console.log("editCategory ", editCategory)
 
-  }, [editMaster])
+  }, [editCategory])
 
   const handleSubmit = () => {
-    alert("f")
     try {
       const data = {
-
-        name: name,
-        categoryId: category,
-        subCategoryId: subCategory,
+        name: name
       }
-      axiosInstance.post("product", data)
+      axiosInstance.post("Category", data)
         .then(res => {
           console.log(res.data.data);
           reset();
@@ -64,16 +54,14 @@ const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, h
   }
 
   const reset = () => {
-    setName("");
-    setCode("")
-
+    setName("")
   }
 
   return (
     <div>
 
-      <Dialog open={open || editMaster} onClose={handleClose}>
-        <DialogTitle>Add Master</DialogTitle>
+      <Dialog open={open || editCategory} onClose={handleClose}>
+        <DialogTitle>Add Category</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit} style={{ marginTop: "10px" }}>
             <Grid container spacing={5} component="form"
@@ -86,50 +74,12 @@ const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, h
                 <TextField
                   fullWidth
                   required
-                  name='ProductName'
+                  name='CategoryName'
                   type='text'
-                  label='Product Name'
-                  placeholder='Product name'
+                  label='Category Name'
+                  placeholder='Category name'
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                />
-              </Grid>
-              {/* <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  required
-                  name='productCode'
-                  type='text'
-                  label='Product Code'
-                  placeholder='Product Code'
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                />
-              </Grid> */}
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  required
-                  name='category'
-                  type='text'
-                  label='Product Category'
-                  placeholder='Product Category'
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  disabled={true}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  required
-                  name='subCategory'
-                  type='text'
-                  label='Sub Category'
-                  placeholder='Sub Category'
-                  value={subCategory}
-                  onChange={(e) => setSubCategory(e.target.value)}
-                  disabled={true}
                 />
               </Grid>
             </Grid>
@@ -146,4 +96,4 @@ const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, h
   );
 }
 
-export default AddOrEditProductMaster;
+export default AddOrEditCategoryCategory;

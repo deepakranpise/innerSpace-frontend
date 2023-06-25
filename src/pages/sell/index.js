@@ -17,6 +17,8 @@ import axios from 'axios'
 import { useState } from 'react'
 import { Alert, Button, Snackbar } from '@mui/material'
 import AddOrEditPurchase from 'src/views/AddorEditPurchase'
+import withAuth from 'src/hoc/withAuth'
+import axiosInstance from 'src/hoc/axios'
 
 const MUITable = () => {
 
@@ -48,7 +50,7 @@ const MUITable = () => {
 
   const fetch = () => {
     try {
-      axios.get("http://localhost:3100/stocks/get", { headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjY0N2I3OWU1ZGUyMDJiMmYxMTMyY2Y4ZSIsImZpcnN0TmFtZSI6IkRlZXBhayIsImxhc3ROYW1lIjoiTWFuZSIsInVzZXJOYW1lIjoibWFuZWRlZXAyMDAxQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiRGVlcGFrIiwiX192IjowfSwiaWF0IjoxNjg1ODE0MDYxLCJleHAiOjE3MTczNTAwNjF9.MBjwAcICyBmAL6O0oxMcD8P_stCpfgWdMEs_vliM8T0' } })
+      axiosInstance.get("stocks/get")
         .then(res => {
           console.log(res.data.data)
           setData(res.data.data);
@@ -107,4 +109,4 @@ const MUITable = () => {
   )
 }
 
-export default MUITable
+export default withAuth(MUITable)

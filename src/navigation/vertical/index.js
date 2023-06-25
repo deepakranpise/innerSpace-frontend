@@ -33,30 +33,27 @@ const navigation = () => {
       path: '/sell'
     },
     {
-      sectionTitle: 'Pages'
+      sectionTitle: 'Masters'
     },
     {
-      title: 'Master',
+      title: 'Product',
       icon: FormatLetterCase,
       path: '/master'
     },
     {
-      title: 'Login',
+      title: 'Category',
       icon: Login,
-      path: '/pages/login',
-      openInNewTab: true
+      path: '/category'
     },
     {
-      title: 'Register',
+      title: 'Sub-Category',
       icon: AccountPlusOutline,
-      path: '/pages/register',
-      openInNewTab: true
+      path: '/sub-category'
     },
     {
-      title: 'Error',
+      title: 'Sizes',
       icon: AlertCircleOutline,
-      path: '/pages/error',
-      openInNewTab: true
+      path: '/sizes'
     },
     {
       sectionTitle: 'User Interface'

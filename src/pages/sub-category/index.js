@@ -19,17 +19,17 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import { MdModeEditOutline } from 'react-icons/md'
-import AddOrEditProductMaster from 'src/views/AddOrEditProductMaster'
+import AddOrEditSubCategory from 'src/views/AddOrEditSubCategory'
 import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
 
 
-const Master = () => {
+const SubCategory = () => {
 
-  const [masterData, setMasterData] = useState([]);
+  const [SubCategoryData, setSubCategoryData] = useState([]);
 
   const [toaster, setToaster] = useState(false);
-  const [editMaster, setEditMaster] = useState(null);
+  const [editSubCategory, setEditSubCategory] = useState(null);
 
 
   const [open, setOpen] = useState(false);
@@ -40,7 +40,7 @@ const Master = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setEditMaster(null)
+    setEditSubCategory(null)
   };
 
   const handleOpenToaster = () => {
@@ -58,9 +58,9 @@ const Master = () => {
 
   const fetch = () => {
     try {
-      axiosInstance.get("product/get?distinct=true")
+      axiosInstance.get("subCategory/get")
         .then(res => {
-          setMasterData(res.data.data);
+          setSubCategoryData(res.data.data);
         })
         .catch(err => {
           console.log(err)
@@ -83,7 +83,7 @@ const Master = () => {
         <Card>
           <CardHeader title='Sticky Header' titleTypographyProps={{ variant: 'h6' }} />
           <Button variant="outlined" onClick={handleClickOpen}>
-            Add Product
+            Add SubCategory
           </Button>
           <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
@@ -96,16 +96,13 @@ const Master = () => {
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Category
                     </TableCell>
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
-                      Sub-Category
-                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {/* {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
               return ( */}
 
-                  {masterData.map(d => (
+                  {SubCategoryData.map(d => (
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
                       <TableCell key={d.id} align="left">
                         {d.name}
@@ -113,11 +110,6 @@ const Master = () => {
                       <TableCell key={d.id} align="left">
                         {d.categoryId.name}
                       </TableCell>
-                      <TableCell key={d.id} align="left">
-                        {d.subCategoryId.name}
-                      </TableCell>
-
-
                     </TableRow>
                   ))}
 
@@ -140,89 +132,11 @@ const Master = () => {
         </Card>
       </Grid>
 
-      <AddOrEditProductMaster open={open} handleClickOpen={handleClickOpen} setEditMaster={setEditMaster} editMaster={editMaster} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
+      <AddOrEditSubCategory open={open} handleClickOpen={handleClickOpen} setEditSubCategory={setEditSubCategory} editSubCategory={editSubCategory} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
 
     </Grid>
   )
 
-
-  // return (
-  //   <>
-  //     <Grid container spacing={6}>
-
-  //       <Grid item xs={12}>
-
-  //         <Card>
-  //           <CardHeader title='Sticky Header' titleTypographyProps={{ variant: 'h6' }} />
-  //           <Button variant="outlined" onClick={() => alert('h')}>
-  //             Add Stock
-  //           </Button>
-  //            </Card>
-  //       </Grid>
-
-  //     </Grid>
-
-  //     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-  //       <TableContainer sx={{ maxHeight: 440 }}>
-  //         <Table stickyHeader aria-label='sticky table'>
-  //           <TableHead>
-  //             <TableRow>
-  //               <TableCell align="left" sx={{ minWidth: 100 }}>
-  //                 Name
-  //               </TableCell>
-
-  //               <TableCell align="left" sx={{ minWidth: 100 }}>
-  //                 Code
-  //               </TableCell>
-  //               <TableCell align="left" sx={{ minWidth: 100 }}>
-  //                 Category
-  //               </TableCell>
-  //               <TableCell align="left" sx={{ minWidth: 100 }}>
-  //                 Sub-Category
-  //               </TableCell>
-  //             </TableRow>
-  //           </TableHead>
-  //           <TableBody>
-  //             {/* {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-  //             return ( */}
-
-  //             {masterData.map(d => (
-  //               <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
-  //                 <TableCell key={d.id} align="left">
-  //                   {d.productName}
-  //                 </TableCell>
-  //                 <TableCell key={d.id} align="left">
-  //                   {d.productCode}
-  //                 </TableCell>
-  //                 <TableCell key={d.id} align="left">
-  //                   {d.category}
-  //                 </TableCell>
-  //                 <TableCell key={d.id} align="left">
-  //                   {d.subCategory}
-  //                 </TableCell>
-
-
-  //               </TableRow>
-  //             ))}
-
-  //             {/* })} */}
-
-  //           </TableBody>
-  //         </Table>
-  //       </TableContainer>
-
-  //       {/* <TablePagination
-  //       rowsPerPageOptions={[10, 25, 100]}
-  //       component='div'
-  //       count={data.length}
-  //       rowsPerPage={rowsPerPage}
-  //       page={page}
-  //       onPageChange={handleChangePage}
-  //       onRowsPerPageChange={handleChangeRowsPerPage}
-  //     /> */}
-  //     </Paper>
-  //   </>
-  // )
 }
 
-export default withAuth(Master);
+export default withAuth(SubCategory);

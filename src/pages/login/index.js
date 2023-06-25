@@ -27,7 +27,6 @@ import FormHelperText from '@mui/material/FormHelperText'
 import * as yup from 'yup'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useAuth } from 'src/hooks/useAuth'
 
 
 // ** Icons Imports
@@ -88,7 +87,6 @@ const LoginPage = () => {
   })
 
   // ** Hook
-  const auth = useAuth()
   const theme = useTheme()
   const router = useRouter()
 
@@ -289,7 +287,7 @@ const LoginPage = () => {
               <LinkStyled href='/forgot-password'>Forgot Password?</LinkStyled>
             </Box>
             <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
-              {auth.loading ? 'spinner' : 'Login'}
+               Login
             </Button>
           </form>
         </CardContent>

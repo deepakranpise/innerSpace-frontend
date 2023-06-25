@@ -12,6 +12,7 @@ import { AiFillDelete } from 'react-icons/ai'
 import { Box, FormHelperText, Grid, Typography } from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
+import axiosInstance from 'src/hoc/axios';
 
 const SellStock = ({ handleClickOpen, handleClose, handleOpenToaster, fetch, stock }) => {
 
@@ -45,7 +46,7 @@ const SellStock = ({ handleClickOpen, handleClose, handleOpenToaster, fetch, sto
         invoiceNo: invoice,
         party: party
       }
-      axios.post("http://localhost:3100/stocks", data, { headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjY0N2I3OWU1ZGUyMDJiMmYxMTMyY2Y4ZSIsImZpcnN0TmFtZSI6IkRlZXBhayIsImxhc3ROYW1lIjoiTWFuZSIsInVzZXJOYW1lIjoibWFuZWRlZXAyMDAxQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiRGVlcGFrIiwiX192IjowfSwiaWF0IjoxNjg1ODE0MDYxLCJleHAiOjE3MTczNTAwNjF9.MBjwAcICyBmAL6O0oxMcD8P_stCpfgWdMEs_vliM8T0' } })
+      axiosInstance.post("stocks", data)
         .then(res => {
           console.log(res.data.data);
           reset();
@@ -73,7 +74,7 @@ const SellStock = ({ handleClickOpen, handleClose, handleOpenToaster, fetch, sto
   }
 
   const addSizeQuantity = () => {
-    let newfield = { size: '', quantity: '', newQuantity:'' }
+    let newfield = { size: '', quantity: '', newQuantity: '' }
     setSizeQuantity([...sizeQuantity, newfield])
   }
 

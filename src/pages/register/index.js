@@ -1,20 +1,17 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, Fragment } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 
 // ** MUI Components
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Icon from 'src/@core/components/icon'
-
 import Divider from '@mui/material/Divider'
 import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
-import InputLabel from '@mui/material/InputLabel'
 import Typography from '@mui/material/Typography'
+import InputLabel from '@mui/material/InputLabel'
 import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
@@ -23,12 +20,6 @@ import { styled, useTheme } from '@mui/material/styles'
 import MuiCard from '@mui/material/Card'
 import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel from '@mui/material/FormControlLabel'
-import FormHelperText from '@mui/material/FormHelperText'
-import * as yup from 'yup'
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useAuth } from 'src/hooks/useAuth'
-
 
 // ** Icons Imports
 import Google from 'mdi-material-ui/Google'
@@ -46,7 +37,6 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
-import AuthApi from 'src/apis/AuthApi'
 
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -60,37 +50,23 @@ const LinkStyled = styled('a')(({ theme }) => ({
 }))
 
 const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
+  marginTop: theme.spacing(1.5),
+  marginBottom: theme.spacing(4),
   '& .MuiFormControlLabel-label': {
     fontSize: '0.875rem',
     color: theme.palette.text.secondary
   }
 }))
 
-const defaultValues = {
-  password: 'admin.123@admin',
-  emailOrMobilenumber: 'tall.thug@gmail.com'
-}
-
-const schema = yup.object().shape({
-  emailOrMobilenumber: yup.string().email().required(),
-  password: yup.string().min(5).required()
-})
-
-const LoginPage = () => {
-  // ** State
-  const [rememberMe, setRememberMe] = useState(true)
-
-  const [showPassword, setShowPassword] = useState(false)
-
+const RegisterPage = () => {
+  // ** States
   const [values, setValues] = useState({
     password: '',
     showPassword: false
   })
 
   // ** Hook
-  const auth = useAuth()
   const theme = useTheme()
-  const router = useRouter()
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -102,39 +78,6 @@ const LoginPage = () => {
 
   const handleMouseDownPassword = event => {
     event.preventDefault()
-  }
-
-  const {
-    control,
-    setError,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
-    defaultValues,
-    mode: 'onBlur',
-    resolver: yupResolver(schema)
-  })
-
-  const onSubmit = async (data) => {
-    const { emailOrMobilenumber, password } = data
-
-    console.log(data)
-
-    const authenticate = await AuthApi.login({ userName: emailOrMobilenumber, password: password })
-    console.log(authenticate)
-    if (authenticate) {
-      router.push('/')
-    } else {
-      alert("Invalid username or password")
-    }
-
-    // auth.login({ emailOrMobilenumber, password, rememberMe }, () => {
-    //   console.log("s")
-    //   setError('emailOrMobilenumber', {
-    //     type: 'manual',
-    //     message: 'Email or Password is invalid'
-    //   })
-    // })
   }
 
   return (
@@ -216,81 +159,84 @@ const LoginPage = () => {
           </Box>
           <Box sx={{ mb: 6 }}>
             <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-              Welcome to {themeConfig.templateName}! 👋🏻
+              Adventure starts here 🚀
             </Typography>
-            <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
+            <Typography variant='body2'>Make your app management easy and fun!</Typography>
           </Box>
-          <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
-            <FormControl fullWidth sx={{ mb: 4 }}>
-              <Controller
-                name='emailOrMobilenumber'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange, onBlur } }) => (
-                  <TextField
-                    autoFocus
-                    label='Email/Username'
-                    value={value}
-                    onBlur={onBlur}
-                    onChange={onChange}
-                    error={Boolean(errors.emailOrMobilenumber)}
-                    placeholder='Enter email or phone number'
-                  />
-                )}
-              />
-              {errors.emailOrMobilenumber && (
-                <FormHelperText sx={{ color: 'error.main' }}>{errors.emailOrMobilenumber.message}</FormHelperText>
-              )}
-            </FormControl>
+          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
+            <TextField autoFocus fullWidth id='username' label='Username' sx={{ marginBottom: 4 }} />
+            <TextField fullWidth type='email' label='Email' sx={{ marginBottom: 4 }} />
             <FormControl fullWidth>
-              <InputLabel htmlFor='auth-login-v2-password' error={Boolean(errors.password)}>
-                Password
-              </InputLabel>
-              <Controller
-                name='password'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange, onBlur } }) => (
-                  <OutlinedInput
-                    value={value}
-                    onBlur={onBlur}
-                    label='Password'
-                    onChange={onChange}
-                    id='auth-login-v2-password'
-                    error={Boolean(errors.password)}
-                    type={showPassword ? 'text' : 'password'}
-                    endAdornment={
-                      <InputAdornment position='end'>
-                        <IconButton
-                          edge='end'
-                          onMouseDown={e => e.preventDefault()}
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
-                          <Icon icon={showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} fontSize={20} />
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                )}
+              <InputLabel htmlFor='auth-register-password'>Password</InputLabel>
+              <OutlinedInput
+                label='Password'
+                value={values.password}
+                id='auth-register-password'
+                onChange={handleChange('password')}
+                type={values.showPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <IconButton
+                      edge='end'
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      aria-label='toggle password visibility'
+                    >
+                      {values.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
-              {errors.password && (
-                <FormHelperText sx={{ color: 'error.main' }} id=''>
-                  {errors.password.message}
-                </FormHelperText>
-              )}
             </FormControl>
-            <Box
-              sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
-            >
-              <FormControlLabel
-                label='Remember Me'
-                control={<Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} />}
-              />
-              <LinkStyled href='/forgot-password'>Forgot Password?</LinkStyled>
-            </Box>
-            <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
-              {auth.loading ? 'spinner' : 'Login'}
+            <FormControlLabel
+              control={<Checkbox />}
+              label={
+                <Fragment>
+                  <span>I agree to </span>
+                  <Link href='/' passHref>
+                    <LinkStyled onClick={e => e.preventDefault()}>privacy policy & terms</LinkStyled>
+                  </Link>
+                </Fragment>
+              }
+            />
+            <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}>
+              Sign up
             </Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <Typography variant='body2' sx={{ marginRight: 2 }}>
+                Already have an account?
+              </Typography>
+              <Typography variant='body2'>
+                <Link passHref href='/pages/login'>
+                  <LinkStyled>Sign in instead</LinkStyled>
+                </Link>
+              </Typography>
+            </Box>
+            <Divider sx={{ my: 5 }}>or</Divider>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Link href='/' passHref>
+                <IconButton component='a' onClick={e => e.preventDefault()}>
+                  <Facebook sx={{ color: '#497ce2' }} />
+                </IconButton>
+              </Link>
+              <Link href='/' passHref>
+                <IconButton component='a' onClick={e => e.preventDefault()}>
+                  <Twitter sx={{ color: '#1da1f2' }} />
+                </IconButton>
+              </Link>
+              <Link href='/' passHref>
+                <IconButton component='a' onClick={e => e.preventDefault()}>
+                  <Github
+                    sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : theme.palette.grey[300]) }}
+                  />
+                </IconButton>
+              </Link>
+              <Link href='/' passHref>
+                <IconButton component='a' onClick={e => e.preventDefault()}>
+                  <Google sx={{ color: '#db4437' }} />
+                </IconButton>
+              </Link>
+            </Box>
           </form>
         </CardContent>
       </Card>
@@ -298,6 +244,6 @@ const LoginPage = () => {
     </Box>
   )
 }
-LoginPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
+RegisterPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
 
-export default LoginPage
+export default RegisterPage

@@ -17,6 +17,8 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 import Table from 'src/views/dashboard/Table'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import withAuth from '../hoc/withAuth';
+import axiosInstance from 'src/hoc/axios'
 
 const Dashboard = () => {
 
@@ -27,7 +29,7 @@ const Dashboard = () => {
 
   const fetch = () => {
     try {
-      axios.get("http://localhost:3100/stocks/get", { headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjY0N2I3OWU1ZGUyMDJiMmYxMTMyY2Y4ZSIsImZpcnN0TmFtZSI6IkRlZXBhayIsImxhc3ROYW1lIjoiTWFuZSIsInVzZXJOYW1lIjoibWFuZWRlZXAyMDAxQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiRGVlcGFrIiwiX192IjowfSwiaWF0IjoxNjg1ODE0MDYxLCJleHAiOjE3MTczNTAwNjF9.MBjwAcICyBmAL6O0oxMcD8P_stCpfgWdMEs_vliM8T0' } })
+      axiosInstance.get("/stocks/get")
         .then(res => {
           console.log("from dashboard ", res.data.data)
           setData(res.data.data);
@@ -42,7 +44,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     try {
-      axios.get("http://localhost:3100/size/get", { headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjY0N2I3OWU1ZGUyMDJiMmYxMTMyY2Y4ZSIsImZpcnN0TmFtZSI6IkRlZXBhayIsImxhc3ROYW1lIjoiTWFuZSIsInVzZXJOYW1lIjoibWFuZWRlZXAyMDAxQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiRGVlcGFrIiwiX192IjowfSwiaWF0IjoxNjg1ODE0MDYxLCJleHAiOjE3MTczNTAwNjF9.MBjwAcICyBmAL6O0oxMcD8P_stCpfgWdMEs_vliM8T0' } })
+      axiosInstance.get("size/get",)
         .then(res => {
           console.log(res.data.data)
           setColumns(res.data.data);
@@ -77,4 +79,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default withAuth(Dashboard);
