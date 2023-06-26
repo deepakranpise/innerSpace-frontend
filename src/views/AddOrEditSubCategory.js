@@ -34,7 +34,7 @@ const AddOrEditCategory = ({ open, setOpen, handleClickOpen, handleClose, handle
     axiosInstance.get("category/get").then((res) => {
       setCategories(res.data.data)
     })
-  },[])
+  }, [])
 
   React.useEffect(() => {
     console.log("editCategory ", editCategory)
@@ -64,7 +64,8 @@ const AddOrEditCategory = ({ open, setOpen, handleClickOpen, handleClose, handle
   }
 
   const reset = () => {
-    setName("")
+    setName("");
+    setCategory("");
   }
 
   return (

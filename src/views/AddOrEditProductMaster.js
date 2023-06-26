@@ -26,10 +26,21 @@ const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, h
 
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
-  const [category, setCategory] = useState("648e1709d1da73680b68f45d");
-  const [subCategory, setSubCategory] = useState("648e18f20f0c7fc6c1f7616b");
+  const [category, setCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
 
-  const categories = ['instant', 'odd']
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+
+
+  React.useEffect(() => {
+    axiosInstance.get("category/get").then((res) => {
+      setCategories(res.data.data)
+    })
+    axiosInstance.get("subCategory/get").then((res) => {
+      setSubCategories(res.data.data)
+    })
+  }, [])
 
 
   React.useEffect(() => {
@@ -65,8 +76,8 @@ const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, h
 
   const reset = () => {
     setName("");
-    setCode("")
-
+    setCategory("");
+    setSubCategory("");
   }
 
   return (
@@ -94,19 +105,42 @@ const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, h
                   onChange={(e) => setName(e.target.value)}
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  required
-                  name='productCode'
-                  type='text'
-                  label='Product Code'
-                  placeholder='Product Code'
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                />
-              </Grid> */}
-              <Grid item xs={6}>
+
+              <Grid item xs={4}>
+                <FormControl fullWidth>
+                  <InputLabel id='Size'>Category</InputLabel>
+                  <Select
+                    label='Category'
+                    name="Category"
+                    id='form-layouts-separator-select'
+                    labelId='form-layouts-separator-select-label'
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                  >
+                    {categories.map(c => (
+                      <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={4}>
+                <FormControl fullWidth>
+                  <InputLabel id='Size'>Sub Category</InputLabel>
+                  <Select
+                    label='Sub Category'
+                    name="subCategory"
+                    id='form-layouts-separator-select'
+                    labelId='form-layouts-separator-select-label'
+                    value={subCategory}
+                    onChange={(e) => setSubCategory(e.target.value)}
+                  >
+                    {subCategories.map(c => (
+                      <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              {/* <Grid item xs={6}>
                 <TextField
                   fullWidth
                   required
@@ -131,7 +165,7 @@ const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, h
                   onChange={(e) => setSubCategory(e.target.value)}
                   disabled={true}
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
           </form>
         </DialogContent>

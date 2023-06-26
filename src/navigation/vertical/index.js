@@ -27,11 +27,12 @@ const navigation = () => {
       icon: Table,
       path: '/purchase'
     },
-    {
-      title: 'Sell',
-      icon: Table,
-      path: '/sell'
-    },
+
+    // {
+    //   title: 'Sell',
+    //   icon: Table,
+    //   path: '/sell'
+    // },
     {
       sectionTitle: 'Masters'
     },

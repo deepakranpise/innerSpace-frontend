@@ -77,7 +77,6 @@ const FallbackSpinner = ({ sx }) => {
           </g>
         </g>
       </svg> */}
-      <img src='/images/snm/logo.png' height='70' width='70'/>
       <CircularProgress disableShrink sx={{ mt: 6 }} />
     </Box>
   )

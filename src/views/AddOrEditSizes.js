@@ -43,7 +43,7 @@ const AddOrEditSizes = ({ open, setOpen, handleClickOpen, handleClose, handleOpe
   const handleSubmit = () => {
     try {
       const data = {
-        name: name,
+        size: [name],
         categoryId: category
       }
       axiosInstance.post("size", data)
@@ -64,7 +64,8 @@ const AddOrEditSizes = ({ open, setOpen, handleClickOpen, handleClose, handleOpe
   }
 
   const reset = () => {
-    setName("")
+    setName("");
+    setCategory("");
   }
 
   return (

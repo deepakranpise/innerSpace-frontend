@@ -107,7 +107,8 @@ const VerticalNavHeader = props => {
               </g>
             </svg>
             <HeaderTitle variant='h6' sx={{ ml: 3 }}>
-              {themeConfig.templateName}
+              {/* {themeConfig.templateName} */}
+              Inventory Management
             </HeaderTitle>
           </StyledLink>
         </Link>

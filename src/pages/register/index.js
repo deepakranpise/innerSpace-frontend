@@ -154,7 +154,7 @@ const RegisterPage = () => {
                 fontSize: '1.5rem !important'
               }}
             >
-              {themeConfig.templateName}
+              Inventory Management
             </Typography>
           </Box>
           <Box sx={{ mb: 6 }}>
