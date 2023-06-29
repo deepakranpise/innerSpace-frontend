@@ -32,10 +32,12 @@ import AddOrEditPurchase from 'src/views/AddorEditPurchase'
 import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
 import moment from 'moment'
+import { useRouter } from 'next/router'
 
 const Purchase = () => {
 
   const [data, setData] = useState([]);
+  const router = useRouter();
 
   //1 for puchase 0 for sell
   const [type, setType] = useState(1);
@@ -76,7 +78,7 @@ const Purchase = () => {
         .catch(err => {
           console.log(err)
         })
-    } catch (rrr) {
+    } catch (err) {
       console.log(err)
     }
   }
@@ -147,7 +149,7 @@ const Purchase = () => {
                   {/* {data.filter(d => (d.type === (type ? 'purchase' : 'sell'))).map(d => ( */}
                   {data.map(d => (
 
-                    <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
+                    <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }} onClick={() => router.push(`/purchase/${d._id}`)}>
                       <TableCell key={data.id} align="left">
                         {d.id}
                       </TableCell>
