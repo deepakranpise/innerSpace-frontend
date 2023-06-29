@@ -22,7 +22,7 @@ import axiosInstance from 'src/hoc/axios';
 
 
 
-const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditCategory, editCategory }) => {
+const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditCategory, editCategory }) => {
 
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(false);
@@ -44,7 +44,7 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
       const data = {
         name: name
       }
-      axiosInstance.post("Category", data)
+      axiosInstance.post("client", data)
         .then(res => {
           if (res.data.status === 200) {
             reset();
@@ -86,10 +86,10 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
                   fullWidth
                   required
                   error={nameError}
-                  name='CategoryName'
+                  name='partyName'
                   type='text'
-                  label='Category Name'
-                  placeholder='Category name'
+                  label='Party Name'
+                  placeholder='Party name'
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -108,4 +108,4 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
   );
 }
 
-export default AddOrEditCategory;
+export default AddOrEditParty;

@@ -31,6 +31,7 @@ import { MdModeEditOutline } from 'react-icons/md'
 import AddOrEditPurchase from 'src/views/AddorEditPurchase'
 import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
+import moment from 'moment'
 
 const Purchase = () => {
 
@@ -40,18 +41,20 @@ const Purchase = () => {
   const [type, setType] = useState(1);
 
   const [toaster, setToaster] = useState(false);
-  const [addPurchase, setAddPurchase] = useState(null);
+  const [errorToaster, setErrorToaster] = useState(false);
+  const [editPurchase, setEditPurchase] = useState(null);
 
 
-  const [open, setOpen] = useState(false);
+  const [addPurchase, setAddPurchase] = useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpen = (type) => {
+    setType(type);
+    setAddPurchase(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
-    setAddPurchase(null)
+    setAddPurchase(false);
+    setEditPurchase(null)
   };
 
   const handleOpenToaster = () => {
@@ -60,6 +63,7 @@ const Purchase = () => {
 
   const handleCloseToaster = () => {
     setToaster(false);
+    setErrorToaster(false);
   }
 
   const fetch = () => {
@@ -81,6 +85,7 @@ const Purchase = () => {
     fetch();
   }, [])
 
+
   return (
     <Grid container spacing={6}>
       <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
@@ -88,14 +93,25 @@ const Purchase = () => {
           Purchase added successfully
         </Alert>
       </Snackbar>
+      <Snackbar open={errorToaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
+        <Alert onClose={handleCloseToaster} severity="error" sx={{ width: '100%' }}>
+          Error While Adding Product
+        </Alert>
+      </Snackbar>
       <Grid item xs={12}>
-        <Button variant="outlined" onClick={() => setType(!type)}>
+        {/* <Button variant="outlined" onClick={() => setType(!type)}>
           See {type ? "Sell" : "Purchase"} Data
-        </Button>
+        </Button> */}
         <Card>
           <CardHeader title='Sticky Header' titleTypographyProps={{ variant: 'h6' }} />
-          <Button variant="outlined" onClick={handleClickOpen}>
-            Add {type ? "Purchase" : "Sell"}
+          <Button variant="outlined" onClick={() => handleClickOpen(1)}>
+            {/* Add {type ? "Purchase" : "Sell"} */}
+            Add Purchase
+          </Button>
+
+          <Button variant="outlined" onClick={() => handleClickOpen(0)}>
+            {/* Add {type ? "Purchase" : "Sell"} */}
+            Add Sell
           </Button>
           {/* <TableStickyHeader setEditStock={setEditStock}  editStock={editStock} data={data} /> */}
 
@@ -113,10 +129,12 @@ const Purchase = () => {
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Date
                     </TableCell>
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                    {/* <TableCell align="left" sx={{ minWidth: 100 }}>
                       Products
+                    </TableCell> */}
+                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                      Type
                     </TableCell>
-
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Action
                     </TableCell>
@@ -126,25 +144,30 @@ const Purchase = () => {
                   {/* {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
               return ( */}
 
-                  {data.filter(d => (d.type === (type ? 'purchase' : 'sell'))).map(d => (
+                  {/* {data.filter(d => (d.type === (type ? 'purchase' : 'sell'))).map(d => ( */}
+                  {data.map(d => (
+
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
                       <TableCell key={data.id} align="left">
                         {d.id}
                       </TableCell>
                       <TableCell key={data.id} align="left">
-                        {d.clientName}
+                        {d.clientName.name}
                       </TableCell>
                       <TableCell key={data.id} align="left">
-                        {d.invoiceDate}
+                        {moment(d.invoiceDate).format("YYYY-MM-DD")}
                       </TableCell>
-                      <TableCell key={data.id} align="left">
+                      {/* <TableCell key={data.id} align="left">
                         {d.products.map(p => (
-                          p.name + "-" + p.size
+                          p.productId.name + "-" + p.productId.size
                         ))}
+                      </TableCell> */}
+                      <TableCell key={data.id} align="left">
+                        {d.type}
                       </TableCell>
 
                       <TableCell key={data.id} align="left">
-                        <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => setAddPurchase(d)} />
+                        <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => setEditPurchase(d)} />
 
                       </TableCell>
                     </TableRow>
@@ -159,7 +182,7 @@ const Purchase = () => {
         </Card>
       </Grid>
 
-      <AddOrEditPurchase open={open} type={type} handleClickOpen={handleClickOpen} setEditPurchase={setAddPurchase} editPurchase={addPurchase} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
+      <AddOrEditPurchase addPurchase={addPurchase} setErrorToaster={setErrorToaster} type={type} editPurchase={editPurchase} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
 
     </Grid>
   )

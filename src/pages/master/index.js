@@ -29,6 +29,7 @@ const Master = () => {
   const [masterData, setMasterData] = useState([]);
 
   const [toaster, setToaster] = useState(false);
+  const [errorToaster, setErrorToaster] = useState(false);
   const [editMaster, setEditMaster] = useState(null);
 
 
@@ -49,6 +50,7 @@ const Master = () => {
 
   const handleCloseToaster = () => {
     setToaster(false);
+    setErrorToaster(false);
   }
 
 
@@ -75,7 +77,13 @@ const Master = () => {
     <Grid container spacing={6}>
       <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="success" sx={{ width: '100%' }}>
-          Stock added successfully
+          Product added successfully
+        </Alert>
+      </Snackbar>
+
+      <Snackbar open={errorToaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
+        <Alert onClose={handleCloseToaster} severity="error" sx={{ width: '100%' }}>
+          Error While Adding Product
         </Alert>
       </Snackbar>
       <Grid item xs={12}>
@@ -94,6 +102,9 @@ const Master = () => {
                       Name
                     </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
+                      Code
+                    </TableCell>
+                    <TableCell align="left" sx={{ minWidth: 100 }}>
                       Category
                     </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
@@ -109,6 +120,9 @@ const Master = () => {
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
                       <TableCell key={d.id} align="left">
                         {d.name}
+                      </TableCell>
+                      <TableCell key={d.id} align="left">
+                        {d?.code}
                       </TableCell>
                       <TableCell key={d.id} align="left">
                         {d.categoryId.name}
@@ -140,7 +154,7 @@ const Master = () => {
         </Card>
       </Grid>
 
-      <AddOrEditProductMaster open={open} handleClickOpen={handleClickOpen} setEditMaster={setEditMaster} editMaster={editMaster} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
+      <AddOrEditProductMaster open={open} setErrorToaster= {setErrorToaster} handleClickOpen={handleClickOpen} setEditMaster={setEditMaster} editMaster={editMaster} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
 
     </Grid>
   )

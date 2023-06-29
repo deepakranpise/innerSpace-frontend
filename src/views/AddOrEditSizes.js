@@ -16,9 +16,7 @@ import FormControl from '@mui/material/FormControl'
 import MenuItem from '@mui/material/MenuItem'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
-import Autocomplete from '@mui/material/Autocomplete'
 import axiosInstance from 'src/hoc/axios';
-
 
 
 
@@ -26,8 +24,15 @@ const AddOrEditSizes = ({ open, setOpen, handleClickOpen, handleClose, handleOpe
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
+  const [nameError, setNameError] = useState(false);
+  const [categoryError, setCategoryError] = useState(false);
+  const [sizeError, setSizeError] = useState(false);
+
+
 
   const [categories, setCategories] = useState([]);
+  const [sizes, setSizes] = useState([]);
+  const [count, setCount] = useState(1);
 
 
   React.useEffect(() => {
@@ -40,10 +45,46 @@ const AddOrEditSizes = ({ open, setOpen, handleClickOpen, handleClose, handleOpe
     console.log("editSize ", editSize)
   }, [editSize])
 
+
+  const addSizes = (value, index) => {
+    let size = sizes;
+
+    size[index] = value;
+    setSizes(size);
+  }
+
   const handleSubmit = () => {
+    if (sizes.length != count || !category) {
+      if (!name) {
+        setNameError(true);
+      }
+      if (!category) {
+        setCategoryError(true);
+      }
+
+      return;
+    }
+    setSizeError(false);
+    sizes.forEach(s => {
+      if (s === '' || s === null || s === undefined) {
+        setNameError(true);
+        alert("fill all sizes");
+        setSizeError(true);
+
+        return;
+      }
+    });
+    if (sizeError) {
+      return;
+    }
+
+    console.log(sizes)
+    setNameError(false);
+    setCategoryError(false);
+
     try {
       const data = {
-        size: [name],
+        size: sizes,
         categoryId: category
       }
       axiosInstance.post("size", data)
@@ -68,6 +109,19 @@ const AddOrEditSizes = ({ open, setOpen, handleClickOpen, handleClose, handleOpe
     setCategory("");
   }
 
+  const deleteSizeQuantity = () => {
+    let array = sizes;
+    if (array.length > 1) {
+      array.splice(array.length - 1, 1);
+      setSizes(array);
+      setCount(--count);
+    } else {
+      if (count > 1) {
+        setCount(--count);
+      }
+    }
+  }
+
   return (
     <div>
 
@@ -82,22 +136,11 @@ const AddOrEditSizes = ({ open, setOpen, handleClickOpen, handleClose, handleOpe
               noValidate
               autoComplete="off">
               <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  required
-                  name='Size'
-                  type='text'
-                  label='Size'
-                  placeholder='Size'
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={4}>
                 <FormControl fullWidth>
                   <InputLabel id='Size'>Category</InputLabel>
                   <Select
                     label='Category'
+                    error={categoryError}
                     name="Category"
                     id='form-layouts-separator-select'
                     labelId='form-layouts-separator-select-label'
@@ -110,6 +153,34 @@ const AddOrEditSizes = ({ open, setOpen, handleClickOpen, handleClose, handleOpe
                   </Select>
                 </FormControl>
               </Grid>
+              {[...Array(count)].map((s, index) => (
+                <>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      required
+                      error={nameError}
+                      name='Size'
+                      type='text'
+                      label='Size'
+                      placeholder='Size'
+                      value={s}
+                      onChange={(e) => addSizes(e.target.value, index)}
+                    />
+                  </Grid>
+                </>
+              ))}
+
+              {(count > 1) && (
+                <Grid item xs={12}>
+                  <AiFillDelete color="red" size="20px" style={{ cursor: "pointer" }} onClick={deleteSizeQuantity} />
+                </Grid>
+              )}
+
+              <Grid item xs={6}>
+                <BsFillPlusCircleFill color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => setCount(++count)} />
+              </Grid>
+
             </Grid>
           </form>
         </DialogContent>

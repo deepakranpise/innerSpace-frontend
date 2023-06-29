@@ -19,18 +19,18 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import { MdModeEditOutline } from 'react-icons/md'
-import AddOrEditCategory from 'src/views/AddOrEditCategory'
+import AddOrEditParty from 'src/views/AddOrEditParty'
 import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
 
 
-const Category = () => {
+const Party = () => {
 
-  const [CategoryData, setCategoryData] = useState([]);
+  const [PartyData, setPartyData] = useState([]);
 
   const [toaster, setToaster] = useState(false);
   const [errorToaster, setErrorToaster] = useState(false);
-  const [editCategory, setEditCategory] = useState(null);
+  const [editParty, setEditParty] = useState(null);
 
 
   const [open, setOpen] = useState(false);
@@ -41,7 +41,7 @@ const Category = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setEditCategory(null)
+    setEditParty(null)
   };
 
   const handleOpenToaster = () => {
@@ -60,9 +60,9 @@ const Category = () => {
 
   const fetch = () => {
     try {
-      axiosInstance.get("category/get")
+      axiosInstance.get("client/get")
         .then(res => {
-          setCategoryData(res.data.data);
+          setPartyData(res.data.data);
         })
         .catch(err => {
           console.log(err)
@@ -77,13 +77,13 @@ const Category = () => {
     <Grid container spacing={6}>
       <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="success" sx={{ width: '100%' }}>
-          Category added successfully
+          Party added successfully
         </Alert>
       </Snackbar>
 
       <Snackbar open={errorToaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="error" sx={{ width: '100%' }}>
-          Error While Adding Category
+          Error While Adding Party
         </Alert>
       </Snackbar>
 
@@ -92,7 +92,7 @@ const Category = () => {
         <Card>
           <CardHeader title='Sticky Header' titleTypographyProps={{ variant: 'h6' }} />
           <Button variant="outlined" onClick={handleClickOpen}>
-            Add Category
+            Add Party
           </Button>
           <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
@@ -105,10 +105,7 @@ const Category = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/* {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-              return ( */}
-
-                  {CategoryData.map(d => (
+                  {PartyData.map(d => (
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
                       <TableCell key={d.id} align="left">
                         {d.name}
@@ -135,11 +132,11 @@ const Category = () => {
         </Card>
       </Grid>
 
-      <AddOrEditCategory open={open} setErrorToaster={setErrorToaster} handleClickOpen={handleClickOpen} setEditCategory={setEditCategory} editCategory={editCategory} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
+      <AddOrEditParty open={open} setErrorToaster={setErrorToaster} handleClickOpen={handleClickOpen} setEditParty={setEditParty} editParty={editParty} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
 
     </Grid>
   )
 
 }
 
-export default withAuth(Category);
+export default withAuth(Party);

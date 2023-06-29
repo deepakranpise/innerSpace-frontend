@@ -22,12 +22,21 @@ import axiosInstance from 'src/hoc/axios';
 
 
 
-const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditMaster, editMaster }) => {
+const AddOrEditProductMaster = ({ open, setOpen,setErrorToaster, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditMaster, editMaster }) => {
+
+
+
 
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
+  const [nameError, setNameError] = useState(false);
+  const [codeError, setCodeError] = useState(false);
+  const [categoryError, setCategoryError] = useState(false);
+  const [subCategoryError, setSubCategoryError] = useState(false);
+
+
 
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
@@ -49,21 +58,48 @@ const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, h
   }, [editMaster])
 
   const handleSubmit = () => {
-    alert("f")
+
+    if (!name || !code || !category || !subCategory) {
+      if (!name) {
+        setNameError(true);
+      }
+      if (!code) {
+        setCodeError(true);
+      }
+      if (!category) {
+        setCategoryError(true);
+      }
+      if (!subCategory) {
+        setSubCategoryError(true);
+      }
+
+      return;
+    }
+
+    setNameError(false);
+    setCodeError(false);
+    setCategoryError(false);
+    setSubCategoryError(false);
+
+
     try {
       const data = {
 
         name: name,
+        code: code,
         categoryId: category,
         subCategoryId: subCategory,
       }
       axiosInstance.post("product", data)
         .then(res => {
-          console.log(res.data.data);
-          reset();
-          handleClose();
-          handleOpenToaster();
-          fetch();
+          if (res.data.status === 200) {
+            reset();
+            handleClose();
+            handleOpenToaster();
+            fetch();
+          } else {
+            setErrorToaster(true);
+          }
         })
         .catch(err => {
           console.log(err)
@@ -76,6 +112,7 @@ const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, h
 
   const reset = () => {
     setName("");
+    setCode("");
     setCategory("");
     setSubCategory("");
   }
@@ -88,15 +125,16 @@ const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, h
         <DialogContent>
           <form onSubmit={handleSubmit} style={{ marginTop: "10px" }}>
             <Grid container spacing={5} component="form"
+              validate
               sx={{
                 '& .MuiTextField-root': { m: 1, width: "max" },
               }}
-              noValidate
               autoComplete="off">
               <Grid item xs={12}>
                 <TextField
                   fullWidth
                   required
+                  error={nameError}
                   name='ProductName'
                   type='text'
                   label='Product Name'
@@ -105,12 +143,27 @@ const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, h
                   onChange={(e) => setName(e.target.value)}
                 />
               </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  fullWidth
+                  required
+                  error={codeError}
+                  name='ProductCode'
+                  type='text'
+                  label='Product Code'
+                  placeholder='Product code'
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                />
+              </Grid>
 
               <Grid item xs={4}>
                 <FormControl fullWidth>
                   <InputLabel id='Size'>Category</InputLabel>
                   <Select
                     label='Category'
+                    required
+                    error={categoryError}
                     name="Category"
                     id='form-layouts-separator-select'
                     labelId='form-layouts-separator-select-label'
@@ -127,6 +180,8 @@ const AddOrEditProductMaster = ({ open, setOpen, handleClickOpen, handleClose, h
                 <FormControl fullWidth>
                   <InputLabel id='Size'>Sub Category</InputLabel>
                   <Select
+                    required
+                    error={subCategoryError}
                     label='Sub Category'
                     name="subCategory"
                     id='form-layouts-separator-select'

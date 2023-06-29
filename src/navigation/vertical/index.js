@@ -57,6 +57,11 @@ const navigation = () => {
       path: '/sizes'
     },
     {
+      title: 'Party',
+      icon: AccountPlusOutline,
+      path: '/party'
+    },
+    {
       sectionTitle: 'User Interface'
     },
     {

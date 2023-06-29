@@ -29,17 +29,19 @@ const SubCategory = () => {
   const [SubCategoryData, setSubCategoryData] = useState([]);
 
   const [toaster, setToaster] = useState(false);
+  const [errorToaster, setErrorToaster] = useState(false);
+
   const [editSubCategory, setEditSubCategory] = useState(null);
 
 
-  const [open, setOpen] = useState(false);
+  const [addSubCategory, setAddSubCategory] = useState(false);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setAddSubCategory(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setAddSubCategory(false);
     setEditSubCategory(null)
   };
 
@@ -49,6 +51,7 @@ const SubCategory = () => {
 
   const handleCloseToaster = () => {
     setToaster(false);
+    setErrorToaster(false);
   }
 
 
@@ -75,9 +78,16 @@ const SubCategory = () => {
     <Grid container spacing={6}>
       <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="success" sx={{ width: '100%' }}>
-          Stock added successfully
+          Sub Category added successfully
         </Alert>
       </Snackbar>
+
+      <Snackbar open={errorToaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
+        <Alert onClose={handleCloseToaster} severity="error" sx={{ width: '100%' }}>
+          Error While Adding Sub Category
+        </Alert>
+      </Snackbar>
+
       <Grid item xs={12}>
 
         <Card>
@@ -108,7 +118,7 @@ const SubCategory = () => {
                         {d.name}
                       </TableCell>
                       <TableCell key={d.id} align="left">
-                        {d.categoryId.name}
+                        {d.categoryId[0].name}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -132,7 +142,7 @@ const SubCategory = () => {
         </Card>
       </Grid>
 
-      <AddOrEditSubCategory open={open} handleClickOpen={handleClickOpen} setEditSubCategory={setEditSubCategory} editSubCategory={editSubCategory} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
+      <AddOrEditSubCategory open={addSubCategory} setErrorToaster={setErrorToaster} handleClickOpen={handleClickOpen} setEditSubCategory={setEditSubCategory} editSubCategory={editSubCategory} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
 
     </Grid>
   )

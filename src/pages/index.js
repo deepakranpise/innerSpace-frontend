@@ -23,7 +23,7 @@ import axiosInstance from 'src/hoc/axios'
 const Dashboard = () => {
 
   const [data, setData] = useState([])
-  const [columns, setColumns] = useState(["2x6", "4x6", "5x6", "6x6", "6x7", "3x6", "1.5x3"])
+  const [columns, setColumns] = useState([])
 
 
 

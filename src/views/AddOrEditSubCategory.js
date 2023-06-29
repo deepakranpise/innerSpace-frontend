@@ -22,10 +22,12 @@ import axiosInstance from 'src/hoc/axios';
 
 
 
-const AddOrEditCategory = ({ open, setOpen, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditCategory, editCategory }) => {
+const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditCategory, editCategory }) => {
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
+  const [nameError, setNameError] = useState(false);
+  const [categoryError, setCategoryError] = useState(false);
 
   const [categories, setCategories] = useState([]);
 
@@ -41,6 +43,18 @@ const AddOrEditCategory = ({ open, setOpen, handleClickOpen, handleClose, handle
   }, [editCategory])
 
   const handleSubmit = () => {
+    if(!name || !category){
+      if (!name) {
+        setNameError(true);
+      }
+      if (!category) {
+        setCategoryError(true);
+      }
+
+      return;
+    }
+    setNameError(false);
+    setCategoryError(false);
     try {
       const data = {
         name: name,
@@ -48,11 +62,15 @@ const AddOrEditCategory = ({ open, setOpen, handleClickOpen, handleClose, handle
       }
       axiosInstance.post("subCategory", data)
         .then(res => {
-          console.log(res.data.data);
-          reset();
-          handleClose();
-          handleOpenToaster();
-          fetch();
+          if (res.data.status === 200) {
+            console.log(res.data.data);
+            reset();
+            handleClose();
+            handleOpenToaster();
+            fetch();
+          } else {
+            setErrorToaster(true);
+          }
         })
         .catch(err => {
           console.log(err)
@@ -85,6 +103,7 @@ const AddOrEditCategory = ({ open, setOpen, handleClickOpen, handleClose, handle
                 <TextField
                   fullWidth
                   required
+                  error = {nameError}
                   name='SubCategoryName'
                   type='text'
                   label='SubCategory Name'
@@ -98,6 +117,7 @@ const AddOrEditCategory = ({ open, setOpen, handleClickOpen, handleClose, handle
                   <InputLabel id='category'>Category</InputLabel>
                   <Select
                     label='Category'
+                  error = {categoryError}
                     name="category"
                     id='form-layouts-separator-select'
                     labelId='form-layouts-separator-select-label'

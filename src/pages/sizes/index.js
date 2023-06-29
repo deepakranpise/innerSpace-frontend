@@ -29,6 +29,7 @@ const Sizes = () => {
   const [SizesData, setSizesData] = useState([]);
 
   const [toaster, setToaster] = useState(false);
+  const [errorToaster, setErrorToaster] = useState(false);
   const [editSizes, setEditSizes] = useState(null);
 
 
@@ -49,6 +50,8 @@ const Sizes = () => {
 
   const handleCloseToaster = () => {
     setToaster(false);
+    setErrorToaster(false);
+
   }
 
 
@@ -76,7 +79,12 @@ const Sizes = () => {
     <Grid container spacing={6}>
       <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="success" sx={{ width: '100%' }}>
-          Stock added successfully
+          Size added successfully
+        </Alert>
+      </Snackbar>
+      <Snackbar open={errorToaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
+        <Alert onClose={handleCloseToaster} severity="error" sx={{ width: '100%' }}>
+          Error While Adding Size
         </Alert>
       </Snackbar>
       <Grid item xs={12}>
@@ -137,7 +145,7 @@ const Sizes = () => {
         </Card>
       </Grid>
 
-      <AddOrEditSizes open={open} handleClickOpen={handleClickOpen} setEditSizes={setEditSizes} editSizes={editSizes} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
+      <AddOrEditSizes open={open} setErrorToaster={setErrorToaster} handleClickOpen={handleClickOpen} setEditSizes={setEditSizes} editSizes={editSizes} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
 
     </Grid >
   )
