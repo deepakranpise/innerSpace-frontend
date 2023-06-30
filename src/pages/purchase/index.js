@@ -51,6 +51,7 @@ const Purchase = () => {
   const [addPurchase, setAddPurchase] = useState(false);
 
   const handleClickOpen = (type) => {
+    // alert()
     setType(type);
     setAddPurchase(true);
   };
@@ -145,34 +146,24 @@ const Purchase = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/* {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-              return ( */}
 
-                  {/* {data.filter(d => (d.type === (type ? 'purchase' : 'sell'))).map(d => ( */}
                   {data.map(d => (
 
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }} onClick={() => router.push(`/purchase/${d._id}`)}>
                       <TableCell key={data.id} align="left">
-                        {d.id}
+                        {d.invoiceNo}
                       </TableCell>
                       <TableCell key={data.id} align="left">
-                        {d?.clientName?.name}
+                        {d.clientName}
                       </TableCell>
                       <TableCell key={data.id} align="left">
                         {moment(d.invoiceDate).format("YYYY-MM-DD")}
                       </TableCell>
-                      {/* <TableCell key={data.id} align="left">
-                        {d.products.map(p => (
-                          p.productId.name + "-" + p.productId.size
-                        ))}
-                      </TableCell> */}
                       <TableCell key={data.id} align="left">
                         {d?.type}
                       </TableCell>
-
                       <TableCell key={data.id} align="left">
                         <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => setEditPurchase(d)} />
-
                       </TableCell>
                     </TableRow>
                   ))}

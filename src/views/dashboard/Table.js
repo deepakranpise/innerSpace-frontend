@@ -12,7 +12,7 @@ import TableContainer from '@mui/material/TableContainer'
 import { useEffect } from 'react'
 import SellStock from '../sellStock'
 import { useState } from 'react'
-import axios from 'axios'
+import { CSVLink } from "react-csv";
 
 
 const DashboardTable = ({ data, columns, fetch }) => {
@@ -40,9 +40,44 @@ const DashboardTable = ({ data, columns, fetch }) => {
     setToaster(false);
   }
 
+  const getHeaders = () => {
+    const headers = [
+      { label: "Name", key: "_id" },
+    ];
+
+    columns[0]?.size?.forEach(element => {
+      headers.push({ label: element, key: element })
+    });
+
+    return headers
+  }
+
+
+  const csvReport = {
+    data: data,
+    headers: getHeaders(),
+    filename: "stocks",
+  };
+
   return (
     <>
       <Card>
+        <CSVLink {...csvReport}
+          style={{
+            color: "#fff",
+            textDecoration: "none",
+            fontWeight: "600",
+            border: "1px solid",
+            height: "35px",
+            display: "flex",
+            width: "70px",
+            borderRadius: "2%",
+            textAlign: "center",
+            padding: "5px",
+            float: "right",
+            margin: "10px"
+          }}
+        >Export</CSVLink>
         <TableContainer>
           <Table sx={{ minWidth: 800 }} aria-label='table in dashboard'>
             <TableHead>
@@ -97,7 +132,7 @@ const DashboardTable = ({ data, columns, fetch }) => {
             </TableBody>
           </Table>
         </TableContainer>
-      </Card>
+      </Card >
       <SellStock handleClose={handleClose} stock={stock} />
     </>
   )

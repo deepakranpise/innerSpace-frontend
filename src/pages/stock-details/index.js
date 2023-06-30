@@ -85,13 +85,10 @@ const StockDetails = () => {
 
     const filteredRows = data.filter(row => {
       console.log(row);
-      row.products.filter(r => {
-        return Object.keys(row).some(field => {
 
-          // @ts-ignore
-
-          return searchRegex.test(row[field].toString())
-        })
+      return Object.keys(row).some(field => {
+        // @ts-ignore
+        return searchRegex.test(row[field].toString())
       })
     })
     if (value.length) {
@@ -187,10 +184,13 @@ const StockDetails = () => {
                     </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Category
+                      <Typography variant='body2' sx={{ mt: 2 }}>
+                        Sub-Category
+                      </Typography>
                     </TableCell>
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                    {/* <TableCell align="left" sx={{ minWidth: 100 }}>
                       Sub-Category
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Product Name
                     </TableCell>
@@ -212,42 +212,42 @@ const StockDetails = () => {
                   {/* {data.filter(d => (d.type === (type ? 'purchase' : 'sell'))).map(d => ( */}
                   {(searchValue ? filteredData : data).map(d => (
 
-                    d.products.map(p => (
+                    <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }}>
 
+                      <TableCell key={data.id} align="left">
+                        {moment(d.invoiceDate).format("YYYY-MM-DD")}
+                      </TableCell>
 
-                      <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }}>
+                      <TableCell key={data.id} align="left">
+                        {d.invoiceNo}
+                      </TableCell>
+                      <TableCell key={data.id} align="left">
+                        {d.clientName}
+                      </TableCell>
+                      <TableCell key={data.id} align="left">
+                        {d.category}
+                        <Typography variant='body2' sx={{ mt: 2 }}>
+                          {d.subCategory}
+                        </Typography>
+                      </TableCell>
+                      {/* <TableCell key={data.id} align="left">
+                          {d?.productId?.subCategoryId}
+                        </TableCell> */}
+                      <TableCell key={data.id} align="left">
+                        {d.name + "-" + d.size}
+                      </TableCell>
+                      <TableCell key={data.id} align="left">
+                        {d.code}
+                      </TableCell>
+                      <TableCell key={data.id} align="left">
+                        {d.type === "sell" ? d.quantity : '-'}
+                      </TableCell>
 
-                        <TableCell key={data.id} align="left">
-                          {moment(d.invoiceDate).format("YYYY-MM-DD")}
-                        </TableCell>
+                      <TableCell key={data.id} align="left">
+                        {d.type === "purchase" ? d.quantity : '-'}
+                      </TableCell>
+                    </TableRow>
 
-                        <TableCell key={data.id} align="left">
-                          {d.id}
-                        </TableCell>
-                        <TableCell key={data.id} align="left">
-                          {d?.clientName?.name}
-                        </TableCell>
-                        <TableCell key={data.id} align="left">
-                          {p?.productId?.categoryId}
-                        </TableCell>
-                        <TableCell key={data.id} align="left">
-                          {p?.productId?.subCategoryId}
-                        </TableCell>
-                        <TableCell key={data.id} align="left">
-                          {p?.productId?.name}
-                        </TableCell>
-                        <TableCell key={data.id} align="left">
-                          {p?.productId?.code}
-                        </TableCell>
-                        <TableCell key={data.id} align="left">
-                          {d.type === "sell" ? p.quantity : '-'}
-                        </TableCell>
-
-                        <TableCell key={data.id} align="left">
-                          {d.type === "purchase" ? p.quantity : '-'}
-                        </TableCell>
-                      </TableRow>
-                    ))
 
                   ))}
 

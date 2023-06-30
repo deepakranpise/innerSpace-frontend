@@ -157,20 +157,32 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
 
   }
 
-  const handleSizeQuantity = (index, e) => {
+  const handleSizeQuantity = (index, e, name) => {
+
+    let entity, value;
+
+    if (name) {
+      console.log(index, e)
+      entity = name;
+      value = e;
+    } else {
+      entity = e.target.name;
+      value = e.target.value;
+    }
 
     let data = [...products];
-    if (e.target.name === 'productId') {
+    if (entity === 'productId') {
 
-      let productCode = productMaster.filter(p => p._id === e.target.value);
+      let productCode = productMaster.filter(p => p._id === value);
       let data = [...products];
       if (productCode && productCode[0]?.code != data[index]['code']) {
         data[index]['code'] = productCode[0]?.code;
         setProducts(data);
       }
     }
-    data[index][e.target.name] = e.target.value;
+    data[index][entity] = value;
     setProducts(data);
+
   }
 
   const addSizeQuantity = () => {
@@ -224,6 +236,12 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
     setProducts(data);
   }
 
+  const onTagsChange = (event, values) => {
+
+    console.log(values);
+
+  }
+
   return (
     <div>
       {/* <Button variant="outlined" onClick={handleClickOpen}>
@@ -240,20 +258,8 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
               }}
               noValidate
               autoComplete="off">
+
               <Grid item xs={4}>
-                <TextField
-                  fullWidth
-                  required
-                  name='date'
-                  error={dateError}
-                  type='date'
-                  label='Date'
-                  placeholder='Date'
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
                 <TextField
                   fullWidth
                   required
@@ -266,8 +272,8 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
                   onChange={(e) => setInvoice(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControl fullWidth>
+              <Grid item xs={4}>
+                {/* <FormControl fullWidth>
                   <InputLabel id='category'>Party Name</InputLabel>
                   <Select
                     label='Party'
@@ -282,7 +288,41 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
                       <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
                     ))}
                   </Select>
-                </FormControl>
+                </FormControl> */}
+
+                <Autocomplete
+                  options={parties}
+                  getOptionLabel={option => option.name}
+                  name="party"
+                  required
+                  onChange={(e, values) => setParty(values?._id)}
+                  renderInput={params => (
+                    <TextField
+                      {...params}
+                      name="productId"
+                      error={partyError}
+                      variant="standard"
+                      label="Party Name"
+                      placeholder="Favorites"
+                      margin="normal"
+                      fullWidth
+                    />
+                  )}
+                />
+
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  fullWidth
+                  required
+                  name='date'
+                  error={dateError}
+                  type='date'
+                  label='Date'
+                  placeholder='Date'
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
               </Grid>
 
               <Grid item xs={12}>
@@ -320,7 +360,7 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
                   />
                 </Grid>
                 <Grid item xs={4} >
-                  <FormControl fullWidth>
+                  {/* <FormControl fullWidth>
                     <InputLabel id='product'>Product Name</InputLabel>
                     <Select
                       label='product name'
@@ -334,40 +374,28 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
                         <MenuItem key={p.name} value={p._id} >{p.name + "  " + p.size}</MenuItem>
                       ))}
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
+                  <Autocomplete
+                    options={q.filteredData.length > 0 ? q.filteredData : productMaster}
+                    getOptionLabel={option => option.name + " " + option.size}
+                    name="productId"
+                    onChange={(e, values) => handleSizeQuantity(index, values?._id, "productId")}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        name="productId"
+                        variant="standard"
+                        label="Product Name"
+                        placeholder="Favorites"
+                        margin="normal"
+                        fullWidth
+                      />
+                    )}
+                  />
                   {!type && q.productId && (
                     <a style={{ color: "#9155FD", float: "right", cursor: "pointer" }} onClick={() => markSegregated(index)}>Segregated</a>
                   )}
 
-
-                  {/* <Autocomplete
-                    id="productname"
-                    name="product"
-                    options={q.category && productMaster.filter(p => p.subCategory === q.category)[0]?.products}
-                    autoHighlight
-                    getOptionLabel={(option) => option.name}
-                    disabled={!q.category && true}
-                    value={q.product}
-                    onChange={(e) => handleSizeQuantity(index, e)}
-                    renderOption={(props, option) => (
-                      <Box component="li"  {...props}>
-                        {option.name}
-                      </Box>
-                    )}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Product Name"
-                        name="product"
-                        value={q.product}
-                        onChange={(e) => handleSizeQuantity(index, e)}
-                        inputProps={{
-                          ...params.inputProps,
-                          autoComplete: 'productName', // disable autocomplete and autofill
-                        }}
-                      />
-                    )}
-                  /> */}
                 </Grid>
                 {q?.isSegregated && (
                   <>

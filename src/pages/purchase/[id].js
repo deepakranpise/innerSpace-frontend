@@ -44,16 +44,11 @@ const Detail = (props) => {
 
   const fetch = () => {
     try {
-      axiosInstance.get("transaction/get")
+      axiosInstance.get(`transaction/get/${id}`)
         .then(res => {
-          if (res.data.status === 200) {
+          if (res.data.status === 200 && res.data.data) {
             console.log(res.data.data)
-            let filteredData = res.data.data.filter(d => d._id === id);
-            if (filteredData.length > 0)
-              setData(filteredData[0]);
-            else
-              router.push('/purchase');
-
+            setData(res.data.data);
           } else {
             router.push('/purchase')
           }
@@ -143,10 +138,10 @@ const Detail = (props) => {
                             {p?.productId?.code}
                           </TableCell>
                           <TableCell key={data.id} align="left">
-                            {p?.productId?.categoryId}
+                            {p?.productId?.subCategoryId?.categoryId?.name}
                           </TableCell>
                           <TableCell key={data.id} align="left">
-                            {p?.productId?.subCategoryId}
+                            {p?.productId?.subCategoryId?.name}
                           </TableCell>
                           <TableCell key={data.id} align="left">
                             {p?.productId?.size}
