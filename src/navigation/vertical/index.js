@@ -17,21 +17,23 @@ const navigation = () => {
       icon: HomeOutline,
       path: '/'
     },
+
+    // {
+    //   title: 'Account Settings',
+    //   icon: AccountCogOutline,
+    //   path: '/account-settings'
+    // },
     {
-      title: 'Account Settings',
-      icon: AccountCogOutline,
-      path: '/account-settings'
+      title: 'Invoice',
+      icon: Table,
+      path: '/purchase'
     },
     {
       title: 'Stock-Details',
       icon: Table,
       path: '/stock-details'
     },
-    {
-      title: 'Purchase',
-      icon: Table,
-      path: '/purchase'
-    },
+
 
     // {
     //   title: 'Sell',

@@ -27,6 +27,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import { MdModeEditOutline } from 'react-icons/md'
 
+import TextField from '@mui/material/TextField';
 
 import AddOrEditPurchase from 'src/views/AddorEditPurchase'
 import withAuth from 'src/hoc/withAuth'
@@ -34,8 +35,14 @@ import axiosInstance from 'src/hoc/axios'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import FallbackSpinner from 'src/@core/components/spinner'
+import { Icon } from '@iconify/react'
+import { Box } from 'mdi-material-ui'
 
-const Purchase = () => {
+const escapeRegExp = value => {
+  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+}
+
+const StockDetails = () => {
 
   const [data, setData] = useState([]);
   const router = useRouter();
@@ -46,6 +53,8 @@ const Purchase = () => {
   const [toaster, setToaster] = useState(false);
   const [errorToaster, setErrorToaster] = useState(false);
   const [editPurchase, setEditPurchase] = useState(null);
+  const [searchValue, setSearchValue] = useState(null);
+  const [filteredData, setFilteredData] = useState([]);
 
 
   const [addPurchase, setAddPurchase] = useState(false);
@@ -69,6 +78,29 @@ const Purchase = () => {
     setErrorToaster(false);
   }
 
+  const handleSearch = value => {
+    setSearchValue(value)
+
+    const searchRegex = new RegExp(escapeRegExp(value), 'i')
+
+    const filteredRows = data.filter(row => {
+      console.log(row);
+      row.products.filter(r => {
+        return Object.keys(row).some(field => {
+
+          // @ts-ignore
+
+          return searchRegex.test(row[field].toString())
+        })
+      })
+    })
+    if (value.length) {
+      setFilteredData(filteredRows)
+    } else {
+      setFilteredData([])
+    }
+  }
+
   const fetch = () => {
     try {
       axiosInstance.get("transaction/get")
@@ -88,7 +120,7 @@ const Purchase = () => {
     fetch();
   }, [])
 
-  if(!data) return <FallbackSpinner/>
+  if (!data) return <FallbackSpinner />
 
   return (
     <Grid container spacing={6}>
@@ -107,14 +139,37 @@ const Purchase = () => {
           See {type ? "Sell" : "Purchase"} Data
         </Button> */}
         <Card>
-          <CardHeader title='Sticky Header' titleTypographyProps={{ variant: 'h6' }} />
-          {/* <Button variant="outlined" onClick={() => handleClickOpen(1)}>
-            Add Purchase
-          </Button>
+          <CardHeader titleTypographyProps={{ variant: 'h6' }} />
 
-          <Button variant="outlined" onClick={() => handleClickOpen(0)}>
-            Add Sell
-          </Button> */}
+          <TextField
+            size='small'
+            value={searchValue}
+            onChange={(e) => handleSearch(e.target.value)}
+            autoFocus
+            placeholder='Search…'
+            InputProps={{
+              startAdornment: (
+                <Box sx={{ mr: 2, display: 'flex' }}>
+                  <Icon icon='mdi:magnify' fontSize={20} />
+                </Box>
+              ),
+
+              // endAdornment: (
+              //   <IconButton size='small' title='Clear' aria-label='Clear' onClick={searchHandler}>
+              //     <Icon icon='mdi:close' fontSize={20} />
+              //   </IconButton>
+              // )
+            }}
+            sx={{
+              width: {
+                xs: 1,
+                sm: 'auto'
+              },
+              '& .MuiInputBase-root > svg': {
+                mr: 2
+              }
+            }}
+          />
 
           <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 550 }}>
@@ -155,12 +210,12 @@ const Purchase = () => {
               return ( */}
 
                   {/* {data.filter(d => (d.type === (type ? 'purchase' : 'sell'))).map(d => ( */}
-                  {data.map(d => (
+                  {(searchValue ? filteredData : data).map(d => (
 
                     d.products.map(p => (
 
 
-                      <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }} onClick={() => router.push(`/purchase/${d._id}`)}>
+                      <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }}>
 
                         <TableCell key={data.id} align="left">
                           {moment(d.invoiceDate).format("YYYY-MM-DD")}
@@ -185,7 +240,7 @@ const Purchase = () => {
                           {p?.productId?.code}
                         </TableCell>
                         <TableCell key={data.id} align="left">
-                          {d.type === "sell" ? p.quantity: '-'}
+                          {d.type === "sell" ? p.quantity : '-'}
                         </TableCell>
 
                         <TableCell key={data.id} align="left">
@@ -211,4 +266,4 @@ const Purchase = () => {
   )
 }
 
-export default withAuth(Purchase)
+export default withAuth(StockDetails)
