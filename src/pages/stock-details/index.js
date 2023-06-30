@@ -33,6 +33,7 @@ import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
 import moment from 'moment'
 import { useRouter } from 'next/router'
+import FallbackSpinner from 'src/@core/components/spinner'
 
 const Purchase = () => {
 
@@ -87,6 +88,7 @@ const Purchase = () => {
     fetch();
   }, [])
 
+  if(!data) return <FallbackSpinner/>
 
   return (
     <Grid container spacing={6}>
@@ -168,19 +170,19 @@ const Purchase = () => {
                           {d.id}
                         </TableCell>
                         <TableCell key={data.id} align="left">
-                          {d.clientName.name}
+                          {d?.clientName?.name}
                         </TableCell>
                         <TableCell key={data.id} align="left">
-                          {p.productId.categoryId}
+                          {p?.productId?.categoryId}
                         </TableCell>
                         <TableCell key={data.id} align="left">
-                          {p.productId.subCategoryId}
+                          {p?.productId?.subCategoryId}
                         </TableCell>
                         <TableCell key={data.id} align="left">
-                          {p.productId.name}
+                          {p?.productId?.name}
                         </TableCell>
                         <TableCell key={data.id} align="left">
-                          {p.productId.code}
+                          {p?.productId?.code}
                         </TableCell>
                         <TableCell key={data.id} align="left">
                           {d.type === "sell" ? p.quantity: '-'}

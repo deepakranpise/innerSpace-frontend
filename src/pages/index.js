@@ -64,7 +64,7 @@ const Dashboard = () => {
     fetch();
   }, [])
 
-  if (data.length === 0)  return <FallbackSpinner />;
+  if (!data)  return <FallbackSpinner />;
 
 return (
   <ApexChartWrapper>

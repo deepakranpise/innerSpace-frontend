@@ -137,22 +137,22 @@ const Detail = (props) => {
 
                         <TableRow hover role='checkbox' tabIndex={-1} key={p._id}>
                           <TableCell key={data._id} align="left">
-                            {p.productId.name}
+                            {p?.productId?.name}
                           </TableCell>
                           <TableCell key={data.id} align="left">
-                            {p.productId.code}
+                            {p?.productId?.code}
                           </TableCell>
                           <TableCell key={data.id} align="left">
-                            {p.productId.categoryId}
+                            {p?.productId?.categoryId}
                           </TableCell>
                           <TableCell key={data.id} align="left">
-                            {p.productId.subCategoryId}
+                            {p?.productId?.subCategoryId}
                           </TableCell>
                           <TableCell key={data.id} align="left">
-                            {p.productId.size}
+                            {p?.productId?.size}
                           </TableCell>
                           <TableCell key={data.id} align="left">
-                            {p.quantity}
+                            {p?.quantity}
                           </TableCell>
 
                         </TableRow>

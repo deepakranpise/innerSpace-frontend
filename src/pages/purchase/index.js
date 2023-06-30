@@ -33,6 +33,7 @@ import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
 import moment from 'moment'
 import { useRouter } from 'next/router'
+import FallbackSpinner from 'src/@core/components/spinner'
 
 const Purchase = () => {
 
@@ -87,6 +88,7 @@ const Purchase = () => {
     fetch();
   }, [])
 
+  if (!data) return <FallbackSpinner />
 
   return (
     <Grid container spacing={6}>
@@ -154,7 +156,7 @@ const Purchase = () => {
                         {d.id}
                       </TableCell>
                       <TableCell key={data.id} align="left">
-                        {d.clientName.name}
+                        {d?.clientName?.name}
                       </TableCell>
                       <TableCell key={data.id} align="left">
                         {moment(d.invoiceDate).format("YYYY-MM-DD")}
@@ -165,7 +167,7 @@ const Purchase = () => {
                         ))}
                       </TableCell> */}
                       <TableCell key={data.id} align="left">
-                        {d.type}
+                        {d?.type}
                       </TableCell>
 
                       <TableCell key={data.id} align="left">
