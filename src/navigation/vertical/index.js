@@ -23,6 +23,11 @@ const navigation = () => {
       path: '/account-settings'
     },
     {
+      title: 'Stock-Details',
+      icon: Table,
+      path: '/stock-details'
+    },
+    {
       title: 'Purchase',
       icon: Table,
       path: '/purchase'

@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import withAuth from '../hoc/withAuth';
 import axiosInstance from 'src/hoc/axios'
+import FallbackSpinner from 'src/@core/components/spinner'
 
 const Dashboard = () => {
 
@@ -63,20 +64,22 @@ const Dashboard = () => {
     fetch();
   }, [])
 
-  return (
-    <ApexChartWrapper>
-      <Grid container spacing={6}>
-        <Grid item xs={12}>
-          <div>
-            Todays Stock
-          </div>
-        </Grid>
-        <Grid item xs={12}>
-          <Table data={data} columns={columns} fetch={fetch} />
-        </Grid>
+  if (data.length === 0)  return <FallbackSpinner />;
+
+return (
+  <ApexChartWrapper>
+    <Grid container spacing={6}>
+      <Grid item xs={12}>
+        <div>
+          Todays Stock
+        </div>
       </Grid>
-    </ApexChartWrapper>
-  )
+      <Grid item xs={12}>
+        <Table data={data} columns={columns} fetch={fetch} />
+      </Grid>
+    </Grid>
+  </ApexChartWrapper>
+)
 }
 
 export default withAuth(Dashboard);

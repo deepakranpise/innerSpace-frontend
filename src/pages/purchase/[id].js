@@ -18,6 +18,7 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import { Button } from '@mui/material'
+import { IoChevronBackOutline } from 'react-icons/io';
 
 
 const DemoGrid = styled(Grid)(({ theme }) => ({
@@ -72,7 +73,7 @@ const Detail = (props) => {
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Card>
-        <Button variant="outlined" onClick={() => router.push('/purchase')}>
+          <Button variant="outlined" onClick={() => router.push('/purchase')}>
             Go Back
           </Button>
           <CardHeader title={'Invoice Details - ' + data?.id} titleTypographyProps={{ variant: 'h6' }} />
@@ -83,7 +84,7 @@ const Detail = (props) => {
               </Grid>
               <DemoGrid item xs={12} sm={10}>
                 <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
-                  {data?.invoiceDate}
+                  {data?.invoiceDate?.slice(0, 10)}
                 </Typography>
               </DemoGrid>
 
@@ -105,7 +106,7 @@ const Detail = (props) => {
                 </Typography>
               </DemoGrid>
 
-              <Paper sx={{ width: '100%',  overflow: 'hidden'}}>
+              <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
                   <Table stickyHeader aria-label='sticky table'>
                     <TableHead>
