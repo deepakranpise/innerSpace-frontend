@@ -75,7 +75,11 @@ const Purchase = () => {
       axiosInstance.get("transaction/get")
         .then(res => {
           console.log(res.data.data)
-          setData(res.data.data);
+
+          const arrayUniqueById = [...new Map(res.data.data.map(item =>
+            [item['invoiceNo'], item])).values()];
+
+          setData(arrayUniqueById);
         })
         .catch(err => {
           console.log(err)
@@ -146,10 +150,14 @@ const Purchase = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
+                  {data.length === 0 && (
+                    <Grid item xs={12} sm={12} sx={{ display: 'flex', alignItems: 'center', margin: "20px" }}>
+                      <Typography>No Data Found</Typography>
+                    </Grid>)}
 
                   {data.map(d => (
 
-                    <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }} onClick={() => router.push(`/purchase/${d._id}`)}>
+                    <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }} onClick={() => router.push(`/purchase/${d.id}`)}>
                       <TableCell key={data.id} align="left">
                         {d.invoiceNo}
                       </TableCell>

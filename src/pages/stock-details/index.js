@@ -206,10 +206,12 @@ const StockDetails = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/* {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-              return ( */}
 
-                  {/* {data.filter(d => (d.type === (type ? 'purchase' : 'sell'))).map(d => ( */}
+                  {data.length === 0 && (
+                    <Grid item xs={12} sm={12} sx={{ display: 'flex', alignItems: 'center', margin: "20px" }}>
+                      <Typography>No Data Found</Typography>
+                    </Grid>)}
+
                   {(searchValue ? filteredData : data).map(d => (
 
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }}>

@@ -64,7 +64,7 @@ const DashboardTable = ({ data, columns, fetch }) => {
       <Card>
         <CSVLink {...csvReport}
           style={{
-            color: "#fff",
+            color: "rgb(105 57 191) !important",
             textDecoration: "none",
             fontWeight: "600",
             border: "1px solid",
