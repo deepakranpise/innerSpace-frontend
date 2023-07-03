@@ -107,9 +107,9 @@ const DashboardTable = ({ data, columns, fetch }) => {
 
           // variant='outlined'
           sx={{ marginTop: '15px', float: 'right' }}
-          aria-controls={open ? 'demo-positioned-menu' : undefined}
+          aria-controls={openEl ? 'demo-positioned-menu' : undefined}
           aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
+          aria-expanded={openEl ? 'true' : undefined}
           onClick={handleClick}
         >
           <SlOptionsVertical />
