@@ -9,7 +9,7 @@ import CardHeader from '@mui/material/CardHeader'
 import { useEffect } from 'react'
 import axios from 'axios'
 import { useState } from 'react'
-import { Alert, Button, Snackbar } from '@mui/material'
+import { Alert, Button, FormControl, Snackbar, TextField } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
@@ -22,6 +22,12 @@ import { MdModeEditOutline } from 'react-icons/md'
 import AddOrEditSizes from 'src/views/AddOrEditSizes'
 import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
+import { Icon } from '@iconify/react'
+import { Box } from 'mdi-material-ui'
+
+const escapeRegExp = value => {
+  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+}
 
 
 const Sizes = () => {
@@ -31,6 +37,9 @@ const Sizes = () => {
   const [toaster, setToaster] = useState(false);
   const [errorToaster, setErrorToaster] = useState(false);
   const [editSizes, setEditSizes] = useState(null);
+  const [searchValue, setSearchValue] = useState(null);
+  const [filteredData, setFilteredData] = useState([]);
+
 
 
   const [open, setOpen] = useState(false);
@@ -75,6 +84,26 @@ const Sizes = () => {
     }
   }
 
+  const handleSearch = value => {
+    setSearchValue(value)
+
+    const searchRegex = new RegExp(escapeRegExp(value), 'i')
+
+    const filteredRows = data.filter(row => {
+      console.log(row);
+
+      return Object.keys(row).some(field => {
+        // @ts-ignore
+        return searchRegex.test(row[field].toString())
+      })
+    })
+    if (value.length) {
+      setFilteredData(filteredRows)
+    } else {
+      setFilteredData([])
+    }
+  }
+
   return (
     <Grid container spacing={6}>
       <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
@@ -94,6 +123,38 @@ const Sizes = () => {
           <Button variant="outlined" onClick={handleClickOpen}>
             Add Sizes
           </Button>
+          <FormControl sx={{ float: 'right' }}>
+            <TextField
+              size='small'
+              value={searchValue}
+              onChange={(e) => handleSearch(e.target.value)}
+              autoFocus
+              placeholder='Search…'
+              InputProps={{
+                startAdornment: (
+                  <Box sx={{ mr: 2, display: 'flex' }}>
+                    <Icon icon='mdi:magnify' fontSize={20} />
+                  </Box>
+                ),
+
+                // endAdornment: (
+                //   <IconButton size='small' title='Clear' aria-label='Clear' onClick={searchHandler}>
+                //     <Icon icon='mdi:close' fontSize={20} />
+                //   </IconButton>
+                // )
+              }}
+              sx={{
+                width: {
+                  xs: 1,
+                  sm: 'auto'
+                },
+                '& .MuiInputBase-root > svg': {
+                  mr: 2
+                }
+              }}
+            />
+          </FormControl>
+
           <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table stickyHeader aria-label='sticky table'>
@@ -111,10 +172,10 @@ const Sizes = () => {
                   {/* {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
               return ( */}
 
-                  {SizesData.map(d => (
+                  {(searchValue ? filteredData : SizesData).map(d => (
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
                       <TableCell key={d.id} align="left">
-                        {d.categoryId[0].name} :
+                        {d?.categoryId[0]?.name} :
                       </TableCell>
 
                       {d.size.map(s => (

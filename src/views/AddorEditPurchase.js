@@ -63,24 +63,44 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
     reset();
     axiosInstance.get("product/get")
       .then(res => {
-        console.log(res.data.data)
-        setProductMaster(res.data.data)
+        if (res.data.status === 200) {
+          console.log(res.data.data)
+          setProductMaster(res.data.data)
+        }
+      })
+      .catch(err => {
+        console.log(err)
       })
 
     axiosInstance.get("category/get")
       .then(res => {
-        setCategories(res.data.data)
+        if (res.data.status === 200) {
+          setCategories(res.data.data)
+        }
+      })
+      .catch(err => {
+        console.log(err)
       })
 
     axiosInstance.get("size/get")
       .then(res => {
-        setSizes(res.data.data)
-        console.log(res.data.data)
+        if (res.data.status === 200) {
+          setSizes(res.data.data)
+          console.log(res.data.data)
+        }
+      })
+      .catch(err => {
+        console.log(err)
       })
     axiosInstance.get("client/get")
       .then(res => {
-        console.log(res.data.data)
-        setParties(res.data.data)
+        if (res.data.status === 200) {
+          console.log(res.data.data)
+          setParties(res.data.data)
+        }
+      })
+      .catch(err => {
+        console.log(err)
       })
 
   }, [editPurchase])
@@ -468,7 +488,7 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
           <Button onClick={reset}>Reset</Button>
           <Button type="submit"
             onClick={handleSubmit}
-          >Add</Button>
+          >Save</Button>
         </DialogActions>
       </Dialog>
     </div>

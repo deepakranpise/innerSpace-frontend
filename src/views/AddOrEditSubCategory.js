@@ -34,7 +34,12 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
 
   React.useEffect(() => {
     axiosInstance.get("category/get").then((res) => {
-      setCategories(res.data.data)
+      if (res.data.status === 200) {
+        setCategories(res.data.data);
+      }
+    })
+    .catch(err => {
+      console.log(err)
     })
   }, [])
 
@@ -43,7 +48,7 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
   }, [editCategory])
 
   const handleSubmit = () => {
-    if(!name || !category){
+    if (!name || !category) {
       if (!name) {
         setNameError(true);
       }
@@ -103,7 +108,7 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
                 <TextField
                   fullWidth
                   required
-                  error = {nameError}
+                  error={nameError}
                   name='SubCategoryName'
                   type='text'
                   label='SubCategory Name'
@@ -117,7 +122,7 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
                   <InputLabel id='category'>Category</InputLabel>
                   <Select
                     label='Category'
-                  error = {categoryError}
+                    error={categoryError}
                     name="category"
                     id='form-layouts-separator-select'
                     labelId='form-layouts-separator-select-label'

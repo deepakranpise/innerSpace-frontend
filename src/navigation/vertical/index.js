@@ -26,7 +26,7 @@ const navigation = () => {
     {
       title: 'Invoice',
       icon: Table,
-      path: '/purchase'
+      path: '/invoice'
     },
     {
       title: 'Stock-Details',

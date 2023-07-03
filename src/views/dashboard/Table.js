@@ -13,16 +13,36 @@ import { useEffect } from 'react'
 import SellStock from '../sellStock'
 import { useState } from 'react'
 import { CSVLink } from "react-csv";
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import { Button, Menu, MenuItem, TextField } from '@mui/material'
+import { Icon } from '@iconify/react'
+import {SlOptionsVertical} from 'react-icons/sl'
 
+const escapeRegExp = value => {
+  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+}
 
 const DashboardTable = ({ data, columns, fetch }) => {
 
   const [toaster, setToaster] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const [editStock, setEditStock] = useState(null);
+  const [filteredData, setFilteredData] = useState([]);
 
   const [stock, setStock] = useState(null);
 
-  var arr = [];
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openEl = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
 
   const handleClickOpen = (stock) => {
     setStock(stock);
@@ -59,25 +79,109 @@ const DashboardTable = ({ data, columns, fetch }) => {
     filename: "stocks",
   };
 
+  const handleSearch = value => {
+    setSearchValue(value)
+
+    const searchRegex = new RegExp(escapeRegExp(value), 'i')
+
+    const filteredRows = data.filter(row => {
+      console.log(row);
+
+      return Object.keys(row).some(field => {
+        // @ts-ignore
+        return searchRegex.test(row[field].toString())
+      })
+    })
+    if (value.length) {
+      setFilteredData(filteredRows)
+    } else {
+      setFilteredData([])
+    }
+  }
+
   return (
     <>
       <Card>
-        <CSVLink {...csvReport}
-          style={{
-            color: "rgb(105 57 191) !important",
-            textDecoration: "none",
-            fontWeight: "600",
-            border: "1px solid",
-            height: "35px",
-            display: "flex",
-            width: "70px",
-            borderRadius: "2%",
-            textAlign: "center",
-            padding: "5px",
-            float: "right",
-            margin: "10px"
+        <Button
+          id="demo-positioned-button"
+
+          // variant='outlined'
+          sx={{ marginTop: '15px', float: 'right' }}
+          aria-controls={open ? 'demo-positioned-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+        >
+          <SlOptionsVertical />
+        </Button>
+        <Menu
+          id="demo-positioned-menu"
+          aria-labelledby="demo-positioned-button"
+          anchorEl={anchorEl}
+          open={openEl}
+          onClose={handleCloseMenu}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
           }}
-        >Export</CSVLink>
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+        >
+          <MenuItem > <CSVLink {...csvReport}
+          style={{
+            // color: "rgb(105 57 191) !important",
+            textDecoration: "none",
+            color:'#111'
+
+            // fontWeight: "600",
+            // border: "1px solid",
+            // height: "35px",
+            // display: "flex",
+            // width: "70px",
+            // borderRadius: "2%",
+            // textAlign: "center",
+            // padding: "5px",
+            // margin: "10px"
+          }}
+        >Export</CSVLink></MenuItem>
+        </Menu>
+        <FormControl sx={{ float: 'right',marginTop: '10px' }}>
+          <TextField
+            size='small'
+            value={searchValue}
+            onChange={(e) => handleSearch(e.target.value)}
+            autoFocus
+            placeholder='Search…'
+            InputProps={{
+              startAdornment: (
+                <Box sx={{ mr: 2, display: 'flex' }}>
+                  <Icon icon='mdi:magnify' fontSize={20} />
+                </Box>
+              ),
+
+              // endAdornment: (
+              //   <IconButton size='small' title='Clear' aria-label='Clear' onClick={searchHandler}>
+              //     <Icon icon='mdi:close' fontSize={20} />
+              //   </IconButton>
+              // )
+            }}
+            sx={{
+              width: {
+                xs: 1,
+                sm: 'auto'
+              },
+              '& .MuiInputBase-root > svg': {
+                mr: 2
+              }
+            }}
+          />
+        </FormControl>
+
+
+
+
         <TableContainer>
           <Table sx={{ minWidth: 800 }} aria-label='table in dashboard'>
             <TableHead>
@@ -91,7 +195,7 @@ const DashboardTable = ({ data, columns, fetch }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map(d => (
+              {(searchValue ? filteredData : data).map(d => (
                 <TableRow hover key={d.name} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
                   <TableCell key={d.id} align="left"> {d._id}
                   </TableCell>

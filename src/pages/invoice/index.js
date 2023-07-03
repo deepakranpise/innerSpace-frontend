@@ -15,7 +15,7 @@ import TableStickyHeader from 'src/views/tables/TableStickyHeader'
 import { useEffect } from 'react'
 import axios from 'axios'
 import { useState } from 'react'
-import { Alert, Button, Snackbar } from '@mui/material'
+import { Alert, Button, FormControl, Snackbar, TextField } from '@mui/material'
 
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
@@ -34,6 +34,12 @@ import axiosInstance from 'src/hoc/axios'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import FallbackSpinner from 'src/@core/components/spinner'
+import { Icon } from '@iconify/react'
+import { Box } from 'mdi-material-ui'
+
+const escapeRegExp = value => {
+  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+}
 
 const Purchase = () => {
 
@@ -47,6 +53,8 @@ const Purchase = () => {
   const [errorToaster, setErrorToaster] = useState(false);
   const [editPurchase, setEditPurchase] = useState(null);
 
+  const [searchValue, setSearchValue] = useState(null);
+  const [filteredData, setFilteredData] = useState([]);
 
   const [addPurchase, setAddPurchase] = useState(false);
 
@@ -68,6 +76,26 @@ const Purchase = () => {
   const handleCloseToaster = () => {
     setToaster(false);
     setErrorToaster(false);
+  }
+
+  const handleSearch = value => {
+    setSearchValue(value)
+
+    const searchRegex = new RegExp(escapeRegExp(value), 'i')
+
+    const filteredRows = data.filter(row => {
+      console.log(row);
+
+      return Object.keys(row).some(field => {
+        // @ts-ignore
+        return searchRegex.test(row[field].toString())
+      })
+    })
+    if (value.length) {
+      setFilteredData(filteredRows)
+    } else {
+      setFilteredData([])
+    }
   }
 
   const fetch = () => {
@@ -112,7 +140,7 @@ const Purchase = () => {
           See {type ? "Sell" : "Purchase"} Data
         </Button> */}
         <Card>
-          <CardHeader title='Sticky Header' titleTypographyProps={{ variant: 'h6' }} />
+          <CardHeader title='Invoices' titleTypographyProps={{ variant: 'h6' }} />
           <Button variant="outlined" onClick={() => handleClickOpen(1)}>
             {/* Add {type ? "Purchase" : "Sell"} */}
             Add Purchase
@@ -122,6 +150,38 @@ const Purchase = () => {
             {/* Add {type ? "Purchase" : "Sell"} */}
             Add Sell
           </Button>
+
+          <FormControl sx={{ float: 'right' }}>
+            <TextField
+              size='small'
+              value={searchValue}
+              onChange={(e) => handleSearch(e.target.value)}
+              autoFocus
+              placeholder='Search…'
+              InputProps={{
+                startAdornment: (
+                  <Box sx={{ mr: 2, display: 'flex' }}>
+                    <Icon icon='mdi:magnify' fontSize={20} />
+                  </Box>
+                ),
+
+                // endAdornment: (
+                //   <IconButton size='small' title='Clear' aria-label='Clear' onClick={searchHandler}>
+                //     <Icon icon='mdi:close' fontSize={20} />
+                //   </IconButton>
+                // )
+              }}
+              sx={{
+                width: {
+                  xs: 1,
+                  sm: 'auto'
+                },
+                '& .MuiInputBase-root > svg': {
+                  mr: 2
+                }
+              }}
+            />
+          </FormControl>
           {/* <TableStickyHeader setEditStock={setEditStock}  editStock={editStock} data={data} /> */}
 
           <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -155,7 +215,7 @@ const Purchase = () => {
                       <Typography>No Data Found</Typography>
                     </Grid>)}
 
-                  {data.map(d => (
+                  {(searchValue ? filteredData : data).map(d => (
 
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }} onClick={() => router.push(`/purchase/${d.id}`)}>
                       <TableCell key={data.id} align="left">

@@ -15,7 +15,13 @@ import TableStickyHeader from 'src/views/tables/TableStickyHeader'
 import { useEffect } from 'react'
 import axios from 'axios'
 import { useState } from 'react'
-import { Alert, Button, Snackbar } from '@mui/material'
+import { Alert, Autocomplete, Button, MenuItem, Snackbar } from '@mui/material'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import Select from '@mui/material/Select'
+
+
+
 
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
@@ -55,6 +61,15 @@ const StockDetails = () => {
   const [editPurchase, setEditPurchase] = useState(null);
   const [searchValue, setSearchValue] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
+
+  const [category, setCategory] = useState('');
+  const [subCategory, setSubCategory] = useState('');
+  const [product, setProduct] = useState('');
+
+
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [products, setProducts] = useState([]);
 
 
   const [addPurchase, setAddPurchase] = useState(false);
@@ -98,6 +113,41 @@ const StockDetails = () => {
     }
   }
 
+  useEffect(() => {
+
+    try {
+      axiosInstance.get("category/get").then((res) => {
+        if (res.data.status === 200) {
+          setCategories(res.data.data);
+        }
+      })
+        .catch(err => {
+          console.log(err)
+        })
+
+      axiosInstance.get("subCategory/get").then((res) => {
+        if (res.data.status === 200) {
+          setSubCategories(res.data.data);
+        }
+      })
+        .catch(err => {
+          console.log(err)
+        })
+
+      axiosInstance.get("product/get?distinct=true").then((res) => {
+        if (res.data.status === 200) {
+          setProducts(res.data.data);
+        }
+      })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }, [])
+
   const fetch = () => {
     try {
       axiosInstance.get("transaction/get")
@@ -117,6 +167,21 @@ const StockDetails = () => {
     fetch();
   }, [])
 
+  const applyFilters = () => {
+    try {
+      axiosInstance.get(`transaction/get?categoryId=${category ? category : ''}&subCategoryId=${subCategory ? subCategory : ''}&productId=${product ? product : ''}`)
+        .then(res => {
+          console.log(res.data.data)
+          setData(res.data.data);
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   if (!data) return <FallbackSpinner />
 
   return (
@@ -131,42 +196,151 @@ const StockDetails = () => {
           Error While Adding Product
         </Alert>
       </Snackbar>
+
       <Grid item xs={12}>
-        {/* <Button variant="outlined" onClick={() => setType(!type)}>
-          See {type ? "Sell" : "Purchase"} Data
-        </Button> */}
         <Card>
           <CardHeader titleTypographyProps={{ variant: 'h6' }} />
+          <Grid>
+            <FormControl sx={{ marginLeft: '10px', width: '15%' }}>
+              {/* <InputLabel id='category'>Category</InputLabel> */}
+              {/* <Select
+                label='Category'
+                name="category"
+                id='form-layouts-separator-select'
+                labelId='form-layouts-separator-select-label'
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                {categories.map(c => (
+                  <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
+                ))}
+              </Select> */}
 
-          <TextField
-            size='small'
-            value={searchValue}
-            onChange={(e) => handleSearch(e.target.value)}
-            autoFocus
-            placeholder='Search…'
-            InputProps={{
-              startAdornment: (
-                <Box sx={{ mr: 2, display: 'flex' }}>
-                  <Icon icon='mdi:magnify' fontSize={20} />
-                </Box>
-              ),
+              <Autocomplete
+                options={categories}
+                getOptionLabel={option => option.name}
+                name="party"
+                required
+                onChange={(e, values) => setCategory(values?._id)}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    name="category"
+                    variant="standard"
+                    label="Category Name"
+                    placeholder="Favorites"
+                    margin="normal"
 
-              // endAdornment: (
-              //   <IconButton size='small' title='Clear' aria-label='Clear' onClick={searchHandler}>
-              //     <Icon icon='mdi:close' fontSize={20} />
-              //   </IconButton>
-              // )
-            }}
-            sx={{
-              width: {
-                xs: 1,
-                sm: 'auto'
-              },
-              '& .MuiInputBase-root > svg': {
-                mr: 2
-              }
-            }}
-          />
+                  />
+                )}
+              />
+
+            </FormControl>
+            <FormControl sx={{ marginLeft: '10px', width: '15%' }}>
+              {/* <InputLabel id='category'>Sub-Category</InputLabel> */}
+              {/* <Select
+                label='Category'
+                name="category"
+                id='form-layouts-separator-select'
+                labelId='form-layouts-separator-select-label'
+                value={subCategory}
+                onChange={(e) => setSubCategory(e.target.value)}
+              >
+                {subCategories.map(c => (
+                  <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
+                ))}
+              </Select> */}
+
+              <Autocomplete
+                options={subCategories}
+                getOptionLabel={option => option.name}
+                name="subCategory"
+                required
+                onChange={(e, values) => setSubCategory(values?._id)}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    name="subCategory"
+                    variant="standard"
+                    label="Sub Category"
+                    placeholder="Favorites"
+                    margin="normal"
+
+                  />
+                )}
+              />
+
+            </FormControl>
+            <FormControl sx={{ marginLeft: '10px', width: '15%' }}>
+              {/* <Select
+                label='Category'
+                name="category"
+                id='form-layouts-separator-select'
+                labelId='form-layouts-separator-select-label'
+                value={product}
+                onChange={(e) => setProduct(e.target.value)}
+              >
+                {products.map(c => (
+                  <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
+                ))}
+              </Select> */}
+
+              <Autocomplete
+                options={products}
+                getOptionLabel={option => option.name}
+                name="party"
+                required
+                onChange={(e, values) => setProduct(values?._id)}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    name="product"
+                    variant="standard"
+                    label="Product Name"
+                    placeholder="Favorites"
+                    margin="normal"
+
+                  />
+                )}
+              />
+
+            </FormControl>
+            <Button variant="outlined" sx={{ margin: '10px', marginLeft: '10px' }} onClick={applyFilters}>
+              Apply
+            </Button>
+            <FormControl sx={{ float: 'right' }}>
+              <TextField
+                size='small'
+                value={searchValue}
+                onChange={(e) => handleSearch(e.target.value)}
+                autoFocus
+                placeholder='Search…'
+                InputProps={{
+                  startAdornment: (
+                    <Box sx={{ mr: 2, display: 'flex' }}>
+                      <Icon icon='mdi:magnify' fontSize={20} />
+                    </Box>
+                  ),
+
+                  // endAdornment: (
+                  //   <IconButton size='small' title='Clear' aria-label='Clear' onClick={searchHandler}>
+                  //     <Icon icon='mdi:close' fontSize={20} />
+                  //   </IconButton>
+                  // )
+                }}
+                sx={{
+                  width: {
+                    xs: 1,
+                    sm: 'auto'
+                  },
+                  '& .MuiInputBase-root > svg': {
+                    mr: 2
+                  }
+                }}
+              />
+            </FormControl>
+          </Grid>
+
 
           <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 550 }}>
@@ -207,7 +381,7 @@ const StockDetails = () => {
                 </TableHead>
                 <TableBody>
 
-                  {data.length === 0 && (
+                  {(searchValue ? filteredData : data).length === 0 && (
                     <Grid item xs={12} sm={12} sx={{ display: 'flex', alignItems: 'center', margin: "20px" }}>
                       <Typography>No Data Found</Typography>
                     </Grid>)}
@@ -260,11 +434,11 @@ const StockDetails = () => {
             </TableContainer>
           </Paper>
         </Card>
-      </Grid>
+      </Grid >
 
       <AddOrEditPurchase addPurchase={addPurchase} setErrorToaster={setErrorToaster} type={type} editPurchase={editPurchase} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
 
-    </Grid>
+    </Grid >
   )
 }
 

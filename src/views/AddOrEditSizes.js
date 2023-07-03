@@ -20,7 +20,7 @@ import axiosInstance from 'src/hoc/axios';
 
 
 
-const AddOrEditSizes = ({ open, setOpen, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditSize, editSize }) => {
+const AddOrEditSizes = ({ open, setOpen, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditSize, editSize, setErrorToast }) => {
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -37,7 +37,12 @@ const AddOrEditSizes = ({ open, setOpen, handleClickOpen, handleClose, handleOpe
 
   React.useEffect(() => {
     axiosInstance.get("category/get").then((res) => {
-      setCategories(res.data.data)
+      if (res.data.status === 200) {
+        setCategories(res.data.data)
+      }
+    })
+    .catch(err => {
+      console.log(err)
     })
   }, [])
 
@@ -89,11 +94,15 @@ const AddOrEditSizes = ({ open, setOpen, handleClickOpen, handleClose, handleOpe
       }
       axiosInstance.post("size", data)
         .then(res => {
-          console.log(res.data.data);
-          reset();
-          handleClose();
-          handleOpenToaster();
-          fetch();
+          if (res.data.status === 200) {
+            console.log(res.data.data);
+            reset();
+            handleClose();
+            handleOpenToaster();
+            fetch();
+          } else {
+            setErrorToast(true);
+          }
         })
         .catch(err => {
           console.log(err)

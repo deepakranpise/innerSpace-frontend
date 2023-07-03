@@ -71,10 +71,11 @@ return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <div>
-          Todays Stock
+
         </div>
       </Grid>
       <Grid item xs={12}>
+
         <Table data={data} columns={columns} fetch={fetch} />
       </Grid>
     </Grid>

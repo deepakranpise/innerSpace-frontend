@@ -22,7 +22,7 @@ import axiosInstance from 'src/hoc/axios';
 
 
 
-const AddOrEditProductMaster = ({ open, setOpen,setErrorToaster, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditMaster, editMaster }) => {
+const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditMaster, editMaster }) => {
 
 
 
@@ -44,11 +44,21 @@ const AddOrEditProductMaster = ({ open, setOpen,setErrorToaster, handleClickOpen
 
   React.useEffect(() => {
     axiosInstance.get("category/get").then((res) => {
-      setCategories(res.data.data)
+      if (res.data.status === 200) {
+        setCategories(res.data.data)
+      }
     })
+      .catch(err => {
+        console.log(err)
+      })
     axiosInstance.get("subCategory/get").then((res) => {
-      setSubCategories(res.data.data)
+      if (res.data.status === 200) {
+        setSubCategories(res.data.data)
+      }
     })
+      .catch(err => {
+        console.log(err)
+      })
   }, [])
 
 

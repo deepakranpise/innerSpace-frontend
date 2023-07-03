@@ -9,7 +9,7 @@ import CardHeader from '@mui/material/CardHeader'
 import { useEffect } from 'react'
 import axios from 'axios'
 import { useState } from 'react'
-import { Alert, Button, Snackbar } from '@mui/material'
+import { Alert, Button, FormControl, Snackbar, TextField } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
@@ -22,7 +22,12 @@ import { MdModeEditOutline } from 'react-icons/md'
 import AddOrEditSubCategory from 'src/views/AddOrEditSubCategory'
 import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
+import { Icon } from '@iconify/react'
+import { Box } from 'mdi-material-ui'
 
+const escapeRegExp = value => {
+  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+}
 
 const SubCategory = () => {
 
@@ -30,6 +35,8 @@ const SubCategory = () => {
 
   const [toaster, setToaster] = useState(false);
   const [errorToaster, setErrorToaster] = useState(false);
+  const [searchValue, setSearchValue] = useState(null);
+  const [filteredData, setFilteredData] = useState([]);
 
   const [editSubCategory, setEditSubCategory] = useState(null);
 
@@ -74,6 +81,27 @@ const SubCategory = () => {
     }
   }
 
+  const handleSearch = value => {
+    setSearchValue(value)
+
+    const searchRegex = new RegExp(escapeRegExp(value), 'i')
+
+    const filteredRows = SubCategoryData.filter(row => {
+      console.log(row);
+
+      return Object.keys(row).some(field => {
+        // @ts-ignore
+        return searchRegex.test(row[field].toString())
+      })
+    })
+    if (value.length) {
+      setFilteredData(filteredRows)
+    } else {
+      setFilteredData([])
+    }
+  }
+
+
   return (
     <Grid container spacing={6}>
       <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
@@ -95,6 +123,39 @@ const SubCategory = () => {
           <Button variant="outlined" onClick={handleClickOpen}>
             Add SubCategory
           </Button>
+
+          <FormControl sx={{ float: 'right' }}>
+            <TextField
+              size='small'
+              value={searchValue}
+              onChange={(e) => handleSearch(e.target.value)}
+              autoFocus
+              placeholder='Search…'
+              InputProps={{
+                startAdornment: (
+                  <Box sx={{ mr: 2, display: 'flex' }}>
+                    <Icon icon='mdi:magnify' fontSize={20} />
+                  </Box>
+                ),
+
+                // endAdornment: (
+                //   <IconButton size='small' title='Clear' aria-label='Clear' onClick={searchHandler}>
+                //     <Icon icon='mdi:close' fontSize={20} />
+                //   </IconButton>
+                // )
+              }}
+              sx={{
+                width: {
+                  xs: 1,
+                  sm: 'auto'
+                },
+                '& .MuiInputBase-root > svg': {
+                  mr: 2
+                }
+              }}
+            />
+          </FormControl>
+
           <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table stickyHeader aria-label='sticky table'>
@@ -111,8 +172,12 @@ const SubCategory = () => {
                 <TableBody>
                   {/* {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
               return ( */}
+                  {(searchValue ? filteredData : SubCategoryData).length === 0 && (
+                    <Grid item xs={12} sm={12} sx={{ display: 'flex', alignItems: 'center', margin: "20px" }}>
+                      <Typography>No Data Found</Typography>
+                    </Grid>)}
 
-                  {SubCategoryData.map(d => (
+                  {(searchValue ? filteredData : SubCategoryData).map(d => (
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
                       <TableCell key={d.id} align="left">
                         {d.name}
