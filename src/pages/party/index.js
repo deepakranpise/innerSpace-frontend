@@ -102,6 +102,18 @@ const Party = () => {
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Name
                     </TableCell>
+                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                      Gst No
+                    </TableCell>
+                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                      Contact No
+                    </TableCell>
+                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                      State
+                    </TableCell>
+                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                      Address
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -109,6 +121,18 @@ const Party = () => {
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
                       <TableCell key={d.id} align="left">
                         {d.name}
+                      </TableCell>
+                      <TableCell key={d.id} align="left">
+                        {d.gstNo}
+                      </TableCell>
+                      <TableCell key={d.id} align="left">
+                        {d.contactNo}
+                      </TableCell>
+                      <TableCell key={d.id} align="left">
+                        {d.state}
+                      </TableCell>
+                      <TableCell key={d.id} align="left">
+                        {d.address}
                       </TableCell>
                     </TableRow>
                   ))}

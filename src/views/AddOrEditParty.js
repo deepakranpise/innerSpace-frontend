@@ -25,7 +25,17 @@ import axiosInstance from 'src/hoc/axios';
 const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditCategory, editCategory }) => {
 
   const [name, setName] = useState("");
+  const [gstNo, setGstNo] = useState("");
+  const [state, setState] = useState("");
+  const [address, setAddress] = useState("");
+  const [contactNo, setContactNo] = useState("");
+
   const [nameError, setNameError] = useState(false);
+  const [gstNoError, setGstNoError] = useState(false);
+  const [addressError, setAddressError] = useState(false);
+  const [stateError, setStateError] = useState(false);
+  const [contactNoError, setContactNoError] = useState(false);
+
 
   React.useEffect(() => {
     console.log("editCategory ", editCategory)
@@ -33,16 +43,46 @@ const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handl
   }, [editCategory])
 
   const handleSubmit = () => {
-    if (!name) {
-      setNameError(true);
+
+    if (!name || !gstNo || !state || !address || !contactNo) {
+
+      if (!name) {
+        setNameError(true);
+      }
+
+      if (!gstNo) {
+        setGstNoError(true);
+      }
+
+      if (!state) {
+        setStateError(true);
+      }
+      if (!address) {
+        setAddressError(true);
+      }
+      if (!contactNo) {
+        setContactNoError(true);
+      }
 
       return;
     }
+
+
     setNameError(false);
+    setGstNoError(false);
+    setStateError(false);
+    setAddressError(false);
+    setContactNoError(false);
+
 
     try {
       const data = {
-        name: name
+        name: name,
+        address: address,
+        gstNo: name,
+        contactNo: contactNo,
+        state: state,
+
       }
       axiosInstance.post("client", data)
         .then(res => {
@@ -66,6 +106,16 @@ const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handl
 
   const reset = () => {
     setName("")
+    setGstNo("")
+    setState("")
+    setAddress("")
+    setContactNo("")
+
+    setNameError(false);
+    setGstNoError(false);
+    setStateError(false);
+    setAddressError(false);
+    setContactNoError(false);
   }
 
   return (
@@ -94,11 +144,64 @@ const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handl
                   onChange={(e) => setName(e.target.value)}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
+                  error={gstNoError}
+                  name='gstNo'
+                  type='text'
+                  label='GST No'
+                  placeholder='GST No'
+                  value={gstNo}
+                  onChange={(e) => setGstNo(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
+                  error={contactNoError}
+                  name='contactNo'
+                  type='number'
+                  label='Party Name'
+                  placeholder='Party name'
+                  value={contactNo}
+                  onChange={(e) => setContactNo(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
+                  error={addressError}
+                  name='address'
+                  type='text'
+                  label='Address'
+                  placeholder='address'
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
+                  error={stateError}
+                  name='state'
+                  type='text'
+                  label='State'
+                  placeholder='State'
+                  value={state}
+                  onChange={(e) => setState(e.target.value)}
+                />
+              </Grid>
+
             </Grid>
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={reset}>Reset</Button>
           <Button type="submit"
             onClick={handleSubmit}
           >Add</Button>

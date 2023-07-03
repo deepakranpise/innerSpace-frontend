@@ -73,31 +73,74 @@ const Detail = (props) => {
           </Button>
           <CardHeader title={'Invoice Details - ' + data?.id} titleTypographyProps={{ variant: 'h6' }} />
           <CardContent>
-            <Grid container spacing={6}>
-              <Grid item xs={12} sm={2} sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography>Date</Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={6} sm={2} sx={{ display: 'flex', alignItems: 'left' }}>
+                <Typography>Date : </Typography>
               </Grid>
-              <DemoGrid item xs={12} sm={10}>
-                <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
+              <DemoGrid item xs={6} sm={4}>
+                <Typography variant='subtitle1' sx={{ marginBottom: 2, alignItems:'left' }}>
                   {data?.invoiceDate?.slice(0, 10)}
                 </Typography>
               </DemoGrid>
 
-              <Grid item xs={12} sm={2} sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography>Invoice No.</Typography>
+              <Grid item xs={6} sm={2} sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography>Invoice No. :</Typography>
               </Grid>
-              <DemoGrid item xs={12} sm={10}>
+              <DemoGrid item xs={6} sm={4}>
                 <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
                   {data?.id}
                 </Typography>
               </DemoGrid>
 
               <Grid item xs={12} sm={2} sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography>Type</Typography>
+                <Typography>Type :</Typography>
               </Grid>
               <DemoGrid item xs={12} sm={10}>
                 <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
                   {data?.type}
+                </Typography>
+              </DemoGrid>
+
+              <Grid item xs={6} sm={2} sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography>Party Name :</Typography>
+              </Grid>
+              <DemoGrid item xs={6} sm={4}>
+                <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
+                  {data?.clientName.name}
+                </Typography>
+              </DemoGrid>
+
+              <Grid item xs={6} sm={2} sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography>Contact No :</Typography>
+              </Grid>
+              <DemoGrid item xs={6} sm={4}>
+                <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
+                  {data?.clientName.contactNo}
+                </Typography>
+              </DemoGrid>
+
+              <Grid item xs={6} sm={2} sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography>Gst No :</Typography>
+              </Grid>
+              <DemoGrid item xs={6} sm={4}>
+                <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
+                  {data?.clientName.gstNo}
+                </Typography>
+              </DemoGrid>
+              <Grid item xs={6} sm={2} sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography>State :</Typography>
+              </Grid>
+              <DemoGrid item xs={6} sm={4}>
+                <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
+                  {data?.clientName.state}
+                </Typography>
+              </DemoGrid>
+              <Grid item xs={6} sm={2} sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography>Address :</Typography>
+              </Grid>
+              <DemoGrid item xs={6} sm={4}>
+                <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
+                  {data?.clientName.address}
                 </Typography>
               </DemoGrid>
 

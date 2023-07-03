@@ -217,7 +217,7 @@ const Purchase = () => {
 
                   {(searchValue ? filteredData : data).map(d => (
 
-                    <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }} onClick={() => router.push(`/purchase/${d.id}`)}>
+                    <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }} onClick={() => router.push(`/invoice/${d.id}`)}>
                       <TableCell key={data.id} align="left">
                         {d.invoiceNo}
                       </TableCell>
