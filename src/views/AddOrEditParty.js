@@ -148,32 +148,6 @@ const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handl
                 <TextField
                   fullWidth
                   required
-                  error={gstNoError}
-                  name='gstNo'
-                  type='text'
-                  label='GST No'
-                  placeholder='GST No'
-                  value={gstNo}
-                  onChange={(e) => setGstNo(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  required
-                  error={contactNoError}
-                  name='contactNo'
-                  type='number'
-                  label='Party Name'
-                  placeholder='Party name'
-                  value={contactNo}
-                  onChange={(e) => setContactNo(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  required
                   error={addressError}
                   name='address'
                   type='text'
@@ -187,13 +161,39 @@ const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handl
                 <TextField
                   fullWidth
                   required
+                  error={gstNoError}
+                  name='gstNo'
+                  type='text'
+                  label='GST No'
+                  placeholder='GST No'
+                  value={gstNo}
+                  onChange={(e) => setGstNo(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
                   error={stateError}
                   name='state'
                   type='text'
-                  label='State'
-                  placeholder='State'
+                  label='State & State Code'
+                  placeholder='State & State Code'
                   value={state}
                   onChange={(e) => setState(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  required
+                  error={contactNoError}
+                  name='contactNo'
+                  type='number'
+                  label='Contact No'
+                  placeholder='Contect No'
+                  value={contactNo}
+                  onChange={(e) => setContactNo(e.target.value)}
                 />
               </Grid>
 
