@@ -191,6 +191,8 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
     }
 
     let data = [...products];
+
+
     if (entity === 'productId') {
 
       let productCode = productMaster.filter(p => p._id === value);
@@ -199,6 +201,10 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
         data[index]['code'] = productCode[0]?.code;
         setProducts(data);
       }
+    } else if (e.target.name === 'category') {
+      let data = [...products];
+      data[index]['filteredData'] = productMaster.filter(p => p.categoryId._id === e.target.value);;
+      setProducts(data);
     }
     data[index][entity] = value;
     setProducts(data);
@@ -396,7 +402,7 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
                     </Select>
                   </FormControl> */}
                   <Autocomplete
-                    options={q.filteredData.length > 0 ? q.filteredData : productMaster}
+                    options={q.category != '' ? q.filteredData : productMaster}
                     getOptionLabel={option => option.name + " " + option.size}
                     name="productId"
                     onChange={(e, values) => handleSizeQuantity(index, values?._id, "productId")}
@@ -448,7 +454,7 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
                           value={q.leftOver}
                           onChange={(e) => handleSizeQuantity(index, e)}
                         >
-                          {productMaster.filter(p => p.code === q.code && p._id != q.productId).map(p => (
+                          {productMaster.filter(p => p.code === q.code).map(p => (
                             <MenuItem key={p._id} value={p._id}>{p.name + "  " + p.size}</MenuItem>
                           ))}
                         </Select>

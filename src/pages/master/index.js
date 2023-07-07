@@ -131,7 +131,7 @@ const Master = () => {
 
     const searchRegex = new RegExp(escapeRegExp(value), 'i')
 
-    const filteredRows = data.filter(row => {
+    const filteredRows = masterData.filter(row => {
       console.log(row);
 
       return Object.keys(row).some(field => {
