@@ -19,6 +19,8 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import { MdModeEditOutline } from 'react-icons/md'
+import { AiFillDelete } from 'react-icons/ai'
+
 import AddOrEditProductMaster from 'src/views/AddOrEditProductMaster'
 import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
@@ -144,6 +146,29 @@ const Master = () => {
     }
   }
 
+  const deleteProduct = (id) => {
+    try {
+      axiosInstance.put('product/delete', { id: id })
+        .then(res => {
+          if (res.data.status === 200) {
+            setToaster(res.data.message);
+            fetch()
+
+            // setLoading(false);
+          } else {
+            // setLoading(false);
+            setErrorToaster(res.data.message);
+          }
+        })
+        .catch(err => {
+          // setLoading(false);
+          setErrorToaster(err);
+        })
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
 
 
   return (
@@ -162,7 +187,7 @@ const Master = () => {
       <Grid item xs={12}>
 
         <Card>
-          <CardHeader title='Sticky Header' titleTypographyProps={{ variant: 'h6' }} />
+          <CardHeader title='Products Master' titleTypographyProps={{ variant: 'h6' }} />
           {/* <Button variant="outlined" onClick={handleClickOpen}>
             Add Product
           </Button> */}
@@ -253,6 +278,9 @@ const Master = () => {
                       <TableCell align="left" sx={{ minWidth: 100 }}>
                         Sub-Category
                       </TableCell>
+                      <TableCell align="left" sx={{ minWidth: 100 }}>
+                        Action
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -275,7 +303,12 @@ const Master = () => {
                           {d.categoryId.name}
                         </TableCell>
                         <TableCell key={d.id} align="left">
-                          {d.subCategoryId.name}
+                          {d?.subCategoryId?.name}
+                        </TableCell>
+                        <TableCell key={d.id} align="left">
+                          <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => setEditMaster(d)} />
+                          <AiFillDelete color="rgb(238 31 31)" size="20px" style={{ cursor: "pointer", marginLeft: "10px" }} onClick={() => deleteProduct(d._id)} />
+
                         </TableCell>
 
 

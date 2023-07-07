@@ -79,7 +79,7 @@ const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handl
       const data = {
         name: name,
         address: address,
-        gstNo: name,
+        gstNo: gstNo,
         contactNo: contactNo,
         state: state,
 

@@ -35,12 +35,26 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
   const [codeError, setCodeError] = useState(false);
   const [categoryError, setCategoryError] = useState(false);
   const [subCategoryError, setSubCategoryError] = useState(false);
-
+  const [filteredSubCategories, setFilteredSubCategories] = useState([]);
 
 
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
 
+
+  React.useEffect(() => {
+    if (editMaster) {
+      setName(editMaster.name);
+      setCode(editMaster.code);
+      setCategory(editMaster.categoryId._id);
+      setSubCategory(editMaster.subCategoryId._id);
+    } else {
+      setName('');
+      setCode('');
+      setCategory('');
+      setSubCategory('');
+    }
+  }, [editMaster])
 
   React.useEffect(() => {
     axiosInstance.get("category/get").then((res) => {
@@ -53,6 +67,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
       })
     axiosInstance.get("subCategory/get").then((res) => {
       if (res.data.status === 200) {
+        console.log("subCat ", res.data.data)
         setSubCategories(res.data.data)
       }
     })
@@ -69,7 +84,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
 
   const handleSubmit = () => {
 
-    if (!name || !code || !category || !subCategory) {
+    if (!name || !code || !category || (filteredSubCategories.length > 0 && !subCategory)) {
       if (!name) {
         setNameError(true);
       }
@@ -79,7 +94,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
       if (!category) {
         setCategoryError(true);
       }
-      if (!subCategory) {
+      if (filteredSubCategories.length > 0 && !subCategory) {
         setSubCategoryError(true);
       }
 
@@ -98,9 +113,13 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
         name: name,
         code: code,
         categoryId: category,
-        subCategoryId: subCategory,
+        subCategoryId: subCategory
       }
-      axiosInstance.post("product", data)
+
+      if (editMaster) {
+        data.id = editMaster._id
+      }
+      (open ? axiosInstance.post("product", data) : axiosInstance.put("product/update", data))
         .then(res => {
           if (res.data.status === 200) {
             reset();
@@ -127,11 +146,16 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
     setSubCategory("");
   }
 
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
+    setFilteredSubCategories(subCategories.filter(s => s.categoryId[0]._id === e.target.value));
+  }
+
   return (
     <div>
 
       <Dialog open={open || editMaster} onClose={handleClose}>
-        <DialogTitle>Add Master</DialogTitle>
+        <DialogTitle>{open ? 'Add' : editMaster && 'Update'} Master</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit} style={{ marginTop: "10px" }}>
             <Grid container spacing={5} component="form"
@@ -178,7 +202,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
                     id='form-layouts-separator-select'
                     labelId='form-layouts-separator-select-label'
                     value={category}
-                    onChange={(e) => setCategory(e.target.value)}
+                    onChange={handleCategoryChange}
                   >
                     {categories.map(c => (
                       <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
@@ -190,18 +214,19 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
                 <FormControl fullWidth>
                   <InputLabel id='Size'>Sub Category</InputLabel>
                   <Select
-                    required
+                    required={filteredSubCategories.length > 0 && true}
                     error={subCategoryError}
                     label='Sub Category'
                     name="subCategory"
                     id='form-layouts-separator-select'
                     labelId='form-layouts-separator-select-label'
                     value={subCategory}
+                    disabled={filteredSubCategories.length === 0 && true}
                     onChange={(e) => setSubCategory(e.target.value)}
                   >
-                    {subCategories.map(c => (
+                    {(filteredSubCategories.map(c => (
                       <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
-                    ))}
+                    )))}
                   </Select>
                 </FormControl>
               </Grid>
@@ -238,7 +263,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
           <Button onClick={handleClose}>Cancel</Button>
           <Button type="submit"
             onClick={handleSubmit}
-          >Add</Button>
+          >{open ? 'Add' : editMaster && 'Update'}</Button>
         </DialogActions>
       </Dialog>
     </div>
