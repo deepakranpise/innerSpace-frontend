@@ -47,7 +47,7 @@ const Dashboard = () => {
     try {
       axiosInstance.get("size/get",)
         .then(res => {
-          console.log(res.data.data)
+          console.log("the sizes ",res.data.data)
           setColumns(res.data.data);
         })
         .catch(err => {

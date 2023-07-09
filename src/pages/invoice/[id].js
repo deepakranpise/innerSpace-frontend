@@ -47,7 +47,7 @@ const Detail = (props) => {
       axiosInstance.get(`transaction/get/${id}`)
         .then(res => {
           if (res.data.status === 200 && res.data.data) {
-            console.log(res.data.data)
+            console.log("[id] ",res.data.data)
             setData(res.data.data);
           } else {
             router.push('/purchase')
@@ -106,7 +106,7 @@ const Detail = (props) => {
               </Grid>
               <DemoGrid item xs={6} sm={4}>
                 <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
-                  {data?.clientName.name}
+                  {data?.clientName?.name}
                 </Typography>
               </DemoGrid>
 
@@ -115,7 +115,7 @@ const Detail = (props) => {
               </Grid>
               <DemoGrid item xs={6} sm={4}>
                 <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
-                  {data?.clientName.contactNo}
+                  {data?.clientName?.contactNo}
                 </Typography>
               </DemoGrid>
 
@@ -124,7 +124,7 @@ const Detail = (props) => {
               </Grid>
               <DemoGrid item xs={6} sm={4}>
                 <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
-                  {data?.clientName.gstNo}
+                  {data?.clientName?.gstNo}
                 </Typography>
               </DemoGrid>
               <Grid item xs={6} sm={2} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -132,7 +132,7 @@ const Detail = (props) => {
               </Grid>
               <DemoGrid item xs={6} sm={4}>
                 <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
-                  {data?.clientName.state}
+                  {data?.clientName?.state}
                 </Typography>
               </DemoGrid>
               <Grid item xs={6} sm={2} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -140,7 +140,7 @@ const Detail = (props) => {
               </Grid>
               <DemoGrid item xs={6} sm={4}>
                 <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
-                  {data?.clientName.address}
+                  {data?.clientName?.address}
                 </Typography>
               </DemoGrid>
 

@@ -15,9 +15,10 @@ import { useState } from 'react'
 import { CSVLink } from "react-csv";
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
-import { Button, Menu, MenuItem, TextField } from '@mui/material'
+import { Autocomplete, Button, Menu, MenuItem, TextField } from '@mui/material'
 import { Icon } from '@iconify/react'
-import {SlOptionsVertical} from 'react-icons/sl'
+import { SlOptionsVertical } from 'react-icons/sl'
+import axiosInstance from 'src/hoc/axios'
 
 const escapeRegExp = value => {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
@@ -29,12 +30,31 @@ const DashboardTable = ({ data, columns, fetch }) => {
   const [searchValue, setSearchValue] = useState('');
   const [editStock, setEditStock] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [filteredColumns, setFilteredColumns] = useState([]);
+
 
   const [stock, setStock] = useState(null);
 
 
   const [anchorEl, setAnchorEl] = useState(null);
   const openEl = Boolean(anchorEl);
+
+
+  useEffect(() => {
+    axiosInstance.get("category/get")
+      .then(res => {
+        if (res.data.status === 200) {
+          setCategories(res.data.data)
+          setCategory(res.data.data[0].name)
+          setFilteredColumns(columns.filter(c => c.categoryId[0]._id === res.data.data[0]._id))
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [])
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -99,9 +119,45 @@ const DashboardTable = ({ data, columns, fetch }) => {
     }
   }
 
+  const handleCategoryChange = (e, values) => {
+
+    if (values === null) {
+      setFilteredColumns(columns.filter(c => c.categoryId[0]._id === categories[0]._id))
+
+      return;
+    }
+    setCategory(e.target.values)
+
+    // let allData = data.filter()
+
+    let col = columns.filter(c => c.categoryId[0]._id === values._id);
+    console.log(col)
+    setFilteredColumns(col)
+  }
+
   return (
     <>
       <Card>
+        <FormControl>
+          <Autocomplete
+            options={categories}
+            getOptionLabel={option => option.name}
+            name="category"
+            sx={{ width: '220px', marginLeft: '10px' }}
+            onChange={handleCategoryChange}
+            value={categories[0]}
+            renderInput={params => (
+              <TextField
+                {...params}
+                name="categoryId"
+                variant="standard"
+                label="Category"
+                placeholder="Category"
+                margin="normal"
+              />
+            )}
+          />
+        </FormControl>
         <Button
           id="demo-positioned-button"
 
@@ -130,24 +186,24 @@ const DashboardTable = ({ data, columns, fetch }) => {
           }}
         >
           <MenuItem > <CSVLink {...csvReport}
-          style={{
-            // color: "rgb(105 57 191) !important",
-            textDecoration: "none",
-            color:'#111'
+            style={{
+              // color: "rgb(105 57 191) !important",
+              textDecoration: "none",
+              color: '#111'
 
-            // fontWeight: "600",
-            // border: "1px solid",
-            // height: "35px",
-            // display: "flex",
-            // width: "70px",
-            // borderRadius: "2%",
-            // textAlign: "center",
-            // padding: "5px",
-            // margin: "10px"
-          }}
-        >Export</CSVLink></MenuItem>
+              // fontWeight: "600",
+              // border: "1px solid",
+              // height: "35px",
+              // display: "flex",
+              // width: "70px",
+              // borderRadius: "2%",
+              // textAlign: "center",
+              // padding: "5px",
+              // margin: "10px"
+            }}
+          >Export</CSVLink></MenuItem>
         </Menu>
-        <FormControl sx={{ float: 'right',marginTop: '10px' }}>
+        <FormControl sx={{ float: 'right', marginTop: '10px' }}>
           <TextField
             size='small'
             value={searchValue}
@@ -189,7 +245,7 @@ const DashboardTable = ({ data, columns, fetch }) => {
                 <TableCell>Name</TableCell>
                 {/* <TableCell>Size</TableCell>
                 <TableCell>Qty</TableCell> */}
-                {columns[0]?.size?.map(c => (
+                {filteredColumns[0]?.size?.map(c => (
                   <TableCell key={c}>{c}</TableCell>
                 ))}
               </TableRow>
@@ -208,7 +264,7 @@ const DashboardTable = ({ data, columns, fetch }) => {
                   {/* <TableCell align="left">
                         {d.size}
                       </TableCell> */}
-                  {columns[0]?.size?.map(c => (
+                  {filteredColumns[0]?.size.map(c => (
                     <TableCell key={c}>{d[c] || "-"}</TableCell>
                   ))}
 
