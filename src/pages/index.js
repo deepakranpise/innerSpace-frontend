@@ -25,6 +25,10 @@ const Dashboard = () => {
 
   const [data, setData] = useState([])
   const [columns, setColumns] = useState([])
+  const [categories, setCategories] = useState([]);
+  const [filteredColumns, setFilteredColumns] = useState([]);
+  const [category, setCategory] = useState([]);
+
 
 
 
@@ -45,10 +49,25 @@ const Dashboard = () => {
 
   useEffect(() => {
     try {
-      axiosInstance.get("size/get",)
+
+
+      axiosInstance.get("category/get")
         .then(res => {
-          console.log("the sizes ",res.data.data)
-          setColumns(res.data.data);
+          if (res.data.status === 200) {
+            setCategories(res.data.data)
+            setCategory(res.data.data[0]);
+
+            axiosInstance.get("size/get",)
+              .then(res => {
+                console.log("the sizes ", res.data.data)
+                setColumns(res.data.data);
+                setFilteredColumns(columns.filter(c => c.categoryId[0]._id === res.data.data[0]._id))
+              })
+              .catch(err => {
+                console.log(err)
+              })
+
+          }
         })
         .catch(err => {
           console.log(err)
@@ -64,23 +83,37 @@ const Dashboard = () => {
     fetch();
   }, [])
 
-  if (!data)  return <FallbackSpinner />;
+  const handleCategoryChange = (e, values) => {
 
-return (
-  <ApexChartWrapper>
-    <Grid container spacing={6}>
-      <Grid item xs={12}>
-        <div>
+    if (values === null) {
+      setFilteredColumns(columns.filter(c => c.categoryId[0]._id === categories[0]._id))
 
-        </div>
+      return;
+    }
+    setCategory(values)
+
+    let col = columns.filter(c => c.categoryId[0]._id === values._id);
+    console.log("col ", col)
+    setFilteredColumns(col)
+  }
+
+  if (!data) return <FallbackSpinner />;
+
+  return (
+    <ApexChartWrapper>
+      <Grid container spacing={6}>
+        <Grid item xs={12}>
+          <div>
+
+          </div>
+        </Grid>
+        <Grid item xs={12}>
+
+          <Table data={data} columns={columns} handleCategoryChange={handleCategoryChange} filteredColumns={filteredColumns} categories={categories} category={category} fetch={fetch} />
+        </Grid>
       </Grid>
-      <Grid item xs={12}>
-
-        <Table data={data} columns={columns} fetch={fetch} />
-      </Grid>
-    </Grid>
-  </ApexChartWrapper>
-)
+    </ApexChartWrapper>
+  )
 }
 
 export default withAuth(Dashboard);

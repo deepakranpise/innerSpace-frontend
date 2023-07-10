@@ -29,6 +29,11 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
 
   React.useEffect(() => {
     console.log("editCategory ", editCategory)
+    if (editCategory) {
+      setName(editCategory.name);
+    } else {
+      setName('');
+    }
 
   }, [editCategory])
 
@@ -44,7 +49,11 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
       const data = {
         name: name
       }
-      axiosInstance.post("Category", data)
+
+      if (editCategory) {
+        data.id = editCategory._id
+      }
+      (open ? axiosInstance.post("Category", data) : axiosInstance.put("Category/update", data))
         .then(res => {
           if (res.data.status === 200) {
             reset();
@@ -72,7 +81,7 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
     <div>
 
       <Dialog open={open || editCategory} onClose={handleClose}>
-        <DialogTitle>Add Category</DialogTitle>
+        <DialogTitle>{open ? 'Add' : editCategory && 'Update'} Category</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit} style={{ marginTop: "10px" }}>
             <Grid container spacing={5} component="form"
@@ -101,7 +110,7 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
           <Button onClick={handleClose}>Cancel</Button>
           <Button type="submit"
             onClick={handleSubmit}
-          >Add</Button>
+          >{open ? 'Add' : editCategory && 'Update'}</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -59,6 +59,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
   React.useEffect(() => {
     axiosInstance.get("category/get").then((res) => {
       if (res.data.status === 200) {
+        console.log("Cat ", res.data.data)
         setCategories(res.data.data)
       }
     })
@@ -69,18 +70,21 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
       if (res.data.status === 200) {
         console.log("subCat ", res.data.data)
         setSubCategories(res.data.data)
+        let filter = res.data.data.filter(s => s.categoryId[0]._id === editMaster?.categoryId?._id);
+        setFilteredSubCategories(filter);
       }
     })
       .catch(err => {
         console.log(err)
       })
-  }, [])
+  }, [editMaster?.categoryId?._id])
 
 
   React.useEffect(() => {
     console.log("editMaster ", editMaster)
 
   }, [editMaster])
+
 
   const handleSubmit = () => {
 
@@ -148,7 +152,14 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
 
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
-    setFilteredSubCategories(subCategories.filter(s => s.categoryId[0]._id === e.target.value));
+    let filter = subCategories.filter(s => s.categoryId[0]._id === e.target.value);
+    setFilteredSubCategories(filter);
+    console.log("first ", filter)
+    if(e.target.value === editMaster.categoryId._id)
+      setSubCategory(editMaster.subCategoryId._id)
+
+    else
+      setSubCategory(filter[0]._id)
   }
 
   return (
@@ -230,32 +241,6 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
                   </Select>
                 </FormControl>
               </Grid>
-              {/* <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  required
-                  name='category'
-                  type='text'
-                  label='Product Category'
-                  placeholder='Product Category'
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  disabled={true}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  required
-                  name='subCategory'
-                  type='text'
-                  label='Sub Category'
-                  placeholder='Sub Category'
-                  value={subCategory}
-                  onChange={(e) => setSubCategory(e.target.value)}
-                  disabled={true}
-                />
-              </Grid> */}
             </Grid>
           </form>
         </DialogContent>

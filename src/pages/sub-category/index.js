@@ -22,8 +22,10 @@ import { MdModeEditOutline } from 'react-icons/md'
 import AddOrEditSubCategory from 'src/views/AddOrEditSubCategory'
 import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
+import { AiFillDelete } from 'react-icons/ai'
 import { Icon } from '@iconify/react'
 import { Box } from 'mdi-material-ui'
+import DeleteModal from 'src/views/DeleteModal'
 
 const escapeRegExp = value => {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
@@ -33,10 +35,11 @@ const SubCategory = () => {
 
   const [SubCategoryData, setSubCategoryData] = useState([]);
 
-  const [toaster, setToaster] = useState(false);
-  const [errorToaster, setErrorToaster] = useState(false);
+  const [toaster, setToaster] = useState(null);
+  const [errorToaster, setErrorToaster] = useState(null);
   const [searchValue, setSearchValue] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
+  const [deleteItem, setDeleteItem] = useState(null);
 
   const [editSubCategory, setEditSubCategory] = useState(null);
 
@@ -49,7 +52,8 @@ const SubCategory = () => {
 
   const handleClose = () => {
     setAddSubCategory(false);
-    setEditSubCategory(null)
+    setEditSubCategory(null);
+    setDeleteItem(null)
   };
 
   const handleOpenToaster = () => {
@@ -101,18 +105,43 @@ const SubCategory = () => {
     }
   }
 
+  const deleteProduct = () => {
+    try {
+      axiosInstance.put('subCategory/delete', { id: deleteItem._id })
+        .then(res => {
+          if (res.data.status === 200) {
+            setToaster(res.data.message);
+            setDeleteItem(null);
+            fetch();
+
+            // setLoading(false);
+          } else {
+            // setLoading(false);
+            setErrorToaster(res.data.message);
+          }
+        })
+        .catch(err => {
+          // setLoading(false);
+          setErrorToaster(err);
+        })
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+
 
   return (
     <Grid container spacing={6}>
       <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="success" sx={{ width: '100%' }}>
-          Sub Category added successfully
+          {toaster}
         </Alert>
       </Snackbar>
 
       <Snackbar open={errorToaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="error" sx={{ width: '100%' }}>
-          Error While Adding Sub Category
+          {errorToaster}
         </Alert>
       </Snackbar>
 
@@ -167,17 +196,20 @@ const SubCategory = () => {
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Category
                     </TableCell>
+                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                      Action
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {/* {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
               return ( */}
-                  {(searchValue ? filteredData : SubCategoryData).length === 0 && (
+                  {(searchValue ? filteredData : SubCategoryData)?.length === 0 && (
                     <Grid item xs={12} sm={12} sx={{ display: 'flex', alignItems: 'center', margin: "20px" }}>
                       <Typography>No Data Found</Typography>
                     </Grid>)}
 
-                  {(searchValue ? filteredData : SubCategoryData).map(d => (
+                  {(searchValue ? filteredData : SubCategoryData)?.map(d => (
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
                       <TableCell key={d.id} align="left">
                         {d.name}
@@ -185,6 +217,11 @@ const SubCategory = () => {
                       <TableCell key={d.id} align="left">
                         {d.categoryId[0].name}
                       </TableCell>
+                      <TableCell key={d.id} align="left">
+                        <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => setEditSubCategory(d)} />
+                        <AiFillDelete color="rgb(238 31 31)" size="20px" style={{ cursor: "pointer", marginLeft: "10px" }} onClick={() => setDeleteItem(d)} />
+                      </TableCell>
+
                     </TableRow>
                   ))}
 
@@ -208,6 +245,7 @@ const SubCategory = () => {
       </Grid>
 
       <AddOrEditSubCategory open={addSubCategory} setErrorToaster={setErrorToaster} handleClickOpen={handleClickOpen} setEditSubCategory={setEditSubCategory} editSubCategory={editSubCategory} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
+      <DeleteModal deleteItem={deleteItem} handleClose={handleClose} deleteProduct={deleteProduct} type='Sub-Category' />
 
     </Grid>
   )

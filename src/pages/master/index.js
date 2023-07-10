@@ -28,6 +28,7 @@ import { ReflectHorizontal } from 'mdi-material-ui'
 import FallbackSpinner from 'src/@core/components/spinner'
 import { Icon } from '@iconify/react'
 import { Box } from 'mdi-material-ui'
+import DeleteModal from 'src/views/DeleteModal'
 
 const escapeRegExp = value => {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
@@ -37,13 +38,14 @@ const Master = () => {
 
   const [masterData, setMasterData] = useState([]);
 
-  const [toaster, setToaster] = useState(false);
-  const [errorToaster, setErrorToaster] = useState(false);
+  const [toaster, setToaster] = useState(null);
+  const [errorToaster, setErrorToaster] = useState(null);
   const [editMaster, setEditMaster] = useState(null);
   const uploadInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [searchValue, setSearchValue] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
+  const [deleteItem, setDeleteItem] = useState(null);
 
   const [open, setOpen] = useState(false);
 
@@ -53,7 +55,8 @@ const Master = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setEditMaster(null)
+    setEditMaster(null);
+    setDeleteItem(null);
   };
 
   const handleOpenToaster = () => {
@@ -146,13 +149,14 @@ const Master = () => {
     }
   }
 
-  const deleteProduct = (id) => {
+  const deleteProduct = () => {
     try {
-      axiosInstance.put('product/delete', { id: id })
+      axiosInstance.put('product/delete', { id: deleteItem._id })
         .then(res => {
           if (res.data.status === 200) {
             setToaster(res.data.message);
-            fetch()
+            setDeleteItem(null);
+            fetch();
 
             // setLoading(false);
           } else {
@@ -175,13 +179,13 @@ const Master = () => {
     <Grid container spacing={6}>
       <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="success" sx={{ width: '100%' }}>
-          Product added successfully
+          {toaster}
         </Alert>
       </Snackbar>
 
       <Snackbar open={errorToaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="error" sx={{ width: '100%' }}>
-          Error While Adding Product
+          {errorToaster}
         </Alert>
       </Snackbar>
       <Grid item xs={12}>
@@ -307,7 +311,7 @@ const Master = () => {
                         </TableCell>
                         <TableCell key={d.id} align="left">
                           <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => setEditMaster(d)} />
-                          <AiFillDelete color="rgb(238 31 31)" size="20px" style={{ cursor: "pointer", marginLeft: "10px" }} onClick={() => deleteProduct(d._id)} />
+                          <AiFillDelete color="rgb(238 31 31)" size="20px" style={{ cursor: "pointer", marginLeft: "10px" }} onClick={() => setDeleteItem(d)} />
 
                         </TableCell>
 
@@ -336,7 +340,7 @@ const Master = () => {
       </Grid>
 
       <AddOrEditProductMaster open={open} setErrorToaster={setErrorToaster} handleClickOpen={handleClickOpen} setEditMaster={setEditMaster} editMaster={editMaster} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
-
+      <DeleteModal deleteItem={deleteItem} handleClose={handleClose} deleteProduct={deleteProduct} type='Product' />
     </Grid>
   )
 

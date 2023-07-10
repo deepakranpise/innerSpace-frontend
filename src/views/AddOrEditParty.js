@@ -22,7 +22,7 @@ import axiosInstance from 'src/hoc/axios';
 
 
 
-const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditCategory, editCategory }) => {
+const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditParty, editParty }) => {
 
   const [name, setName] = useState("");
   const [gstNo, setGstNo] = useState("");
@@ -38,9 +38,23 @@ const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handl
 
 
   React.useEffect(() => {
-    console.log("editCategory ", editCategory)
+    console.log("editParty ", editParty)
+    if (editParty) {
+      setName(editParty.name);
+      setGstNo(editParty.gstNo);
+      setState(editParty.state);
+      setAddress(editParty.address);
+      setContactNo(editParty.contactNo);
 
-  }, [editCategory])
+    } else {
+      setName('');
+      setGstNo('');
+      setState('');
+      setAddress('');
+      setContactNo('');
+    }
+
+  }, [editParty])
 
   const handleSubmit = () => {
 
@@ -84,7 +98,12 @@ const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handl
         state: state,
 
       }
-      axiosInstance.post("client", data)
+      if (editParty) {
+        data.id = editParty._id
+      }
+
+      // axiosInstance.post("client", data)
+      (open ? axiosInstance.post("client", data) : axiosInstance.put("client/update", data))
         .then(res => {
           if (res.data.status === 200) {
             reset();
@@ -121,8 +140,8 @@ const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handl
   return (
     <div>
 
-      <Dialog open={open || editCategory} onClose={handleClose}>
-        <DialogTitle>Add Category</DialogTitle>
+      <Dialog open={open || editParty} onClose={handleClose}>
+        <DialogTitle>{open ? 'Add' : editParty && 'Update'} Party</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit} style={{ marginTop: "10px" }}>
             <Grid container spacing={5} component="form"
@@ -204,7 +223,7 @@ const AddOrEditParty = ({ open, setOpen, setErrorToaster, handleClickOpen, handl
           <Button onClick={reset}>Reset</Button>
           <Button type="submit"
             onClick={handleSubmit}
-          >Add</Button>
+          >{open ? 'Add' : editParty && 'Update'}</Button>
         </DialogActions>
       </Dialog>
     </div>

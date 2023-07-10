@@ -24,6 +24,8 @@ import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
 import { Box } from 'mdi-material-ui'
 import { Icon } from '@iconify/react'
+import { AiFillDelete } from 'react-icons/ai'
+import DeleteModal from 'src/views/DeleteModal'
 
 
 const escapeRegExp = value => {
@@ -34,11 +36,13 @@ const Category = () => {
 
   const [CategoryData, setCategoryData] = useState([]);
 
-  const [toaster, setToaster] = useState(false);
-  const [errorToaster, setErrorToaster] = useState(false);
+  const [toaster, setToaster] = useState(null);
+  const [errorToaster, setErrorToaster] = useState(null);
   const [editCategory, setEditCategory] = useState(null);
   const [searchValue, setSearchValue] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
+  const [deleteItem, setDeleteItem] = useState(null);
+
 
   const [open, setOpen] = useState(false);
 
@@ -48,7 +52,9 @@ const Category = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setEditCategory(null)
+    setEditCategory(null);
+    setDeleteItem(null);
+
   };
 
   const handleOpenToaster = () => {
@@ -100,17 +106,42 @@ const Category = () => {
     }
   }
 
+  const deleteProduct = () => {
+    try {
+      axiosInstance.put('Category/delete', { id: deleteItem._id })
+        .then(res => {
+          if (res.data.status === 200) {
+            setToaster(res.data.message);
+            setDeleteItem(null);
+            fetch();
+
+            // setLoading(false);
+          } else {
+            // setLoading(false);
+            setErrorToaster(res.data.message);
+          }
+        })
+        .catch(err => {
+          // setLoading(false);
+          setErrorToaster(err);
+        })
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <Grid container spacing={6}>
       <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="success" sx={{ width: '100%' }}>
-          Category added successfully
+          {toaster}
         </Alert>
       </Snackbar>
 
       <Snackbar open={errorToaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="error" sx={{ width: '100%' }}>
-          Error While Adding Category
+          {errorToaster}
         </Alert>
       </Snackbar>
 
@@ -161,6 +192,9 @@ const Category = () => {
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Name
                     </TableCell>
+                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                      Action
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -176,6 +210,11 @@ const Category = () => {
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
                       <TableCell key={d.id} align="left">
                         {d.name}
+                      </TableCell>
+                      <TableCell key={d.id} align="left">
+                        <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => setEditCategory(d)} />
+                        <AiFillDelete color="rgb(238 31 31)" size="20px" style={{ cursor: "pointer", marginLeft: "10px" }} onClick={() => setDeleteItem(d)} />
+
                       </TableCell>
                     </TableRow>
                   ))}
@@ -200,6 +239,7 @@ const Category = () => {
       </Grid>
 
       <AddOrEditCategory open={open} setErrorToaster={setErrorToaster} handleClickOpen={handleClickOpen} setEditCategory={setEditCategory} editCategory={editCategory} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
+      <DeleteModal deleteItem={deleteItem} handleClose={handleClose} deleteProduct={deleteProduct} type='Category' />
 
     </Grid>
   )

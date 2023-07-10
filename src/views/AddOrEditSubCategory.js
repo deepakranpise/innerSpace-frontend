@@ -18,11 +18,12 @@ import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import Autocomplete from '@mui/material/Autocomplete'
 import axiosInstance from 'src/hoc/axios';
+import { ElevatorPassenger } from 'mdi-material-ui';
 
 
 
 
-const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, handleClose, handleOpenToaster, fetch, setEditCategory, editCategory }) => {
+const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, handleClose, handleOpenToaster, fetch, editSubCategory, setEditSubCategory }) => {
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -38,14 +39,21 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
         setCategories(res.data.data);
       }
     })
-    .catch(err => {
-      console.log(err)
-    })
+      .catch(err => {
+        console.log(err)
+      })
   }, [])
 
   React.useEffect(() => {
-    console.log("editCategory ", editCategory)
-  }, [editCategory])
+    console.log("editSubCategory ", editSubCategory)
+    if (editSubCategory) {
+      setName(editSubCategory.name);
+      setCategory(editSubCategory.categoryId[0]._id);
+    } else {
+      setName('');
+      setCategory('');
+    }
+  }, [editSubCategory])
 
   const handleSubmit = () => {
     if (!name || !category) {
@@ -65,7 +73,13 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
         name: name,
         categoryId: category
       }
-      axiosInstance.post("subCategory", data)
+      if (editSubCategory) {
+        data.id = editSubCategory._id
+      }
+
+      // axiosInstance.post("subCategory", data)
+
+      (open ? axiosInstance.post("subCategory", data) : axiosInstance.put("subCategory/update", data))
         .then(res => {
           if (res.data.status === 200) {
             console.log(res.data.data);
@@ -94,8 +108,8 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
   return (
     <div>
 
-      <Dialog open={open || editCategory} onClose={handleClose}>
-        <DialogTitle>Add Category</DialogTitle>
+      <Dialog open={open || editSubCategory} onClose={handleClose}>
+        <DialogTitle>{open ? 'Add' : editSubCategory && 'Update'} Sub-Category</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit} style={{ marginTop: "10px" }}>
             <Grid container spacing={5} component="form"
@@ -117,7 +131,7 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
                   onChange={(e) => setName(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel id='category'>Category</InputLabel>
                   <Select
@@ -142,7 +156,7 @@ const AddOrEditCategory = ({ open, setOpen, setErrorToaster, handleClickOpen, ha
           <Button onClick={handleClose}>Cancel</Button>
           <Button type="submit"
             onClick={handleSubmit}
-          >Add</Button>
+          >{open ? 'Add' : editSubCategory && 'Update'}</Button>
         </DialogActions>
       </Dialog>
     </div>

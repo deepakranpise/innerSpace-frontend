@@ -24,15 +24,12 @@ const escapeRegExp = value => {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
 
-const DashboardTable = ({ data, columns, fetch }) => {
+const DashboardTable = ({ data, columns, fetch, categories, filteredColumns, handleCategoryChange, category }) => {
 
   const [toaster, setToaster] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [editStock, setEditStock] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [category, setCategory] = useState([]);
-  const [filteredColumns, setFilteredColumns] = useState([]);
 
 
   const [stock, setStock] = useState(null);
@@ -42,19 +39,7 @@ const DashboardTable = ({ data, columns, fetch }) => {
   const openEl = Boolean(anchorEl);
 
 
-  useEffect(() => {
-    axiosInstance.get("category/get")
-      .then(res => {
-        if (res.data.status === 200) {
-          setCategories(res.data.data)
-          setCategory(res.data.data[0].name)
-          setFilteredColumns(columns.filter(c => c.categoryId[0]._id === res.data.data[0]._id))
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }, [])
+
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -85,7 +70,7 @@ const DashboardTable = ({ data, columns, fetch }) => {
       { label: "Name", key: "_id" },
     ];
 
-    columns[0]?.size?.forEach(element => {
+    filteredColumns[0]?.size?.forEach(element => {
       headers.push({ label: element, key: element })
     });
 
@@ -119,21 +104,7 @@ const DashboardTable = ({ data, columns, fetch }) => {
     }
   }
 
-  const handleCategoryChange = (e, values) => {
 
-    if (values === null) {
-      setFilteredColumns(columns.filter(c => c.categoryId[0]._id === categories[0]._id))
-
-      return;
-    }
-    setCategory(e.target.values)
-
-    // let allData = data.filter()
-
-    let col = columns.filter(c => c.categoryId[0]._id === values._id);
-    console.log(col)
-    setFilteredColumns(col)
-  }
 
   return (
     <>
@@ -145,7 +116,7 @@ const DashboardTable = ({ data, columns, fetch }) => {
             name="category"
             sx={{ width: '220px', marginLeft: '10px' }}
             onChange={handleCategoryChange}
-            value={categories[0]}
+            value={category}
             renderInput={params => (
               <TextField
                 {...params}
@@ -242,10 +213,10 @@ const DashboardTable = ({ data, columns, fetch }) => {
           <Table sx={{ minWidth: 800 }} aria-label='table in dashboard'>
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
+                <TableCell>{category.name}</TableCell>
                 {/* <TableCell>Size</TableCell>
                 <TableCell>Qty</TableCell> */}
-                {filteredColumns[0]?.size?.map(c => (
+                {(columns.filter(c => c.categoryId[0]._id === category._id))[0]?.size?.map(c => (
                   <TableCell key={c}>{c}</TableCell>
                 ))}
               </TableRow>
@@ -255,38 +226,11 @@ const DashboardTable = ({ data, columns, fetch }) => {
                 <TableRow hover key={d.name} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
                   <TableCell key={d.id} align="left"> {d._id}
                   </TableCell>
-                  {/* {columns.map((u, index) => (
-                    <TableCell key={u} align="left">
-                      {u}
-                    </TableCell>
-                  ))} */}
-                  {/* {d.data.map(qty => ( */}
-                  {/* <TableCell align="left">
-                        {d.size}
-                      </TableCell> */}
-                  {filteredColumns[0]?.size.map(c => (
+
+                  {(columns.filter(c => c.categoryId[0]._id === category._id))[0]?.size?.map(c => (
                     <TableCell key={c}>{d[c] || "-"}</TableCell>
                   ))}
 
-                  {/* <TableCell>{d.email}</TableCell> */}
-                  {/* <TableCell>{d.date}</TableCell>
-                <TableCell>{d.salary}</TableCell>
-                <TableCell>{d.age}</TableCell> */}
-                  {/* <TableCell>
-                    <Chip
-                      label='sell'
-                      color={statusObj['professional'].color}
-                      sx={{
-                        cursor: "pointer",
-                        height: 24,
-                        fontSize: '0.75rem',
-                        textTransform: 'capitalize',
-                        '& .MuiChip-label': { fontWeight: 500 }
-                      }}
-                      onClick={() => handleClickOpen(d)}
-                    />
-
-                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>

@@ -20,17 +20,20 @@ import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import { MdModeEditOutline } from 'react-icons/md'
 import AddOrEditParty from 'src/views/AddOrEditParty'
+import { AiFillDelete } from 'react-icons/ai'
 import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
+import DeleteModal from 'src/views/DeleteModal'
 
 
 const Party = () => {
 
   const [PartyData, setPartyData] = useState([]);
 
-  const [toaster, setToaster] = useState(false);
-  const [errorToaster, setErrorToaster] = useState(false);
+  const [toaster, setToaster] = useState(null);
+  const [errorToaster, setErrorToaster] = useState(null);
   const [editParty, setEditParty] = useState(null);
+  const [deleteItem, setDeleteItem] = useState(null);
 
 
   const [open, setOpen] = useState(false);
@@ -42,6 +45,7 @@ const Party = () => {
   const handleClose = () => {
     setOpen(false);
     setEditParty(null)
+    setDeleteItem(null);
   };
 
   const handleOpenToaster = () => {
@@ -73,17 +77,42 @@ const Party = () => {
     }
   }
 
+  const deleteProduct = () => {
+    try {
+      axiosInstance.put('client/delete', { id: deleteItem._id })
+        .then(res => {
+          if (res.data.status === 200) {
+            setToaster(res.data.message);
+            setDeleteItem(null);
+            fetch();
+
+            // setLoading(false);
+          } else {
+            // setLoading(false);
+            setErrorToaster(res.data.message);
+          }
+        })
+        .catch(err => {
+          // setLoading(false);
+          setErrorToaster(err);
+        })
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <Grid container spacing={6}>
       <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="success" sx={{ width: '100%' }}>
-          Party added successfully
+          {toaster}
         </Alert>
       </Snackbar>
 
       <Snackbar open={errorToaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="error" sx={{ width: '100%' }}>
-          Error While Adding Party
+          {errorToaster}
         </Alert>
       </Snackbar>
 
@@ -114,6 +143,9 @@ const Party = () => {
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Address
                     </TableCell>
+                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                      Action
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -133,6 +165,11 @@ const Party = () => {
                       </TableCell>
                       <TableCell key={d.id} align="left">
                         {d.address}
+                      </TableCell>
+                      <TableCell key={d.id} align="left">
+                        <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => setEditParty(d)} />
+                        <AiFillDelete color="rgb(238 31 31)" size="20px" style={{ cursor: "pointer", marginLeft: "10px" }} onClick={() => setDeleteItem(d)} />
+
                       </TableCell>
                     </TableRow>
                   ))}
@@ -157,6 +194,7 @@ const Party = () => {
       </Grid>
 
       <AddOrEditParty open={open} setErrorToaster={setErrorToaster} handleClickOpen={handleClickOpen} setEditParty={setEditParty} editParty={editParty} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
+      <DeleteModal deleteItem={deleteItem} handleClose={handleClose} deleteProduct={deleteProduct} type='Party' />
 
     </Grid>
   )
