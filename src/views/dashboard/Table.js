@@ -213,7 +213,7 @@ const DashboardTable = ({ data, columns, fetch, categories, filteredColumns, han
           <Table sx={{ minWidth: 800 }} aria-label='table in dashboard'>
             <TableHead>
               <TableRow>
-                <TableCell>{category.name}</TableCell>
+                <TableCell>{category?.name}</TableCell>
                 {/* <TableCell>Size</TableCell>
                 <TableCell>Qty</TableCell> */}
                 {(columns.filter(c => c.categoryId[0]._id === category._id))[0]?.size?.map(c => (
