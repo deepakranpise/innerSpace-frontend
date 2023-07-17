@@ -304,7 +304,7 @@ const Master = () => {
                           {d?.code}
                         </TableCell>
                         <TableCell key={d.id} align="left">
-                          {d.categoryId.name}
+                          {d.categoryId?.name}
                         </TableCell>
                         <TableCell key={d.id} align="left">
                           {d?.subCategoryId?.name}

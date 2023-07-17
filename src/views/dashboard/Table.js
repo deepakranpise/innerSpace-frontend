@@ -19,12 +19,13 @@ import { Autocomplete, Button, Menu, MenuItem, TextField } from '@mui/material'
 import { Icon } from '@iconify/react'
 import { SlOptionsVertical } from 'react-icons/sl'
 import axiosInstance from 'src/hoc/axios'
+import { Grid } from 'mdi-material-ui'
 
 const escapeRegExp = value => {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
 
-const DashboardTable = ({ data, columns, fetch, categories, filteredColumns, handleCategoryChange, category }) => {
+const DashboardTable = ({ data, columns, fetch, categories, subCategory,handleSubCategoryChange, filteredColumns, filteredSubCategories, handleCategoryChange, category }) => {
 
   const [toaster, setToaster] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -129,6 +130,26 @@ const DashboardTable = ({ data, columns, fetch, categories, filteredColumns, han
             )}
           />
         </FormControl>
+        <FormControl>
+          <Autocomplete
+            options={filteredSubCategories}
+            getOptionLabel={option => option.name}
+            name="subCategory"
+            sx={{ width: '220px', marginLeft: '10px' }}
+            onChange={handleSubCategoryChange}
+            value={subCategory}
+            renderInput={params => (
+              <TextField
+                {...params}
+                name="subCategoryId"
+                variant="standard"
+                label="Sub-Category"
+                placeholder="Sub-Category"
+                margin="normal"
+              />
+            )}
+          />
+        </FormControl>
         <Button
           id="demo-positioned-button"
 
@@ -222,13 +243,21 @@ const DashboardTable = ({ data, columns, fetch, categories, filteredColumns, han
               </TableRow>
             </TableHead>
             <TableBody>
-              {(searchValue ? filteredData : data).map(d => (
+
+              {Object.keys(searchValue ? filteredData : data).length === 0 && (
+                  <Typography sx={{ display: 'flex', alignItems: 'center', margin: "20px" }}>No Data Found</Typography>
+
+                )}
+
+              {Object.keys(searchValue ? filteredData : data).map(d => (
                 <TableRow hover key={d.name} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
-                  <TableCell key={d.id} align="left"> {d._id}
+                  <TableCell key={d.id} align="left"> {(searchValue ? filteredData : data)[d][0].name}
                   </TableCell>
 
                   {(columns.filter(c => c.categoryId[0]._id === category._id))[0]?.size?.map(c => (
-                    <TableCell key={c}>{d[c] || "-"}</TableCell>
+                    (searchValue ? filteredData : data)[d].filter(dd => dd.size === c).map(dd => (
+                      <TableCell key={c}> {dd.quantity || 0} </TableCell>
+                    ))
                   ))}
 
                 </TableRow>

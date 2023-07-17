@@ -26,8 +26,11 @@ const Dashboard = () => {
   const [data, setData] = useState([])
   const [columns, setColumns] = useState([])
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [filteredSubCategories, setFilteredSubCategories] = useState([]);
   const [filteredColumns, setFilteredColumns] = useState([]);
   const [category, setCategory] = useState([]);
+  const [subCategory, setSubCategory] = useState([]);
 
 
 
@@ -36,8 +39,14 @@ const Dashboard = () => {
     try {
       axiosInstance.get("/stocks/get")
         .then(res => {
-          console.log("from dashboard ", res.data.data)
-          setData(res.data.data);
+          if (res.data.status === 200) {
+            // alert("here")
+            console.log("stocks data ", res.data.data);
+            setData(res.data.data);
+          }
+          else {
+            setData([]);
+          }
         })
         .catch(err => {
           console.log(err)
@@ -67,6 +76,17 @@ const Dashboard = () => {
                 console.log(err)
               })
 
+            axiosInstance.get("subCategory/get",)
+              .then(res => {
+                console.log("the subcategories ", res.data.data)
+                setSubCategories(res.data.data);
+                setFilteredSubCategories(res.data.data.filter(d => d.categoryId[0]._id === category._id));
+                setSubCategory(filteredSubCategories[0]);
+              })
+              .catch(err => {
+                console.log(err)
+              })
+
           }
         })
         .catch(err => {
@@ -87,14 +107,34 @@ const Dashboard = () => {
 
     if (values === null) {
       setFilteredColumns(columns.filter(c => c.categoryId[0]._id === categories[0]._id))
+      setFilteredSubCategories([])
 
       return;
     }
     setCategory(values)
 
     let col = columns.filter(c => c.categoryId[0]._id === values._id);
-    console.log("col ", col)
-    setFilteredColumns(col)
+    setFilteredColumns(col);
+
+    // let data1 = {};
+    // for (const key in data) {
+    //   let data1 = data.filter(d => d.categoryId === values._id);
+    // }
+
+    let subCat = subCategories.filter(c => c.categoryId[0]._id === values._id)
+    setFilteredSubCategories(subCat)
+
+  }
+
+  const handleSubCategoryChange = (e, values) => {
+    if (values === null) {
+      setFilteredSubCategories([])
+
+      return;
+    }
+    setSubCategory(values)
+
+
   }
 
   if (!data) return <FallbackSpinner />;
@@ -109,7 +149,7 @@ const Dashboard = () => {
         </Grid>
         <Grid item xs={12}>
 
-          <Table data={data} columns={columns} handleCategoryChange={handleCategoryChange} filteredColumns={filteredColumns} categories={categories} category={category} fetch={fetch} />
+          <Table data={data} columns={columns} handleCategoryChange={handleCategoryChange} handleSubCategoryChange={handleSubCategoryChange} subCategory={subCategory} filteredColumns={filteredColumns} categories={categories} filteredSubCategories={filteredSubCategories} subCategories={subCategories} category={category} fetch={fetch} />
         </Grid>
       </Grid>
     </ApexChartWrapper>

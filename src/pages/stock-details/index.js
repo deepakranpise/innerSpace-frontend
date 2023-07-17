@@ -38,11 +38,11 @@ import TextField from '@mui/material/TextField';
 import AddOrEditPurchase from 'src/views/AddorEditPurchase'
 import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
-import moment from 'moment'
 import { useRouter } from 'next/router'
 import FallbackSpinner from 'src/@core/components/spinner'
 import { Icon } from '@iconify/react'
 import { Box } from 'mdi-material-ui'
+import moment from 'moment/moment';
 
 const escapeRegExp = value => {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
@@ -55,6 +55,9 @@ const StockDetails = () => {
 
   //1 for puchase 0 for sell
   const [type, setType] = useState(1);
+  const [startDate, setStartDate] = useState(moment().format("YYYY-MM-DD"));
+  const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
+
 
   const [toaster, setToaster] = useState(false);
   const [errorToaster, setErrorToaster] = useState(false);
@@ -169,7 +172,7 @@ const StockDetails = () => {
 
   const applyFilters = () => {
     try {
-      axiosInstance.get(`transaction/get?categoryId=${category ? category : ''}&subCategoryId=${subCategory ? subCategory : ''}&productId=${product ? product : ''}`)
+      axiosInstance.get(`transaction/get?categoryId=${category ? category : ''}&subCategoryId=${subCategory ? subCategory : ''}&productId=${product ? product : ''}&startDate=${startDate ? startDate : ''}&endDate=${endDate ? endDate : ''}`)
         .then(res => {
           console.log(res.data.data)
           setData(res.data.data);
@@ -236,9 +239,9 @@ const StockDetails = () => {
               />
 
             </FormControl>
-            <FormControl sx={{ marginLeft: '10px', width: '15%' }}>
-              {/* <InputLabel id='category'>Sub-Category</InputLabel> */}
-              {/* <Select
+            {/* <FormControl sx={{ marginLeft: '10px', width: '15%' }}> */}
+            {/* <InputLabel id='category'>Sub-Category</InputLabel> */}
+            {/* <Select
                 label='Category'
                 name="category"
                 id='form-layouts-separator-select'
@@ -251,7 +254,7 @@ const StockDetails = () => {
                 ))}
               </Select> */}
 
-              <Autocomplete
+            {/* <Autocomplete
                 options={subCategories}
                 getOptionLabel={option => option.name}
                 name="subCategory"
@@ -268,9 +271,10 @@ const StockDetails = () => {
 
                   />
                 )}
-              />
+              /> */}
 
-            </FormControl>
+            {/* </FormControl> */}
+
             <FormControl sx={{ marginLeft: '10px', width: '15%' }}>
               {/* <Select
                 label='Category'
@@ -303,8 +307,34 @@ const StockDetails = () => {
                   />
                 )}
               />
-
             </FormControl>
+
+            <FormControl sx={{ marginLeft: '10px' }}>
+              <TextField
+                fullWidth
+                required
+                name='date'
+                type='date'
+                label='Start Date'
+                placeholder='Date'
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </FormControl>
+            <FormControl sx={{ marginLeft: '10px' }}>
+              <TextField
+                fullWidth
+                required
+                name='date'
+                type='date'
+                label='End Date'
+                placeholder='Date'
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </FormControl>
+
+
             <Button variant="outlined" sx={{ margin: '10px', marginLeft: '10px' }} onClick={applyFilters}>
               Apply
             </Button>
