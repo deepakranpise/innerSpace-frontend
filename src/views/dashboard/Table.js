@@ -25,7 +25,7 @@ const escapeRegExp = value => {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
 
-const DashboardTable = ({ data, columns, fetch, categories, subCategory,handleSubCategoryChange, filteredColumns, filteredSubCategories, handleCategoryChange, category }) => {
+const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCategory, handleSubCategoryChange, filteredColumns, filteredSubCategories, handleCategoryChange, category }) => {
 
   const [toaster, setToaster] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -90,13 +90,21 @@ const DashboardTable = ({ data, columns, fetch, categories, subCategory,handleSu
 
     const searchRegex = new RegExp(escapeRegExp(value), 'i')
 
-    const filteredRows = data.filter(row => {
-      console.log(row);
+    const filteredRows = Object.keys(data).filter(row => {
+      // console.log(row);
 
-      return Object.keys(row).some(field => {
-        // @ts-ignore
-        return searchRegex.test(row[field].toString())
+      data[row].filter(r => {
+        console.log(r);
+
+        return Object.keys(r).some(field => {
+          // @ts-ignore
+
+          return searchRegex.test(r[field].toString())
+        })
       })
+
+      console.log(filteredRows);
+
     })
     if (value.length) {
       setFilteredData(filteredRows)
@@ -150,10 +158,17 @@ const DashboardTable = ({ data, columns, fetch, categories, subCategory,handleSu
             )}
           />
         </FormControl>
+        <FormControl>
+          <Button variant='contained' sx={{marginTop:"30px", marginLeft:"20px"}} onClick={() => applyFilters(category._id, subCategory._id)}>
+            Apply
+          </Button>
+        </FormControl>
+
         <Button
           id="demo-positioned-button"
 
           // variant='outlined'
+          disabled={true}
           sx={{ marginTop: '15px', float: 'right' }}
           aria-controls={openEl ? 'demo-positioned-menu' : undefined}
           aria-haspopup="true"
@@ -245,9 +260,9 @@ const DashboardTable = ({ data, columns, fetch, categories, subCategory,handleSu
             <TableBody>
 
               {Object.keys(searchValue ? filteredData : data).length === 0 && (
-                  <Typography sx={{ display: 'flex', alignItems: 'center', margin: "20px" }}>No Data Found</Typography>
+                <Typography sx={{ display: 'flex', alignItems: 'center', margin: "20px" }}>No Data Found</Typography>
 
-                )}
+              )}
 
               {Object.keys(searchValue ? filteredData : data).map(d => (
                 <TableRow hover key={d.name} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>

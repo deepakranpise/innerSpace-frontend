@@ -102,7 +102,6 @@ const StockDetails = () => {
     const searchRegex = new RegExp(escapeRegExp(value), 'i')
 
     const filteredRows = data.filter(row => {
-      console.log(row);
 
       return Object.keys(row).some(field => {
         // @ts-ignore

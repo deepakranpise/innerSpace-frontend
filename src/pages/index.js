@@ -33,29 +33,6 @@ const Dashboard = () => {
   const [subCategory, setSubCategory] = useState([]);
 
 
-
-
-  const fetch = () => {
-    try {
-      axiosInstance.get("/stocks/get?categoryId=64b5337ba4ca8ba5e3d614dc&subCategoryId=64b533f1a4ca8ba5e3d614e8")
-        .then(res => {
-          if (res.data.status === 200) {
-            // alert("here")
-            console.log("stocks data ", res.data.data);
-            setData(res.data.data);
-          }
-          else {
-            setData([]);
-          }
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
   useEffect(() => {
     try {
 
@@ -82,6 +59,7 @@ const Dashboard = () => {
                 setSubCategories(res.data.data);
                 setFilteredSubCategories(res.data.data.filter(d => d.categoryId[0]._id === ress.data.data[0]._id));
                 setSubCategory(res.data.data.filter(d => d.categoryId[0]._id === ress.data.data[0]._id)[0]);
+                fetch(ress.data.data[0]._id, res.data.data.filter(d => d.categoryId[0]._id === ress.data.data[0]._id)[0]._id);
               })
               .catch(err => {
                 console.log(err)
@@ -99,9 +77,36 @@ const Dashboard = () => {
   }, [])
 
 
-  useEffect(() => {
-    fetch();
-  }, [])
+
+  const fetch = (cat, subCat) => {
+    try {
+      axiosInstance.get(`/stocks/get?categoryId=${cat}&subCategoryId=${subCat}`)
+        .then(res => {
+          if (res.data.status === 200) {
+            // alert("here")
+            console.log("stocks data ", res.data.data);
+            setData(res.data.data);
+          }
+          else {
+            setData([]);
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+
+  const applyFilters = (cat, subCat) => {
+    fetch(cat, subCat);
+  }
+
+  // useEffect(() => {
+  //   fetch();
+  // }, [])
 
   const handleCategoryChange = (e, values) => {
 
@@ -149,7 +154,7 @@ const Dashboard = () => {
         </Grid>
         <Grid item xs={12}>
 
-          <Table data={data} columns={columns} handleCategoryChange={handleCategoryChange} handleSubCategoryChange={handleSubCategoryChange} subCategory={subCategory} filteredColumns={filteredColumns} categories={categories} filteredSubCategories={filteredSubCategories} subCategories={subCategories} category={category} fetch={fetch} />
+          <Table data={data} columns={columns} handleCategoryChange={handleCategoryChange} handleSubCategoryChange={handleSubCategoryChange} subCategory={subCategory} filteredColumns={filteredColumns} categories={categories} filteredSubCategories={filteredSubCategories} subCategories={subCategories} category={category} applyFilters={applyFilters} fetch={fetch} />
         </Grid>
       </Grid>
     </ApexChartWrapper>
