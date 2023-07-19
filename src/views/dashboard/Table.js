@@ -68,10 +68,12 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
 
   const getHeaders = () => {
     const headers = [
-      { label: "Name", key: "_id" },
+      { label: "Name", key: "name" },
+      { label: "Code", key: "code" },
+
     ];
 
-    filteredColumns[0]?.size?.forEach(element => {
+    columns[0]?.size?.forEach(element => {
       headers.push({ label: element, key: element })
     });
 
@@ -85,26 +87,18 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
     filename: "stocks",
   };
 
+
   const handleSearch = value => {
     setSearchValue(value)
 
     const searchRegex = new RegExp(escapeRegExp(value), 'i')
 
-    const filteredRows = Object.keys(data).filter(row => {
-      // console.log(row);
+    const filteredRows = data.filter(row => {
 
-      data[row].filter(r => {
-        console.log(r);
-
-        return Object.keys(r).some(field => {
-          // @ts-ignore
-
-          return searchRegex.test(r[field].toString())
-        })
+      return Object.keys(row).some(field => {
+        // @ts-ignore
+        return searchRegex.test(row[field].toString())
       })
-
-      console.log(filteredRows);
-
     })
     if (value.length) {
       setFilteredData(filteredRows)
@@ -159,7 +153,7 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
           />
         </FormControl>
         <FormControl>
-          <Button variant='contained' sx={{marginTop:"30px", marginLeft:"20px"}} onClick={() => applyFilters(category._id, subCategory._id)}>
+          <Button variant='contained' sx={{ marginTop: "30px", marginLeft: "20px" }} onClick={() => applyFilters(category._id, subCategory._id)}>
             Apply
           </Button>
         </FormControl>
@@ -168,7 +162,6 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
           id="demo-positioned-button"
 
           // variant='outlined'
-          disabled={true}
           sx={{ marginTop: '15px', float: 'right' }}
           aria-controls={openEl ? 'demo-positioned-menu' : undefined}
           aria-haspopup="true"
@@ -264,15 +257,17 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
 
               )}
 
-              {Object.keys(searchValue ? filteredData : data).map(d => (
+              {(searchValue ? filteredData : data).map(d => (
                 <TableRow hover key={d.name} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
-                  <TableCell key={d.id} align="left"> {(searchValue ? filteredData : data)[d][0].name}
+                  <TableCell key={d.id} align="left"> {d.name}
                   </TableCell>
 
                   {(columns.filter(c => c.categoryId[0]._id === category._id))[0]?.size?.map(c => (
-                    (searchValue ? filteredData : data)[d].filter(dd => dd.size === c).map(dd => (
-                      <TableCell key={c}> {dd.quantity || 0} </TableCell>
-                    ))
+                    <TableCell key={c}> {d[c]} </TableCell>
+
+                    // d.filter(dd => dd.size === c).map(dd => (
+                    //   <TableCell key={c}> {dd.quantity || 0} </TableCell>
+                    // ))
                   ))}
 
                 </TableRow>
