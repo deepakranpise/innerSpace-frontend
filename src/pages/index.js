@@ -37,7 +37,7 @@ const Dashboard = () => {
 
   const fetch = () => {
     try {
-      axiosInstance.get("/stocks/get")
+      axiosInstance.get("/stocks/get?categoryId=64b5337ba4ca8ba5e3d614dc&subCategoryId=64b533f1a4ca8ba5e3d614e8")
         .then(res => {
           if (res.data.status === 200) {
             // alert("here")
@@ -61,10 +61,10 @@ const Dashboard = () => {
 
 
       axiosInstance.get("category/get")
-        .then(res => {
-          if (res.data.status === 200) {
-            setCategories(res.data.data)
-            setCategory(res.data.data[0]);
+        .then(ress => {
+          if (ress.data.status === 200) {
+            setCategories(ress.data.data)
+            setCategory(ress.data.data[0]);
 
             axiosInstance.get("size/get",)
               .then(res => {
@@ -80,8 +80,8 @@ const Dashboard = () => {
               .then(res => {
                 console.log("the subcategories ", res.data.data)
                 setSubCategories(res.data.data);
-                setFilteredSubCategories(res.data.data.filter(d => d.categoryId[0]._id === category._id));
-                setSubCategory(filteredSubCategories[0]);
+                setFilteredSubCategories(res.data.data.filter(d => d.categoryId[0]._id === ress.data.data[0]._id));
+                setSubCategory(res.data.data.filter(d => d.categoryId[0]._id === ress.data.data[0]._id)[0]);
               })
               .catch(err => {
                 console.log(err)
