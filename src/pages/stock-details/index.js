@@ -387,9 +387,9 @@ const StockDetails = () => {
                     </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Category
-                      <Typography variant='body2' sx={{ mt: 2 }}>
+                      {/* <Typography variant='body2' sx={{ mt: 2 }}>
                         Sub-Category
-                      </Typography>
+                      </Typography> */}
                     </TableCell>
                     {/* <TableCell align="left" sx={{ minWidth: 100 }}>
                       Sub-Category
@@ -431,9 +431,9 @@ const StockDetails = () => {
                       </TableCell>
                       <TableCell key={data.id} align="left">
                         {d.category}
-                        <Typography variant='body2' sx={{ mt: 2 }}>
+                        {/* <Typography variant='body2' sx={{ mt: 2 }}>
                           {d.subCategory}
-                        </Typography>
+                        </Typography> */}
                       </TableCell>
                       {/* <TableCell key={data.id} align="left">
                           {d?.productId?.subCategoryId}
