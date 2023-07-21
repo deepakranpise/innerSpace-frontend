@@ -257,8 +257,8 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
 
               )}
 
-              {(searchValue ? filteredData : data).map(d => (
-                <TableRow hover key={d.name} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
+              {(searchValue ? filteredData : data).map((d, index) => (
+                <TableRow hover key={d.name} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }} style={{ backgroundColor: (index % 2 === 0) && '#f1f1f1' }} >
                   <TableCell key={d.id} align="left"> {d.name}
                   </TableCell>
 
