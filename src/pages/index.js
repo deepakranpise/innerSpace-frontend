@@ -20,6 +20,7 @@ import axios from 'axios'
 import withAuth from '../hoc/withAuth';
 import axiosInstance from 'src/hoc/axios'
 import FallbackSpinner from 'src/@core/components/spinner'
+import { Head } from 'mdi-material-ui'
 
 const Dashboard = () => {
 
@@ -145,19 +146,30 @@ const Dashboard = () => {
   if (!data) return <FallbackSpinner />;
 
   return (
-    <ApexChartWrapper>
-      <Grid container spacing={6}>
-        <Grid item xs={12}>
-          <div>
+    <>
+      <Head>
+        <title>My website</title>
+        <meta name="description">
+          Inventory solutions. A real time stock tracker and invoice management app.
+        </meta>
+        <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        </meta>
+      </Head>
 
-          </div>
-        </Grid>
-        <Grid item xs={12}>
+      <ApexChartWrapper>
+        <Grid container spacing={6}>
+          <Grid item xs={12}>
+            <div>
 
-          <Table data={data} columns={columns} handleCategoryChange={handleCategoryChange} handleSubCategoryChange={handleSubCategoryChange} subCategory={subCategory} filteredColumns={filteredColumns} categories={categories} filteredSubCategories={filteredSubCategories} subCategories={subCategories} category={category} applyFilters={applyFilters} fetch={fetch} />
+            </div>
+          </Grid>
+          <Grid item xs={12}>
+
+            <Table data={data} columns={columns} handleCategoryChange={handleCategoryChange} handleSubCategoryChange={handleSubCategoryChange} subCategory={subCategory} filteredColumns={filteredColumns} categories={categories} filteredSubCategories={filteredSubCategories} subCategories={subCategories} category={category} applyFilters={applyFilters} fetch={fetch} />
+          </Grid>
         </Grid>
-      </Grid>
-    </ApexChartWrapper>
+      </ApexChartWrapper>
+    </>
   )
 }
 

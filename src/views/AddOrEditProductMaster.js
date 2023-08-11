@@ -196,6 +196,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
                   name='ProductCode'
                   type='text'
                   label='Product Code'
+                  disabled={true}
                   placeholder='Product code'
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
