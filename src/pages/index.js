@@ -148,7 +148,7 @@ const Dashboard = () => {
   return (
     <>
       <Head>
-        <title>My website</title>
+        <title>Inventory management APP</title>
         <meta name="description">
           Inventory solutions. A real time stock tracker and invoice management app.
         </meta>
