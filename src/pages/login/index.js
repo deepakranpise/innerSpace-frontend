@@ -30,15 +30,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 
 // ** Icons Imports
-import Google from 'mdi-material-ui/Google'
-import Github from 'mdi-material-ui/Github'
-import Twitter from 'mdi-material-ui/Twitter'
-import Facebook from 'mdi-material-ui/Facebook'
-import EyeOutline from 'mdi-material-ui/EyeOutline'
-import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
-// ** Configs
-import themeConfig from 'src/configs/themeConfig'
+
 
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
@@ -46,7 +39,6 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 import AuthApi from 'src/apis/AuthApi'
-import { Head } from 'mdi-material-ui'
 
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -138,14 +130,6 @@ const LoginPage = () => {
 
   return (
     <>
-      <Head>
-        <title>Inventory management APP</title>
-        <meta name="description">
-          Inventory solutions. A real time stock tracker and invoice management app.
-        </meta>
-        <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests">
-        </meta>
-      </Head>
       <Box className='content-center'>
         <Card sx={{ zIndex: 1 }}>
           <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>

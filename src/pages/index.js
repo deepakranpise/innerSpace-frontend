@@ -1,14 +1,7 @@
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
 
-// ** Icons Imports
-import Poll from 'mdi-material-ui/Poll'
-import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
-import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
-import BriefcaseVariantOutline from 'mdi-material-ui/BriefcaseVariantOutline'
 
-// ** Custom Components Imports
-import CardStatisticsVerticalComponent from 'src/@core/components/card-statistics/card-stats-vertical'
 
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
@@ -16,11 +9,9 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 // ** Demo Components Imports
 import Table from 'src/views/dashboard/Table'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import withAuth from '../hoc/withAuth';
 import axiosInstance from 'src/hoc/axios'
 import FallbackSpinner from 'src/@core/components/spinner'
-import { Head } from 'mdi-material-ui'
 
 const Dashboard = () => {
 
@@ -147,15 +138,6 @@ const Dashboard = () => {
 
   return (
     <>
-      <Head>
-        <title>Inventory management APP</title>
-        <meta name="description">
-          Inventory solutions. A real time stock tracker and invoice management app.
-        </meta>
-        <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests">
-        </meta>
-      </Head>
-
       <ApexChartWrapper>
         <Grid container spacing={6}>
           <Grid item xs={12}>
