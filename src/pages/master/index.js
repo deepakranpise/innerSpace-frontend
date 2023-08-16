@@ -150,7 +150,7 @@ const Master = () => {
 
   const deleteProduct = () => {
     try {
-      axiosInstance.put('product/delete', { id: deleteItem.code })
+      axiosInstance.put('product/delete', { code: deleteItem.code })
         .then(res => {
           if (res.data.status === 200) {
             setToaster(res.data.message);
