@@ -135,7 +135,6 @@ const Master = () => {
     const searchRegex = new RegExp(escapeRegExp(value), 'i')
 
     const filteredRows = masterData.filter(row => {
-      console.log(row);
 
       return Object.keys(row).some(field => {
         // @ts-ignore
@@ -151,7 +150,7 @@ const Master = () => {
 
   const deleteProduct = () => {
     try {
-      axiosInstance.put('product/delete', { id: deleteItem._id })
+      axiosInstance.put('product/delete', { id: deleteItem.code })
         .then(res => {
           if (res.data.status === 200) {
             setToaster(res.data.message);
