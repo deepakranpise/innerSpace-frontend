@@ -189,20 +189,17 @@ const Purchase = () => {
               <Table stickyHeader aria-label='sticky table'>
                 <TableHead>
                   <TableRow>
+                  <TableCell align="left" sx={{ minWidth: 100 }}>
+                      Type
+                    </TableCell>
+                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                      Date
+                    </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Invoice No
                     </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Party
-                    </TableCell>
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
-                      Date
-                    </TableCell>
-                    {/* <TableCell align="left" sx={{ minWidth: 100 }}>
-                      Products
-                    </TableCell> */}
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
-                      Type
                     </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Action
