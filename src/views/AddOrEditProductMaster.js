@@ -35,17 +35,21 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
   const [codeError, setCodeError] = useState(false);
   const [categoryError, setCategoryError] = useState(false);
   const [subCategoryError, setSubCategoryError] = useState(false);
+  const [packingError, setPackingError] = useState(false);
   const [filteredSubCategories, setFilteredSubCategories] = useState([]);
 
 
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
+  const [packing, setPacking] = useState([]);
+
 
 
   React.useEffect(() => {
     if (editMaster) {
       setName(editMaster.name);
       setCode(editMaster.code);
+      setPacking(editMaster.packingType);
       setCategory(editMaster.categoryId._id);
       setSubCategory(editMaster.subCategoryId._id);
     } else {
@@ -82,12 +86,15 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
 
   const handleSubmit = () => {
 
-    if (!name || !code || !category || (filteredSubCategories.length > 0 && !subCategory)) {
+    if (!name || !code || !packing || !category || (filteredSubCategories.length > 0 && !subCategory)) {
       if (!name) {
         setNameError(true);
       }
       if (!code) {
         setCodeError(true);
+      }
+      if (!packing) {
+        setPackingError(true);
       }
       if (!category) {
         setCategoryError(true);
@@ -101,6 +108,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
 
     setNameError(false);
     setCodeError(false);
+    setPackingError(false);
     setCategoryError(false);
     setSubCategoryError(false);
 
@@ -110,6 +118,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
 
         name: name,
         code: code,
+        packingType: packing,
         categoryId: category,
         subCategoryId: subCategory
       }
@@ -182,7 +191,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
                   onChange={(e) => setName(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={6}>
                 <TextField
                   fullWidth
                   required
@@ -197,7 +206,27 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
                 />
               </Grid>
 
-              <Grid item xs={4}>
+              <Grid item xs={6}>
+                <FormControl fullWidth>
+                  <InputLabel id='Size'>Packing Type</InputLabel>
+                  <Select
+                    label='Packing Type'
+                    required
+                    error={packingError}
+                    name="Category"
+                    id='form-layouts-separator-select'
+                    labelId='form-layouts-separator-select-label'
+                    value={packing}
+                    onChange={(e) => setPacking(e.target.value)}
+                  >
+                    <MenuItem value="Nos">Nos</MenuItem>
+                    <MenuItem value="Set">Set</MenuItem>
+                    <MenuItem value="Mtr">Mtr</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={6}>
                 <FormControl fullWidth>
                   <InputLabel id='Size'>Category</InputLabel>
                   <Select
@@ -216,7 +245,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={6}>
                 <FormControl fullWidth>
                   <InputLabel id='Size'>Sub Category</InputLabel>
                   <Select
