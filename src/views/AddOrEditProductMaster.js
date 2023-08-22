@@ -29,6 +29,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
 
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
+  const [packing, setPacking] = useState("");
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [nameError, setNameError] = useState(false);
@@ -41,7 +42,6 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
 
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
-  const [packing, setPacking] = useState([]);
 
 
 
