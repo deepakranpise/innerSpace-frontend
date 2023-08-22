@@ -59,7 +59,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
   React.useEffect(() => {
     axiosInstance.get("category/get").then((res) => {
       if (res.data.status === 200) {
-        console.log("Cat ", res.data.data)
+
         setCategories(res.data.data)
       }
     })
@@ -68,7 +68,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
       })
     axiosInstance.get("subCategory/get").then((res) => {
       if (res.data.status === 200) {
-        console.log("subCat ", res.data.data)
+
         setSubCategories(res.data.data)
         let filter = res.data.data.filter(s => s.categoryId[0]._id === editMaster?.categoryId?._id);
         setFilteredSubCategories(filter);
@@ -78,12 +78,6 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
         console.log(err)
       })
   }, [editMaster?.categoryId?._id])
-
-
-  React.useEffect(() => {
-    console.log("editMaster ", editMaster)
-
-  }, [editMaster])
 
 
   const handleSubmit = () => {
@@ -155,7 +149,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
     let filter = subCategories.filter(s => s.categoryId[0]._id === e.target.value);
     setFilteredSubCategories(filter);
     console.log("first ", filter)
-    if(e.target.value === editMaster.categoryId._id)
+    if (e.target.value === editMaster.categoryId._id)
       setSubCategory(editMaster.subCategoryId._id)
 
     else
@@ -196,7 +190,7 @@ const AddOrEditProductMaster = ({ open, setOpen, setErrorToaster, handleClickOpe
                   name='ProductCode'
                   type='text'
                   label='Product Code'
-                  disabled={true}
+                  disabled={editMaster && true}
                   placeholder='Product code'
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
