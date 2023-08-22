@@ -276,6 +276,9 @@ const Master = () => {
                         Code
                       </TableCell>
                       <TableCell align="left" sx={{ minWidth: 100 }}>
+                        Packing Type
+                      </TableCell>
+                      <TableCell align="left" sx={{ minWidth: 100 }}>
                         Category
                       </TableCell>
                       <TableCell align="left" sx={{ minWidth: 100 }}>
@@ -301,6 +304,9 @@ const Master = () => {
                         </TableCell>
                         <TableCell key={d.id} align="left">
                           {d?.code}
+                        </TableCell>
+                        <TableCell key={d.id} align="left">
+                          {d?.packingType}
                         </TableCell>
                         <TableCell key={d.id} align="left">
                           {d.categoryId?.name}
