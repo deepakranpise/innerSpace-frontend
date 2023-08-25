@@ -53,7 +53,6 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
   React.useEffect(() => {
     if (editPurchase) {
       // alert("yess")
-      console.log(editPurchase)
       setInvoice(editPurchase.id);
       setParty(editPurchase.clientName);
     }
@@ -64,7 +63,6 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
     axiosInstance.get("product/get")
       .then(res => {
         if (res.data.status === 200) {
-          console.log(res.data.data)
           setProductMaster(res.data.data)
         }
       })
@@ -86,7 +84,6 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
       .then(res => {
         if (res.data.status === 200) {
           setSizes(res.data.data)
-          console.log(res.data.data)
         }
       })
       .catch(err => {
@@ -95,7 +92,6 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
     axiosInstance.get("client/get")
       .then(res => {
         if (res.data.status === 200) {
-          console.log(res.data.data)
           setParties(res.data.data)
         }
       })
@@ -126,7 +122,6 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
     setError(false);
 
     products.forEach(p => {
-      console.log(p)
       if (p.category === '' || p.productId === '' || p.quantity === '') {
         alert("Please enter all product details!");
         setError(true);
@@ -182,7 +177,6 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
     let entity, value;
 
     if (name) {
-      console.log(index, e)
       entity = name;
       value = e;
     } else {
@@ -217,6 +211,9 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
   }
 
   const deleteSizeQuantity = (index) => {
+    // alert(index);
+
+    // return;
     let data = [...products];
     data.splice(index, 1)
     setProducts(data)
@@ -237,7 +234,6 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
         return searchRegex.test(row['code'].toString())
       })
     })
-    console.log(filteredRows)
     if (e.target.value.length) {
       if (filteredRows.length > 0) {
 
@@ -262,11 +258,6 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
     setProducts(data);
   }
 
-  const onTagsChange = (event, values) => {
-
-    console.log(values);
-
-  }
 
   return (
     <div>
@@ -386,21 +377,6 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
                   />
                 </Grid>
                 <Grid item xs={4} >
-                  {/* <FormControl fullWidth>
-                    <InputLabel id='product'>Product Name</InputLabel>
-                    <Select
-                      label='product name'
-                      name="productId"
-                      id='form-layouts-separator-select'
-                      labelId='form-layouts-separator-select-label'
-                      value={q.productId}
-                      onChange={(e) => handleSizeQuantity(index, e)}
-                    >
-                      {(q.filteredData.length > 0 ? q.filteredData : productMaster).map(p => (
-                        <MenuItem key={p.name} value={p._id} >{p.name + "  " + p.size}</MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl> */}
                   <Autocomplete
                     options={q.category != '' ? q.filteredData : productMaster}
                     getOptionLabel={option => option.name + " " + option.size}
@@ -477,7 +453,7 @@ const AddOrEditPurchase = ({ addPurchase, setErrorToaster, type, handleClose, ha
                 </Grid>
                 {(index > 0) && (
                   <Grid item xs={12}>
-                    <AiFillDelete color="red" size="20px" style={{ cursor: "pointer" }} onClick={deleteSizeQuantity} />
+                    <AiFillDelete color="red" size="20px" style={{ cursor: "pointer" }} onClick={() => deleteSizeQuantity(index)} />
                   </Grid>
                 )}
               </>

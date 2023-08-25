@@ -189,7 +189,7 @@ const Purchase = () => {
               <Table stickyHeader aria-label='sticky table'>
                 <TableHead>
                   <TableRow>
-                  <TableCell align="left" sx={{ minWidth: 100 }}>
+                    <TableCell align="left" sx={{ minWidth: 100 }}>
                       Type
                     </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
@@ -214,21 +214,21 @@ const Purchase = () => {
 
                   {(searchValue ? filteredData : data).map(d => (
 
-                    <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }} onClick={() => router.push(`/invoice/${d.id}`)}>
-                      <TableCell key={data.id} align="left">
+                    <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }} >
+                      <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
                         {d.invoiceNo}
                       </TableCell>
-                      <TableCell key={data.id} align="left">
+                      <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
                         {d.clientName}
                       </TableCell>
-                      <TableCell key={data.id} align="left">
+                      <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
                         {moment(d.invoiceDate).format("YYYY-MM-DD")}
                       </TableCell>
-                      <TableCell key={data.id} align="left">
+                      <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
                         {d?.type}
                       </TableCell>
-                      <TableCell key={data.id} align="left">
-                        <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => setEditPurchase(d)} />
+                      <TableCell key={data.id} align="left" >
+                        <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={(e) => generateInvoice(e)} />
                       </TableCell>
                     </TableRow>
                   ))}

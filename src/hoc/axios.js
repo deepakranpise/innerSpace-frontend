@@ -4,8 +4,9 @@ import { errorToast } from 'src/utils/toast'
 
 // Next we make an 'instance' of it
 const axiosInstance = axios.create({
-  // baseURL: 'http://localhost:3100'
-  baseURL: 'http://16.171.39.169:3100'
+  baseURL: 'http://localhost:3100'
+
+  // baseURL: 'http://16.171.39.169:3100'
 
 })
 
