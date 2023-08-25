@@ -10,9 +10,7 @@ export default async function handler(req, res) {
 
   try {
     // read our invoice-template.html file using node fs module
-    const file = fs.readFileSync(__dirname + '/src/views/template/invoice-template.html', 'utf8');
-    console.log(__dirname);
-    console.log(__dirname + '/src/views/template');
+    const file = fs.readFileSync(path.join(__dirname, '..', '..', 'views', 'template', 'invoice-template.html'), 'utf8');
 
     const template = handlers.compile(`${file}`);
 
