@@ -121,6 +121,70 @@ const Purchase = () => {
     fetch();
   }, [])
 
+  // const generateInvoice = e => {
+  //   e.preventDefault();
+
+  //   // send a post request with the name to our API endpoint
+  //   const fetchData = async () => {
+  //     let data = await axios.post('http://localhost:3000/api/user', { name: "Deepak" })
+  //       .then(async res => {
+  //         console.log(res.data);
+
+  //         return await res.data;
+  //       })
+
+  //     return data;
+
+  //     // convert the response into an array Buffer
+  //   };
+
+  //   // convert the buffer into an object URL
+  //   const saveAsPDF = async () => {
+  //     const buffer = await fetchData();
+
+  //     console.log("first ", buffer)
+
+  //     const blob = new Blob([buffer]);
+  //     const link = document.createElement('a');
+  //     link.href = URL.createObjectURL(blob);
+  //     link.download = 'invoice.pdf';
+  //     link.click();
+  //   };
+
+  //   saveAsPDF();
+  // };
+
+
+  async function generateInvoice() {
+    try {
+      const response = await axios.post('http://localhost:3000/api/user', { name: "Deepak" }, {
+        responseType: 'arraybuffer',
+      });
+
+      // if (!response.ok) {
+      //   throw new Error('API request failed');
+      // }
+
+      // const pdfBlob = await response.data.blob();
+      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+
+      console.log(pdfBlob);
+
+      // Convert Blob to ArrayBuffer
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = pdfUrl;
+      link.download = 'invoice.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
+  }
+
   if (!data) return <FallbackSpinner />
 
   return (
