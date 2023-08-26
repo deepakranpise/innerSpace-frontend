@@ -118,6 +118,7 @@ const Purchase = () => {
   }
 
   useEffect(() => {
+    // generateInvoice();
     fetch();
   }, [])
 
