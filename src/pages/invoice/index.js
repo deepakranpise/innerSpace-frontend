@@ -25,7 +25,9 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
+import { HiOutlineDownload } from 'react-icons/hi'
 import { MdModeEditOutline } from 'react-icons/md'
+
 
 
 import AddOrEditPurchase from 'src/views/AddorEditPurchase'
@@ -52,7 +54,7 @@ const Purchase = () => {
   const [toaster, setToaster] = useState(false);
   const [errorToaster, setErrorToaster] = useState(false);
   const [editPurchase, setEditPurchase] = useState(null);
-
+  const [downloadingToaster, setDownloadingToaster] = useState(false);
   const [searchValue, setSearchValue] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
 
@@ -122,49 +124,19 @@ const Purchase = () => {
     fetch();
   }, [])
 
-  // const generateInvoice = e => {
-  //   e.preventDefault();
-
-  //   // send a post request with the name to our API endpoint
-  //   const fetchData = async () => {
-  //     let data = await axios.post('http://localhost:3000/api/user', { name: "Deepak" })
-  //       .then(async res => {
-  //         console.log(res.data);
-
-  //         return await res.data;
-  //       })
-
-  //     return data;
-
-  //     // convert the response into an array Buffer
-  //   };
-
-  //   // convert the buffer into an object URL
-  //   const saveAsPDF = async () => {
-  //     const buffer = await fetchData();
-
-  //     console.log("first ", buffer)
-
-  //     const blob = new Blob([buffer]);
-  //     const link = document.createElement('a');
-  //     link.href = URL.createObjectURL(blob);
-  //     link.download = 'invoice.pdf';
-  //     link.click();
-  //   };
-
-  //   saveAsPDF();
-  // };
-
-
   async function generateInvoice() {
     try {
-      const response = await axios.post(window.location.origin + '/api/user', { name: "Deepak" }, {
+      // window.location.origin
+      setDownloadingToaster(true);
+
+      const response = await axiosInstance.post('/transaction/download-invoice', { name: "Deepak" }, {
         responseType: 'arraybuffer',
       });
 
       // if (!response.ok) {
       //   throw new Error('API request failed');
       // }
+      console.log(response.data);
 
       // const pdfBlob = await response.data.blob();
       const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
@@ -184,6 +156,7 @@ const Purchase = () => {
     } catch (error) {
       console.error('Error generating PDF:', error);
     }
+    setDownloadingToaster(false);
   }
 
   if (!data) return <FallbackSpinner />
@@ -193,6 +166,11 @@ const Purchase = () => {
       <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
         <Alert onClose={handleCloseToaster} severity="success" sx={{ width: '100%' }}>
           Purchase added successfully
+        </Alert>
+      </Snackbar>
+      <Snackbar open={downloadingToaster} autoHideDuration={20000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
+        <Alert onClose={handleCloseToaster} severity="info" sx={{ width: '100%' }}>
+          Downloading Invoice
         </Alert>
       </Snackbar>
       <Snackbar open={errorToaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
@@ -292,9 +270,13 @@ const Purchase = () => {
                       <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
                         {d?.type}
                       </TableCell>
-                      <TableCell key={data.id} align="left" >
+                      {/* <TableCell key={data.id} align="left" >
                         <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={(e) => generateInvoice(e)} />
+                      </TableCell> */}
+                      <TableCell key={data.id} align="left" >
+                        <HiOutlineDownload color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={(e) => generateInvoice(e)} />
                       </TableCell>
+
                     </TableRow>
                   ))}
 
