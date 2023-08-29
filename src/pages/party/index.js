@@ -132,10 +132,10 @@ const Party = () => {
                       Name
                     </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
-                      Gst No
+                      Contact No
                     </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
-                      Contact No
+                      Gst No
                     </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       State
@@ -155,10 +155,10 @@ const Party = () => {
                         {d.name}
                       </TableCell>
                       <TableCell key={d.id} align="left">
-                        {d.gstNo}
+                        {d.contactNo}
                       </TableCell>
                       <TableCell key={d.id} align="left">
-                        {d.contactNo}
+                        {d.gstNo}
                       </TableCell>
                       <TableCell key={d.id} align="left">
                         {d.state}

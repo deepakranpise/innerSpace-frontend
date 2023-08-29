@@ -270,6 +270,9 @@ const Master = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell align="left" sx={{ minWidth: 100 }}>
+                        Category
+                      </TableCell>
+                      <TableCell align="left" sx={{ minWidth: 100 }}>
                         Name
                       </TableCell>
                       <TableCell align="left" sx={{ minWidth: 100 }}>
@@ -277,9 +280,6 @@ const Master = () => {
                       </TableCell>
                       <TableCell align="left" sx={{ minWidth: 100 }}>
                         Packing Type
-                      </TableCell>
-                      <TableCell align="left" sx={{ minWidth: 100 }}>
-                        Category
                       </TableCell>
                       <TableCell align="left" sx={{ minWidth: 100 }}>
                         Sub-Category
@@ -300,6 +300,9 @@ const Master = () => {
                     {(searchValue ? filteredData : masterData).map(d => (
                       <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
                         <TableCell key={d.id} align="left">
+                          {d.categoryId?.name}
+                        </TableCell>
+                        <TableCell key={d.id} align="left">
                           {d.name}
                         </TableCell>
                         <TableCell key={d.id} align="left">
@@ -307,9 +310,6 @@ const Master = () => {
                         </TableCell>
                         <TableCell key={d.id} align="left">
                           {d?.packingType}
-                        </TableCell>
-                        <TableCell key={d.id} align="left">
-                          {d.categoryId?.name}
                         </TableCell>
                         <TableCell key={d.id} align="left">
                           {d?.subCategoryId?.name}
