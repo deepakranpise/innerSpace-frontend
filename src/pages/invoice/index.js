@@ -233,9 +233,6 @@ const Purchase = () => {
                 <TableHead>
                   <TableRow>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
-                      Type
-                    </TableCell>
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
                       Date
                     </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
@@ -243,6 +240,9 @@ const Purchase = () => {
                     </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Party
+                    </TableCell>
+                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                      Type
                     </TableCell>
                     <TableCell align="left" sx={{ minWidth: 100 }}>
                       Action
@@ -259,14 +259,15 @@ const Purchase = () => {
 
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }} >
                       <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
+                        {moment(d.invoiceDate).format("YYYY-MM-DD")}
+                      </TableCell>
+                      <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
                         {d.invoiceNo}
                       </TableCell>
                       <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
                         {d.clientName}
                       </TableCell>
-                      <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
-                        {moment(d.invoiceDate).format("YYYY-MM-DD")}
-                      </TableCell>
+
                       <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
                         {d?.type}
                       </TableCell>
