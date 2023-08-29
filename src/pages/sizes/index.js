@@ -174,12 +174,12 @@ const Sizes = () => {
 
                   {(searchValue ? filteredData : SizesData).map(d => (
                     <TableRow hover role='checkbox' tabIndex={-1} key={d.id}>
-                      <TableCell key={d.id} align="left">
+                      <TableCell key={d.id} align="left" sx={{ width: 50 }}>
                         {d?.categoryId[0]?.name} :
                       </TableCell>
 
                       {d.size.map(s => (
-                        <TableCell key={d.id} align="left">
+                        <TableCell key={d.id} sx={{ width: 30 }} align="left">
                           <div>  {s} </div>
                         </TableCell>
                       )
