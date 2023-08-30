@@ -1,8 +1,9 @@
 import fs from 'fs';
 
-// import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer';
 import handlers from 'handlebars';
-import puppeteer from 'puppeteer-core';
+
+// import puppeteer from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
 import Picture from '../../../public/images/logos/Picture.png'
 
@@ -298,12 +299,8 @@ export default async function handler(req, res) {
     // simulate a chrome browser with puppeteer and navigate to a new page
     // const browser = await puppeteer.launch();
 
-    const browser = browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: { width: 800, height: 600 },
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
-      ignoreHTTPSErrors: true,
+    const browser = await puppeteer.launch({
+      executablePath: puppeteer.executablePath(),
     });
 
     const page = await browser.newPage();
