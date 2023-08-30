@@ -124,7 +124,7 @@ const Purchase = () => {
     fetch();
   }, [])
 
-  async function generateInvoice() {
+  async function generateInvoice1() {
     try {
       // window.location.origin
       setDownloadingToaster(true);
@@ -157,6 +157,36 @@ const Purchase = () => {
       console.error('Error generating PDF:', error);
     }
     setDownloadingToaster(false);
+  }
+
+  async function generateInvoice() {
+    try {
+      const response = await axios.post('http://localhost:3000/api/user', { name: "Deepak" }, {
+        responseType: 'arraybuffer',
+      });
+
+      // if (!response.ok) {
+      //   throw new Error('API request failed');
+      // }
+
+      // const pdfBlob = await response.data.blob();
+      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+
+      console.log(pdfBlob);
+
+      // Convert Blob to ArrayBuffer
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = pdfUrl;
+      link.download = 'invoice.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
   }
 
   if (!data) return <FallbackSpinner />
