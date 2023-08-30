@@ -124,7 +124,7 @@ const Purchase = () => {
     fetch();
   }, [])
 
-  async function generateInvoice1() {
+  async function generateInvoice() {
     try {
       // window.location.origin
       setDownloadingToaster(true);
@@ -159,7 +159,7 @@ const Purchase = () => {
     setDownloadingToaster(false);
   }
 
-  async function generateInvoice() {
+  async function generateInvoice1() {
     try {
       const response = await axios.post('https://inventorysolutions.in/api/user', { name: "Deepak" }, {
         responseType: 'arraybuffer',
