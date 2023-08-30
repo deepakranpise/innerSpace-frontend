@@ -296,12 +296,7 @@ export default async function handler(req, res) {
     // simulate a chrome browser with puppeteer and navigate to a new page
     // const browser = await puppeteer.launch();
 
-    const browser = await puppeteer.launch({
-      headless: true, // Set to true for PDF generation
-      executablePath: '/home/ec2-user/home/inventory/innerSpce-backend/node_modules/puppeteer/.local-chromium/linux-722234/chrome-linux/chrome',
-
-      // other options...
-    });
+    const browser = await puppeteer.launch();
 
     const page = await browser.newPage();
 
