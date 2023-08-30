@@ -556,6 +556,14 @@
   "resolved" "https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.1.1.tgz"
   "version" "1.1.1"
 
+"@sparticuz/chromium@^116.0.0":
+  "integrity" "sha512-PynBS6fIE9DnQofQFSGMn63sbHxrcQOmQDGfv1p4sXCEw8IjTBqTj1j72/RomhjtnbaTJn3ktuaPCQc6j51sUQ=="
+  "resolved" "https://registry.npmjs.org/@sparticuz/chromium/-/chromium-116.0.0.tgz"
+  "version" "116.0.0"
+  dependencies:
+    "follow-redirects" "^1.15.2"
+    "tar-fs" "^3.0.4"
+
 "@tootallnate/quickjs-emscripten@^0.23.0":
   "integrity" "sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA=="
   "resolved" "https://registry.npmjs.org/@tootallnate/quickjs-emscripten/-/quickjs-emscripten-0.23.0.tgz"
@@ -1153,6 +1161,13 @@
   "integrity" "sha512-ruHgVZFEv00mAQMz1tQjfjdG63jiPWrQPF6HLlX2ucqLqVTJoWngeBEKHaJ6n1swV/HSvgnBNbtTRIlcVyW3Fw=="
   "resolved" "https://registry.npmjs.org/chromium-bidi/-/chromium-bidi-0.4.20.tgz"
   "version" "0.4.20"
+  dependencies:
+    "mitt" "3.0.1"
+
+"chromium-bidi@0.4.22":
+  "integrity" "sha512-wR7Y9Ioez+cNXT4ZP7VNM1HRTljpNnMSLw4/RnwhhZUP4yCU7kIQND00YiktuHekch68jklGPK1q9Jkb29+fQg=="
+  "resolved" "https://registry.npmjs.org/chromium-bidi/-/chromium-bidi-0.4.22.tgz"
+  "version" "0.4.22"
   dependencies:
     "mitt" "3.0.1"
 
@@ -2072,7 +2087,7 @@
   "resolved" "https://registry.npmjs.org/flatted/-/flatted-3.2.5.tgz"
   "version" "3.2.5"
 
-"follow-redirects@^1.15.0":
+"follow-redirects@^1.15.0", "follow-redirects@^1.15.2":
   "integrity" "sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA=="
   "resolved" "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.2.tgz"
   "version" "1.15.2"
@@ -3455,6 +3470,18 @@
   "resolved" "https://registry.npmjs.org/punycode/-/punycode-2.1.1.tgz"
   "version" "2.1.1"
 
+"puppeteer-core@^21.1.1":
+  "integrity" "sha512-Tlcajcf44zwfa9Sbwv3T8BtaNMJ69wtpHIxwl2NOBTyTK3D1wppQovXTjfw0TDOm3a16eCfQ+5BMi3vRQ4kuAQ=="
+  "resolved" "https://registry.npmjs.org/puppeteer-core/-/puppeteer-core-21.1.1.tgz"
+  "version" "21.1.1"
+  dependencies:
+    "@puppeteer/browsers" "1.7.0"
+    "chromium-bidi" "0.4.22"
+    "cross-fetch" "4.0.0"
+    "debug" "4.3.4"
+    "devtools-protocol" "0.0.1159816"
+    "ws" "8.13.0"
+
 "puppeteer-core@21.1.0":
   "integrity" "sha512-ggfTj09jo81Y6M4DyNj80GrY6Pip+AtDUgGljqoSzP6FG5nz5Aju6Cs/X147fLgkJ4UKTb736U6cDp0ssLzN5Q=="
   "resolved" "https://registry.npmjs.org/puppeteer-core/-/puppeteer-core-21.1.0.tgz"
@@ -4212,7 +4239,7 @@
   "resolved" "https://registry.npmjs.org/tapable/-/tapable-2.2.1.tgz"
   "version" "2.2.1"
 
-"tar-fs@3.0.4":
+"tar-fs@^3.0.4", "tar-fs@3.0.4":
   "integrity" "sha512-5AFQU8b9qLfZCX9zp2duONhPmZv0hGYiBPJsyUdqMjzq/mqVpy/rEUSeHk1+YitmxugaptgBh5oDGU3VsAJq4w=="
   "resolved" "https://registry.npmjs.org/tar-fs/-/tar-fs-3.0.4.tgz"
   "version" "3.0.4"
