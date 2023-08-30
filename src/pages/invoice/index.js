@@ -161,7 +161,7 @@ const Purchase = () => {
 
   async function generateInvoice() {
     try {
-      const response = await axios.post('http://localhost:3000/api/user', { name: "Deepak" }, {
+      const response = await axios.post('https://inventorysolutions.in/api/user', { name: "Deepak" }, {
         responseType: 'arraybuffer',
       });
 
