@@ -73,7 +73,7 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
 
     ];
 
-    filteredColumns[0]?.size?.forEach(element => {
+    (filteredColumns.length > 0 ? filteredColumns : columns.filter(c => c.categoryId[0]._id === category._id))[0]?.size?.forEach(element => {
       headers.push({ label: element, key: element })
     });
 
@@ -154,11 +154,11 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
             )}
           />
         </FormControl>
-        <FormControl>
+        {/* <FormControl>
           <Button variant='contained' sx={{ marginTop: "30px", marginLeft: "20px" }} onClick={() => applyFilters(category._id, subCategory._id)}>
             Apply
           </Button>
-        </FormControl>
+        </FormControl> */}
 
         <Button
           id="demo-positioned-button"
@@ -247,7 +247,7 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
                 <TableCell>{category?.name}</TableCell>
                 {/* <TableCell>Size</TableCell>
                 <TableCell>Qty</TableCell> */}
-                {filteredColumns[0]?.size?.map(c => (
+                {(filteredColumns.length > 0 ? filteredColumns : columns.filter(c => c.categoryId[0]._id === category._id))[0]?.size?.map(c => (
                   <TableCell key={c}>{c}</TableCell>
                 ))}
               </TableRow>
@@ -264,7 +264,7 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
                   <TableCell key={d.id} align="left"> {d.name}
                   </TableCell>
 
-                  {filteredColumns[0]?.size?.map(c => (
+                  {(filteredColumns.length > 0 ? filteredColumns : columns.filter(c => c.categoryId[0]._id === category._id))[0]?.size?.map(c => (
                     <TableCell key={c}> {d[c]} </TableCell>
 
                     // d.filter(dd => dd.size === c).map(dd => (

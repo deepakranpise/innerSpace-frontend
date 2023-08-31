@@ -161,6 +161,8 @@ const Purchase = () => {
 
   async function generateInvoice() {
     try {
+      setDownloadingToaster(true);
+
       const response = await axios.post(window.location.protocol + '//' + window.location.host + '/api/user', { name: "Deepak" }, {
         responseType: 'arraybuffer',
       });
@@ -187,6 +189,8 @@ const Purchase = () => {
     } catch (error) {
       console.error('Error generating PDF:', error);
     }
+    setDownloadingToaster(false);
+
   }
 
   if (!data) return <FallbackSpinner />

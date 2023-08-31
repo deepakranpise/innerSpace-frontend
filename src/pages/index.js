@@ -21,8 +21,8 @@ const Dashboard = () => {
   const [subCategories, setSubCategories] = useState([]);
   const [filteredSubCategories, setFilteredSubCategories] = useState([]);
   const [filteredColumns, setFilteredColumns] = useState([]);
-  const [category, setCategory] = useState([]);
-  const [subCategory, setSubCategory] = useState([]);
+  const [category, setCategory] = useState({});
+  const [subCategory, setSubCategory] = useState({});
 
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const Dashboard = () => {
               .then(res => {
                 console.log("the sizes ", res.data.data)
                 setColumns(res.data.data);
-                setFilteredColumns(columns.filter(c => c.categoryId[0]._id === res.data.data[0]._id))
+                setFilteredColumns(columns.filter(c => c.categoryId[0]._id === ress.data.data[0]._id))
 
                 console.log("filtered ", filteredColumns);
               })
@@ -119,6 +119,8 @@ const Dashboard = () => {
     setFilteredSubCategories(subCat)
     setSubCategory(subCat[0])
 
+    fetch(values._id, subCat[0]._id);
+
 
   }
 
@@ -130,6 +132,7 @@ const Dashboard = () => {
     }
     setSubCategory(values)
 
+    fetch(category._id, values._id);
 
   }
 
