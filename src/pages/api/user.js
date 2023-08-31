@@ -9,7 +9,10 @@ import handlers from 'handlebars';
 const puppeteer = require("puppeteer-core");
 const chromium = require("@sparticuz/chromium");
 
-import Picture from '../../../public/images/logos/Picture.png'
+import logo from '../../../public/images/logos/Picture.png'
+import tline from '../../../public/images/logos/tline.png'
+import kb from '../../../public/images/logos/kb.png'
+
 
 export default async function handler(req, res) {
   const { name } = req.body;
@@ -304,7 +307,7 @@ export default async function handler(req, res) {
 
     const template = handlers.compile(`${file}`);
 
-    const html = template({ customerName });
+    const html = template({ customerName, logo, tline, kb });
 
     // simulate a chrome browser with puppeteer and navigate to a new page
     // const browser = await puppeteer.launch();
