@@ -309,7 +309,7 @@ const Purchase = () => {
                         <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={(e) => generateInvoice(e)} />
                       </TableCell> */}
                       <TableCell key={data.id} align="left" >
-                        <HiOutlineDownload color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => generateInvoice(d.id)} />
+                        <HiOutlineDownload color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => generateInvoice(d.invoiceNo)} />
                       </TableCell>
 
                     </TableRow>
