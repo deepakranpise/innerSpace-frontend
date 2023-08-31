@@ -159,11 +159,11 @@ const Purchase = () => {
     setDownloadingToaster(false);
   }
 
-  async function generateInvoice() {
+  async function generateInvoice(challanNo) {
     try {
       setDownloadingToaster(true);
 
-      const response = await axios.post(window.location.protocol + '//' + window.location.host + '/api/user', { name: "Deepak" }, {
+      const response = await axios.post(window.location.protocol + '//' + window.location.host + '/api/user', { challanNo: challanNo }, {
         responseType: 'arraybuffer',
       });
 
@@ -309,7 +309,7 @@ const Purchase = () => {
                         <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={(e) => generateInvoice(e)} />
                       </TableCell> */}
                       <TableCell key={data.id} align="left" >
-                        <HiOutlineDownload color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={(e) => generateInvoice(e)} />
+                        <HiOutlineDownload color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => generateInvoice(d.id)} />
                       </TableCell>
 
                     </TableRow>

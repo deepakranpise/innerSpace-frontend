@@ -12,9 +12,7 @@ const chromium = require("@sparticuz/chromium");
 
 
 export default async function handler(req, res) {
-  const { name } = req.body;
-
-  const customerName = name || 'John Doe';
+  const { challanNo } = req.body;
 
   try {
     // read our invoice-template.html file using node fs module
@@ -299,9 +297,7 @@ export default async function handler(req, res) {
     const host = req.headers.host;
     const protocol = req.headers['x-forwarded-proto'] || 'http'
 
-    const kb = '/images/logos/kb.png';
-    const tline = './images/logos/tline.png';
-    const logo = protocol + '://' + host + '/images/logos/Picture.png';
+
 
     chromium.setHeadlessMode = true;
 
@@ -311,7 +307,11 @@ export default async function handler(req, res) {
 
     const template = handlers.compile(`${file}`);
 
-    const html = template({ customerName, logo, tline, kb });
+    const logo = protocol + '://' + host + '/images/logos/Picture.png';
+    const kb = protocol + '://' + host + '/images/logos/kb.png';
+    const tline = protocol + '://' + host + '/images/logos/tline.png';
+
+    const html = template({ challanNo, logo, tline, kb });
 
     // simulate a chrome browser with puppeteer and navigate to a new page
     // const browser = await puppeteer.launch();
