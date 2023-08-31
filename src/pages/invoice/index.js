@@ -181,7 +181,7 @@ const Purchase = () => {
       const link = document.createElement('a');
       link.style.display = 'none';
       link.href = pdfUrl;
-      link.download = 'invoice.pdf';
+      link.download = `${challanNo}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
