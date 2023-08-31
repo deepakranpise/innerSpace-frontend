@@ -9,9 +9,6 @@ import handlers from 'handlebars';
 const puppeteer = require("puppeteer-core");
 const chromium = require("@sparticuz/chromium");
 
-import logo from '../../../public/images/logos/Picture.png'
-import tline from '../../../public/images/logos/tline.png'
-import kb from '../../../public/images/logos/kb.png'
 
 
 export default async function handler(req, res) {
@@ -298,6 +295,10 @@ export default async function handler(req, res) {
 
 </html>
     `
+
+    const kb = '/images/logos/kb.png';
+    const tline = './images/logos/tline.png';
+    const logo = window.location.protocol + '//' + window.location.host + '/images/logos/Picture.png';
 
     chromium.setHeadlessMode = true;
 
