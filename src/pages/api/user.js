@@ -1,10 +1,14 @@
 import fs from 'fs';
 
-import puppeteer from 'puppeteer';
+// import puppeteer from 'puppeteer';
 import handlers from 'handlebars';
 
 // import puppeteer from 'puppeteer-core';
-import chromium from '@sparticuz/chromium';
+// import chromium from '@sparticuz/chromium';
+// const test = require("node:test");
+const puppeteer = require("puppeteer-core");
+const chromium = require("@sparticuz/chromium");
+
 import Picture from '../../../public/images/logos/Picture.png'
 
 export default async function handler(req, res) {
@@ -292,6 +296,12 @@ export default async function handler(req, res) {
 </html>
     `
 
+    chromium.setHeadlessMode = true;
+
+    // Optional: If you'd like to disable webgl, true is the default.
+    chromium.setGraphicsMode = false;
+
+
     const template = handlers.compile(`${file}`);
 
     const html = template({ customerName });
@@ -299,8 +309,14 @@ export default async function handler(req, res) {
     // simulate a chrome browser with puppeteer and navigate to a new page
     // const browser = await puppeteer.launch();
 
+    // const browser = await puppeteer.launch({
+    //   executablePath: puppeteer.executablePath(),
+    // });
     const browser = await puppeteer.launch({
-      executablePath: puppeteer.executablePath(),
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
     });
 
     const page = await browser.newPage();
