@@ -40,6 +40,8 @@ const Dashboard = () => {
                 console.log("the sizes ", res.data.data)
                 setColumns(res.data.data);
                 setFilteredColumns(columns.filter(c => c.categoryId[0]._id === res.data.data[0]._id))
+
+                console.log("filtered ", filteredColumns);
               })
               .catch(err => {
                 console.log(err)
@@ -75,7 +77,10 @@ const Dashboard = () => {
       axiosInstance.get(`/stocks/get?categoryId=${cat}&subCategoryId=${subCat}`)
         .then(res => {
           if (res.data.status === 200) {
-            // alert("here")
+
+            let col = columns.filter(c => c.categoryId[0]._id === cat);
+            setFilteredColumns(col);
+
             console.log("stocks data ", res.data.data);
             setData(res.data.data);
           }
@@ -96,13 +101,10 @@ const Dashboard = () => {
     fetch(cat, subCat);
   }
 
-  // useEffect(() => {
-  //   fetch();
-  // }, [])
-
   const handleCategoryChange = (e, values) => {
 
     if (values === null) {
+
       setFilteredColumns(columns.filter(c => c.categoryId[0]._id === categories[0]._id))
       setFilteredSubCategories([])
 
@@ -110,16 +112,13 @@ const Dashboard = () => {
     }
     setCategory(values)
 
-    let col = columns.filter(c => c.categoryId[0]._id === values._id);
-    setFilteredColumns(col);
-
-    // let data1 = {};
-    // for (const key in data) {
-    //   let data1 = data.filter(d => d.categoryId === values._id);
-    // }
+    // let col = columns.filter(c => c.categoryId[0]._id === values._id);
+    // setFilteredColumns(col);
 
     let subCat = subCategories.filter(c => c.categoryId[0]._id === values._id)
     setFilteredSubCategories(subCat)
+    setSubCategory(subCat[0])
+
 
   }
 

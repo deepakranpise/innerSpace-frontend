@@ -73,7 +73,7 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
 
     ];
 
-    columns[0]?.size?.forEach(element => {
+    filteredColumns[0]?.size?.forEach(element => {
       headers.push({ label: element, key: element })
     });
 
@@ -114,6 +114,7 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
       <Card>
         <FormControl>
           <Autocomplete
+            disableClearable
             options={categories}
             getOptionLabel={option => option.name}
             name="category"
@@ -134,6 +135,7 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
         </FormControl>
         <FormControl>
           <Autocomplete
+            disableClearable
             options={filteredSubCategories}
             getOptionLabel={option => option.name}
             name="subCategory"
@@ -245,7 +247,7 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
                 <TableCell>{category?.name}</TableCell>
                 {/* <TableCell>Size</TableCell>
                 <TableCell>Qty</TableCell> */}
-                {(columns.filter(c => c.categoryId[0]._id === category._id))[0]?.size?.map(c => (
+                {filteredColumns[0]?.size?.map(c => (
                   <TableCell key={c}>{c}</TableCell>
                 ))}
               </TableRow>
@@ -262,7 +264,7 @@ const DashboardTable = ({ data, columns, fetch, applyFilters, categories, subCat
                   <TableCell key={d.id} align="left"> {d.name}
                   </TableCell>
 
-                  {(columns.filter(c => c.categoryId[0]._id === category._id))[0]?.size?.map(c => (
+                  {filteredColumns[0]?.size?.map(c => (
                     <TableCell key={c}> {d[c]} </TableCell>
 
                     // d.filter(dd => dd.size === c).map(dd => (
