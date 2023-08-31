@@ -296,9 +296,12 @@ export default async function handler(req, res) {
 </html>
     `
 
+    const host = req.headers.host;
+    const protocol = req.headers['x-forwarded-proto'] || 'http'
+
     const kb = '/images/logos/kb.png';
     const tline = './images/logos/tline.png';
-    const logo = window.location.protocol + '//' + window.location.host + '/images/logos/Picture.png';
+    const logo = protocol + '//' + host + '/images/logos/Picture.png';
 
     chromium.setHeadlessMode = true;
 
