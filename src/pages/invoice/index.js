@@ -27,9 +27,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import { HiOutlineDownload } from 'react-icons/hi'
 import { MdModeEditOutline } from 'react-icons/md'
-
-
-
+import { AiFillDelete } from 'react-icons/ai'
 import AddOrEditPurchase from 'src/views/AddorEditPurchase'
 import withAuth from 'src/hoc/withAuth'
 import axiosInstance from 'src/hoc/axios'
@@ -310,6 +308,8 @@ const Purchase = () => {
                       </TableCell> */}
                       <TableCell key={data.id} align="left" >
                         <HiOutlineDownload color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => generateInvoice(d.invoiceNo)} />
+                        <AiFillDelete color="#ff4747" size="20px" style={{ cursor: "pointer", marginLeft: "10px" }} />
+
                       </TableCell>
 
                     </TableRow>
