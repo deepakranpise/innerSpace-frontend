@@ -301,7 +301,7 @@ export default async function handler(req, res) {
 
     const kb = '/images/logos/kb.png';
     const tline = './images/logos/tline.png';
-    const logo = protocol + '//' + host + '/images/logos/Picture.png';
+    const logo = protocol + '://' + host + '/images/logos/Picture.png';
 
     chromium.setHeadlessMode = true;
 
