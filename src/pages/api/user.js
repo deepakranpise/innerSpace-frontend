@@ -139,7 +139,7 @@ export default async function handler(req, res) {
           <img src="{{logo}}" alt="logo" height="80px" />
         </div>
         <div class="title">
-          Delivery Challan
+          Delivery Challan {{logo}}
         </div>
         <div>
           <div>
