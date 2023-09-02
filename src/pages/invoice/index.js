@@ -42,40 +42,39 @@ const escapeRegExp = value => {
 }
 
 const Purchase = () => {
-
-  const [data, setData] = useState([]);
-  const router = useRouter();
+  const [data, setData] = useState([])
+  const router = useRouter()
 
   //1 for puchase 0 for sell
-  const [type, setType] = useState(1);
+  const [type, setType] = useState(1)
 
-  const [toaster, setToaster] = useState(false);
-  const [errorToaster, setErrorToaster] = useState(false);
-  const [editPurchase, setEditPurchase] = useState(null);
-  const [downloadingToaster, setDownloadingToaster] = useState(false);
-  const [searchValue, setSearchValue] = useState(null);
-  const [filteredData, setFilteredData] = useState([]);
+  const [toaster, setToaster] = useState(false)
+  const [errorToaster, setErrorToaster] = useState(false)
+  const [editPurchase, setEditPurchase] = useState(null)
+  const [downloadingToaster, setDownloadingToaster] = useState(false)
+  const [searchValue, setSearchValue] = useState(null)
+  const [filteredData, setFilteredData] = useState([])
 
-  const [addPurchase, setAddPurchase] = useState(false);
+  const [addPurchase, setAddPurchase] = useState(false)
 
-  const handleClickOpen = (type) => {
+  const handleClickOpen = type => {
     // alert()
-    setType(type);
-    setAddPurchase(true);
-  };
+    setType(type)
+    setAddPurchase(true)
+  }
 
   const handleClose = () => {
-    setAddPurchase(false);
+    setAddPurchase(false)
     setEditPurchase(null)
-  };
+  }
 
   const handleOpenToaster = () => {
-    setToaster(true);
+    setToaster(true)
   }
 
   const handleCloseToaster = () => {
-    setToaster(false);
-    setErrorToaster(false);
+    setToaster(false)
+    setErrorToaster(false)
   }
 
   const handleSearch = value => {
@@ -84,7 +83,7 @@ const Purchase = () => {
     const searchRegex = new RegExp(escapeRegExp(value), 'i')
 
     const filteredRows = data.filter(row => {
-      console.log(row);
+      console.log(row)
 
       return Object.keys(row).some(field => {
         // @ts-ignore
@@ -100,14 +99,14 @@ const Purchase = () => {
 
   const fetch = () => {
     try {
-      axiosInstance.get("transaction/get")
+      axiosInstance
+        .get('transaction/get')
         .then(res => {
           console.log(res.data.data)
 
-          const arrayUniqueById = [...new Map(res.data.data.map(item =>
-            [item['invoiceNo'], item])).values()];
+          const arrayUniqueById = [...new Map(res.data.data.map(item => [item['invoiceNo'], item])).values()]
 
-          setData(arrayUniqueById);
+          setData(arrayUniqueById)
         })
         .catch(err => {
           console.log(err)
@@ -119,94 +118,132 @@ const Purchase = () => {
 
   useEffect(() => {
     // generateInvoice();
-    fetch();
+    fetch()
   }, [])
 
   async function generateInvoice1() {
     try {
       // window.location.origin
-      setDownloadingToaster(true);
+      setDownloadingToaster(true)
 
-      const response = await axiosInstance.post('/transaction/download-invoice', { name: "Deepak" }, {
-        responseType: 'arraybuffer',
-      });
+      const response = await axiosInstance.post(
+        '/transaction/download-invoice',
+        { name: 'Deepak' },
+        {
+          responseType: 'arraybuffer'
+        }
+      )
 
       // if (!response.ok) {
       //   throw new Error('API request failed');
       // }
-      console.log(response.data);
+      console.log(response.data)
 
       // const pdfBlob = await response.data.blob();
-      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+      const pdfBlob = new Blob([response.data], { type: 'application/pdf' })
 
-      console.log(pdfBlob);
+      console.log(pdfBlob)
 
       // Convert Blob to ArrayBuffer
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-      const link = document.createElement('a');
-      link.style.display = 'none';
-      link.href = pdfUrl;
-      link.download = 'invoice.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
+      const pdfUrl = URL.createObjectURL(pdfBlob)
+      const link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = pdfUrl
+      link.download = 'invoice.pdf'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      console.error('Error generating PDF:', error)
     }
-    setDownloadingToaster(false);
+    setDownloadingToaster(false)
   }
 
   async function generateInvoice(challanNo) {
     try {
-      setDownloadingToaster(true);
+      setDownloadingToaster(true)
 
-      const response = await axios.post(window.location.protocol + '//' + window.location.host + '/api/user', { challanNo: challanNo }, {
-        responseType: 'arraybuffer',
-      });
+      const response = await axios.post(
+        window.location.protocol + '//' + window.location.host + '/api/user',
+        { challanNo: challanNo },
+        {
+          responseType: 'arraybuffer'
+        }
+      )
 
       // if (!response.ok) {
       //   throw new Error('API request failed');
       // }
 
       // const pdfBlob = await response.data.blob();
-      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+      const pdfBlob = new Blob([response.data], { type: 'application/pdf' })
 
-      console.log(pdfBlob);
+      console.log(pdfBlob)
 
       // Convert Blob to ArrayBuffer
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-      const link = document.createElement('a');
-      link.style.display = 'none';
-      link.href = pdfUrl;
-      link.download = `${challanNo}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
+      const pdfUrl = URL.createObjectURL(pdfBlob)
+      const link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = pdfUrl
+      link.download = `${challanNo}.pdf`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      console.error('Error generating PDF:', error)
     }
-    setDownloadingToaster(false);
+    setDownloadingToaster(false)
+  }
 
+  const deleteInvoice = async id => {
+    try {
+      axiosInstance
+        .get(`transaction/deleteTransaction/${id}`)
+        .then(res => {
+          console.log(res.data.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   if (!data) return <FallbackSpinner />
 
   return (
     <Grid container spacing={6}>
-      <Snackbar open={toaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
-        <Alert onClose={handleCloseToaster} severity="success" sx={{ width: '100%' }}>
+      <Snackbar
+        open={toaster}
+        autoHideDuration={6000}
+        onClose={handleCloseToaster}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        style={{ top: '10%' }}
+      >
+        <Alert onClose={handleCloseToaster} severity='success' sx={{ width: '100%' }}>
           Purchase added successfully
         </Alert>
       </Snackbar>
-      <Snackbar open={downloadingToaster} autoHideDuration={20000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
-        <Alert onClose={handleCloseToaster} severity="info" sx={{ width: '100%' }}>
+      <Snackbar
+        open={downloadingToaster}
+        autoHideDuration={20000}
+        onClose={handleCloseToaster}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        style={{ top: '10%' }}
+      >
+        <Alert onClose={handleCloseToaster} severity='info' sx={{ width: '100%' }}>
           Downloading Invoice
         </Alert>
       </Snackbar>
-      <Snackbar open={errorToaster} autoHideDuration={6000} onClose={handleCloseToaster} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} style={{ top: "10%" }}>
-        <Alert onClose={handleCloseToaster} severity="error" sx={{ width: '100%' }}>
+      <Snackbar
+        open={errorToaster}
+        autoHideDuration={6000}
+        onClose={handleCloseToaster}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        style={{ top: '10%' }}
+      >
+        <Alert onClose={handleCloseToaster} severity='error' sx={{ width: '100%' }}>
           Error While Adding Product
         </Alert>
       </Snackbar>
@@ -216,12 +253,12 @@ const Purchase = () => {
         </Button> */}
         <Card>
           <CardHeader title='Invoices' titleTypographyProps={{ variant: 'h6' }} />
-          <Button variant="outlined" onClick={() => handleClickOpen(1)}>
+          <Button variant='outlined' onClick={() => handleClickOpen(1)}>
             {/* Add {type ? "Purchase" : "Sell"} */}
             Add Purchase
           </Button>
 
-          <Button variant="outlined" onClick={() => handleClickOpen(0)}>
+          <Button variant='outlined' onClick={() => handleClickOpen(0)}>
             {/* Add {type ? "Purchase" : "Sell"} */}
             Add Sell
           </Button>
@@ -230,7 +267,7 @@ const Purchase = () => {
             <TextField
               size='small'
               value={searchValue}
-              onChange={(e) => handleSearch(e.target.value)}
+              onChange={e => handleSearch(e.target.value)}
               autoFocus
               placeholder='Search…'
               InputProps={{
@@ -238,7 +275,7 @@ const Purchase = () => {
                   <Box sx={{ mr: 2, display: 'flex' }}>
                     <Icon icon='mdi:magnify' fontSize={20} />
                   </Box>
-                ),
+                )
 
                 // endAdornment: (
                 //   <IconButton size='small' title='Clear' aria-label='Clear' onClick={searchHandler}>
@@ -264,59 +301,66 @@ const Purchase = () => {
               <Table stickyHeader aria-label='sticky table'>
                 <TableHead>
                   <TableRow>
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                    <TableCell align='left' sx={{ minWidth: 100 }}>
                       Date
                     </TableCell>
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                    <TableCell align='left' sx={{ minWidth: 100 }}>
                       Invoice No
                     </TableCell>
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                    <TableCell align='left' sx={{ minWidth: 100 }}>
                       Party
                     </TableCell>
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                    <TableCell align='left' sx={{ minWidth: 100 }}>
                       Type
                     </TableCell>
-                    <TableCell align="left" sx={{ minWidth: 100 }}>
+                    <TableCell align='left' sx={{ minWidth: 100 }}>
                       Action
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {data.length === 0 && (
-                    <Grid item xs={12} sm={12} sx={{ display: 'flex', alignItems: 'center', margin: "20px" }}>
+                    <Grid item xs={12} sm={12} sx={{ display: 'flex', alignItems: 'center', margin: '20px' }}>
                       <Typography>No Data Found</Typography>
-                    </Grid>)}
+                    </Grid>
+                  )}
 
                   {(searchValue ? filteredData : data).map(d => (
-
-                    <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: "pointer" }} >
-                      <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
-                        {moment(d.invoiceDate).format("YYYY-MM-DD")}
+                    <TableRow hover role='checkbox' tabIndex={-1} key={d.id} style={{ cursor: 'pointer' }}>
+                      <TableCell key={data.id} align='left' onClick={() => router.push(`/invoice/${d.id}`)}>
+                        {moment(d.invoiceDate).format('YYYY-MM-DD')}
                       </TableCell>
-                      <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
+                      <TableCell key={data.id} align='left' onClick={() => router.push(`/invoice/${d.id}`)}>
                         {d.invoiceNo}
                       </TableCell>
-                      <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
+                      <TableCell key={data.id} align='left' onClick={() => router.push(`/invoice/${d.id}`)}>
                         {d.clientName}
                       </TableCell>
 
-                      <TableCell key={data.id} align="left" onClick={() => router.push(`/invoice/${d.id}`)}>
+                      <TableCell key={data.id} align='left' onClick={() => router.push(`/invoice/${d.id}`)}>
                         {d?.type}
                       </TableCell>
                       {/* <TableCell key={data.id} align="left" >
                         <MdModeEditOutline color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={(e) => generateInvoice(e)} />
                       </TableCell> */}
-                      <TableCell key={data.id} align="left" >
-                        <HiOutlineDownload color="#9155FD" size="20px" style={{ cursor: "pointer" }} onClick={() => generateInvoice(d.invoiceNo)} />
-                        <AiFillDelete color="#ff4747" size="20px" style={{ cursor: "pointer", marginLeft: "10px" }} />
-
+                      <TableCell key={data.id} align='left'>
+                        <HiOutlineDownload
+                          color='#9155FD'
+                          size='20px'
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => generateInvoice(d.invoiceNo)}
+                        />
+                        <AiFillDelete
+                          color='#ff4747'
+                          size='20px'
+                          style={{ cursor: 'pointer', marginLeft: '10px' }}
+                          onClick={() => deleteInvoice(d.id)}
+                        />
                       </TableCell>
-
                     </TableRow>
                   ))}
 
                   {/* })} */}
-
                 </TableBody>
               </Table>
             </TableContainer>
@@ -324,8 +368,15 @@ const Purchase = () => {
         </Card>
       </Grid>
 
-      <AddOrEditPurchase addPurchase={addPurchase} setErrorToaster={setErrorToaster} type={type} editPurchase={editPurchase} handleClose={handleClose} handleOpenToaster={handleOpenToaster} fetch={fetch} />
-
+      <AddOrEditPurchase
+        addPurchase={addPurchase}
+        setErrorToaster={setErrorToaster}
+        type={type}
+        editPurchase={editPurchase}
+        handleClose={handleClose}
+        handleOpenToaster={handleOpenToaster}
+        fetch={fetch}
+      />
     </Grid>
   )
 }
