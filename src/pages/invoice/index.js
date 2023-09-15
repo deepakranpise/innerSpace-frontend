@@ -255,7 +255,7 @@ const Purchase = () => {
           <CardHeader title='Invoices' titleTypographyProps={{ variant: 'h6' }} />
           <Button variant='outlined' onClick={() => handleClickOpen(1)}>
             {/* Add {type ? "Purchase" : "Sell"} */}
-            Add Purchase
+            {/* Add Purchase */}
           </Button>
 
           <Button variant='outlined' onClick={() => handleClickOpen(0)}>
